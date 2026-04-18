@@ -31,6 +31,7 @@ Open the app at `http://127.0.0.1:5173/`, then run this scenario from the browse
 - Button released -> Wire -> MCU Output: `low`
 - Button pressed -> Wire -> MCU Output: `high`
 - Button released again -> Wire -> MCU Output: `low`
+- Power + Power -> AND Gate -> MCU Output: gate `high`, output `high`
 - Inspect panel includes the starter `Power` card.
 
 ## Verification Commands
@@ -38,4 +39,3 @@ Open the app at `http://127.0.0.1:5173/`, then run this scenario from the browse
 - `go test ./...`
 - `cd web && npm test`
 - `cd web && npm run build`
-
