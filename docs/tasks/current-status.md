@@ -13,7 +13,7 @@ This file is the handoff point for new Codex sessions. Start here, then read the
 - Research notes: [`../plans/wire-craft-research-notes.md`](../plans/wire-craft-research-notes.md)
 - Active phase plan: [`../plans/wire-craft-phase-3-physical-actuators.md`](../plans/wire-craft-phase-3-physical-actuators.md)
 - Active work orders: [`phase-3-work-orders.md`](./phase-3-work-orders.md)
-- Recent checkpoint report: [`phase-2-checkpoint-report.md`](./phase-2-checkpoint-report.md)
+- Recent checkpoint report: [`phase-3-checkpoint-report.md`](./phase-3-checkpoint-report.md)
 
 ## Repository State
 
@@ -30,6 +30,8 @@ This file is the handoff point for new Codex sessions. Start here, then read the
 Goal: connect server-authoritative circuit signal state to deterministic physical actuator motion. The server should turn High/Low circuit outputs into kinematic piston or motor transforms, and the client should render those transforms through the existing interpolation path.
 
 GitHub issue: [#28 Phase 3: Physical Actuators](https://github.com/devlikebear/wirecraft/issues/28)
+
+Status: verification complete; waiting for user approval before moving to Phase 4.
 
 ## Completed Work
 
@@ -67,14 +69,15 @@ GitHub issue: [#28 Phase 3: Physical Actuators](https://github.com/devlikebear/w
 - [x] [#35 WO-30: Add actuator placement UI](https://github.com/devlikebear/wirecraft/issues/35)
 - [x] [#36 WO-31: Add sensor input extension point](https://github.com/devlikebear/wirecraft/issues/36)
 - [x] [#37 WO-32: Add motor and driver component cards](https://github.com/devlikebear/wirecraft/issues/37)
+- [x] [#38 Phase 3 Checkpoint: Verify physical actuators](https://github.com/devlikebear/wirecraft/issues/38)
 
 ## Next Work Order
 
-Start with **Phase 3 Checkpoint: Verify Physical Actuators** in [`phase-3-work-orders.md`](./phase-3-work-orders.md).
+Wait for explicit user approval to move to **Phase 4: Multiplayer Physics Sync**.
 
-GitHub issue: [#38 Phase 3 Checkpoint: Verify physical actuators](https://github.com/devlikebear/wirecraft/issues/38)
+Phase 3 checkpoint report: [`phase-3-checkpoint-report.md`](./phase-3-checkpoint-report.md)
 
-Phase 2 is complete and approved. Phase 3 has started; the physics transform/entity foundation, actuator domain model, actuator-facing block/protocol types, internal actuator update order, transform snapshot export, actuator entity rendering, actuator placement UI, sensor input extension point, and motor/driver component cards are complete. The next step is the Phase 3 checkpoint verification.
+Phase 2 is complete and approved. Phase 3 implementation and checkpoint verification are complete. The next step is user approval before Phase 4 planning and work orders are created.
 
 ## GitHub Issue Index
 

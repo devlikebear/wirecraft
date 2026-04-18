@@ -11,8 +11,8 @@ _예상 소요: 1-2주_
 ## 전제 조건
 
 - [x] Phase 2 완료 및 사용자 승인
-- [ ] snapshot interpolation이 Phase 1에서 동작 중
-- [ ] circuit output state를 simulation layer에서 읽을 수 있음
+- [x] snapshot interpolation이 Phase 1에서 동작 중
+- [x] circuit output state를 simulation layer에서 읽을 수 있음
 
 ## 포함 기능
 
@@ -151,23 +151,23 @@ _예상 소요: 1-2주_
 
 **구현 확인:**
 - [x] 피스톤 또는 모터 block을 배치할 수 있다.
-- [ ] 회로 output High/Low가 actuator input으로 연결된다.
-- [ ] 서버 tick에서 actuator transform이 계산된다.
-- [ ] 클라이언트가 actuator transform을 보간 렌더링한다.
+- [x] 회로 output High/Low가 actuator input으로 연결된다.
+- [x] 서버 tick에서 actuator transform이 계산된다.
+- [x] 클라이언트가 actuator transform을 보간 렌더링한다.
 - [x] sensor 확장 지점이 코드상 분리되어 있다.
 - [x] GPIO pin에 motor를 직접 연결하면 warning 또는 invalid wiring이 표시된다.
 
 **자동 검증:**
-- [ ] 서버 테스트 통과: `go test ./...`
-- [ ] 클라이언트 테스트 통과: `cd web && npm test`
-- [ ] 클라이언트 빌드 통과: `cd web && npm run build`
+- [x] 서버 테스트 통과: `go test ./...`
+- [x] 클라이언트 테스트 통과: `cd web && npm test`
+- [x] 클라이언트 빌드 통과: `cd web && npm run build`
 
 **수동 확인:**
-- [ ] 버튼 -> 전선 -> 피스톤 회로를 만들고 버튼을 누르면 피스톤이 움직인다.
-- [ ] 버튼을 떼면 피스톤이 원위치로 돌아온다.
-- [ ] motor block은 driver/transistor component 없이 직접 연결하면 동작하지 않거나 warning을 표시한다.
-- [ ] 브라우저 창 2개에서 피스톤 위치가 동일하게 보인다.
-- [ ] 움직임이 서버 tick 단위로 끊겨 보이지 않고 보간된다.
+- [x] 버튼 -> 전선 -> 피스톤 회로를 만들고 버튼을 누르면 피스톤이 움직인다.
+- [x] 버튼을 떼면 피스톤이 원위치로 돌아온다.
+- [x] motor block은 driver/transistor component 없이 직접 연결하면 동작하지 않거나 warning을 표시한다.
+- [x] 브라우저 창 2개에서 피스톤 위치가 동일하게 보인다.
+- [x] 움직임이 서버 tick 단위로 끊겨 보이지 않고 보간된다.
 
 **완료 처리:**
 1. 위 항목 모두 통과 시 완료 요약과 검증 결과를 보고한다.

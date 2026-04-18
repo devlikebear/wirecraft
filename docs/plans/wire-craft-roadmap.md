@@ -77,7 +77,7 @@ Status: Completed. Tracking issue: [#17](https://github.com/devlikebear/wirecraf
 
 ### Phase 3: Physical Actuators — 회로 신호와 물리 블록 결합
 
-Status: Active. Tracking issue: [#28](https://github.com/devlikebear/wirecraft/issues/28).
+Status: Verification complete; awaiting user approval. Tracking issue: [#28](https://github.com/devlikebear/wirecraft/issues/28).
 
 - **목표**: 회로 출력이 피스톤 또는 모터 블록 움직임으로 변환되고, 클라이언트는 transform snapshot을 보간 렌더링한다.
 - **포함 기능**: actuator component, simple kinematic movement, sensor input stub, transform replication

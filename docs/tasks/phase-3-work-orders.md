@@ -429,7 +429,7 @@ Add beginner-facing motor, motor driver, and transistor switch component cards s
 
 ## Phase 3 Checkpoint: Verify Physical Actuators
 
-Status: Next. GitHub issue: [#38](https://github.com/devlikebear/wirecraft/issues/38).
+Status: Verification complete. GitHub issue: [#38](https://github.com/devlikebear/wirecraft/issues/38).
 
 ## Goal
 
@@ -437,22 +437,22 @@ Verify Phase 3 end-to-end: actuator placement, circuit-driven piston motion, int
 
 ## Checklist
 
-- [ ] `go test ./...` passes.
-- [ ] `cd web && npm test` passes.
-- [ ] `cd web && npm run build` passes.
-- [ ] Browser can place piston or motor blocks.
-- [ ] Button or power driven circuit can move a piston.
-- [ ] Button release returns piston toward its base transform.
-- [ ] Client renders interpolated actuator transforms.
-- [ ] Motor / motor driver / transistor switch inspect cards show warnings.
-- [ ] Phase 3 docs and GitHub parent issue are updated.
+- [x] `go test ./...` passes.
+- [x] `cd web && npm test` passes.
+- [x] `cd web && npm run build` passes.
+- [x] Browser can place piston or motor blocks.
+- [x] Button or power driven circuit can move a piston.
+- [x] Button release returns piston toward its base transform.
+- [x] Client renders interpolated actuator transforms.
+- [x] Motor / motor driver / transistor switch inspect cards show warnings.
+- [x] Phase 3 docs and GitHub parent issue are updated.
 
 ---
 
 ## Planned Work Orders
 
-- [ ] Phase 4 planning after Phase 3 checkpoint and user approval.
+- [ ] Phase 4 planning after user approval.
 
 ## Session Handoff
 
-Start the next session from [current-status.md](./current-status.md), then continue with [#38 Phase 3 Checkpoint](https://github.com/devlikebear/wirecraft/issues/38).
+Start the next session from [current-status.md](./current-status.md). Phase 3 verification is complete; wait for explicit user approval before moving to Phase 4.
