@@ -12,6 +12,7 @@ type SnapshotInput struct {
 	Tick         TickID
 	ServerTimeMS int64
 	World        *world.World
+	ButtonStates map[world.Position]bool
 	Stats        SnapshotStatsInput
 }
 
@@ -38,7 +39,7 @@ func BuildSnapshot(input SnapshotInput) netproto.Snapshot {
 		ServerTimeMS: input.ServerTimeMS,
 		Blocks:       blocks,
 		Entities:     []netproto.EntitySnapshot{buildDebugMoverEntity(input.Tick)},
-		Circuit:      buildCircuitSnapshot(input.World),
+		Circuit:      buildCircuitSnapshot(input.World, input.ButtonStates),
 		Stats: netproto.SnapshotStats{
 			ClientCount:        input.Stats.ClientCount,
 			CommandQueueLength: input.Stats.CommandQueueLength,
@@ -53,7 +54,7 @@ func BuildSnapshot(input SnapshotInput) netproto.Snapshot {
 	return snapshot
 }
 
-func buildCircuitSnapshot(w *world.World) netproto.CircuitSnapshot {
+func buildCircuitSnapshot(w *world.World, buttonStates map[world.Position]bool) netproto.CircuitSnapshot {
 	nodes := make([]netproto.CircuitNodeSnapshot, 0)
 	if w == nil {
 		return netproto.CircuitSnapshot{Nodes: nodes}
@@ -65,14 +66,21 @@ func buildCircuitSnapshot(w *world.World) netproto.CircuitSnapshot {
 	}
 
 	positionsByNodeID := make(map[circuit.NodeID]world.Position)
+	buttonStatesByNodeID := make(map[circuit.NodeID]circuit.SignalState)
 	for _, block := range w.OccupiedBlocks() {
 		if !circuit.IsCircuitBlock(block.BlockType) {
 			continue
 		}
-		positionsByNodeID[circuit.NodeIDForPosition(block.Position)] = block.Position
+		nodeID := circuit.NodeIDForPosition(block.Position)
+		positionsByNodeID[nodeID] = block.Position
+		if block.BlockType == world.BlockButton && buttonStates[block.Position] {
+			buttonStatesByNodeID[nodeID] = circuit.SignalHigh
+		}
 	}
 
-	evaluation := circuit.EvaluateGraph(graph)
+	evaluation := circuit.EvaluateGraphWithInput(graph, circuit.EvaluationInput{
+		ButtonStates: buttonStatesByNodeID,
+	})
 	for _, node := range graph.Nodes() {
 		position, ok := positionsByNodeID[node.ID]
 		if !ok {

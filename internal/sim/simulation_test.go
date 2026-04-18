@@ -98,6 +98,46 @@ func TestSimulationStepIncludesCircuitStateAfterCommands(t *testing.T) {
 	})
 }
 
+func TestSimulationSetButtonCommandAffectsCircuitState(t *testing.T) {
+	simulation := NewSimulationWithDimensions(world.Dimensions{X: 8, Y: 8, Z: 8})
+	buttonPos := world.Position{X: 0, Y: 0, Z: 0}
+	wirePos := world.Position{X: 1, Y: 0, Z: 0}
+	outputPos := world.Position{X: 2, Y: 0, Z: 0}
+
+	if err := simulation.ApplyCommand(placeCommand("cmd-1", buttonPos, world.BlockButton)); err != nil {
+		t.Fatalf("ApplyCommand(button) error = %v, want nil", err)
+	}
+	if err := simulation.ApplyCommand(placeCommand("cmd-2", wirePos, world.BlockWire)); err != nil {
+		t.Fatalf("ApplyCommand(wire) error = %v, want nil", err)
+	}
+	if err := simulation.ApplyCommand(placeCommand("cmd-3", outputPos, world.BlockMCUOutput)); err != nil {
+		t.Fatalf("ApplyCommand(output) error = %v, want nil", err)
+	}
+
+	released := simulation.Step(StepInput{})
+	assertCircuitSignal(t, released, "0:0:0", "low")
+	assertCircuitSignal(t, released, "1:0:0", "low")
+	assertCircuitSignal(t, released, "2:0:0", "low")
+
+	if err := simulation.ApplyCommand(setButtonCommand("cmd-4", buttonPos, true)); err != nil {
+		t.Fatalf("ApplyCommand(press) error = %v, want nil", err)
+	}
+
+	pressed := simulation.Step(StepInput{})
+	assertCircuitSignal(t, pressed, "0:0:0", "high")
+	assertCircuitSignal(t, pressed, "1:0:0", "high")
+	assertCircuitSignal(t, pressed, "2:0:0", "high")
+
+	if err := simulation.ApplyCommand(setButtonCommand("cmd-5", buttonPos, false)); err != nil {
+		t.Fatalf("ApplyCommand(release) error = %v, want nil", err)
+	}
+
+	releasedAgain := simulation.Step(StepInput{})
+	assertCircuitSignal(t, releasedAgain, "0:0:0", "low")
+	assertCircuitSignal(t, releasedAgain, "1:0:0", "low")
+	assertCircuitSignal(t, releasedAgain, "2:0:0", "low")
+}
+
 func TestSimulationRejectsInvalidCommandWithoutChangingWorld(t *testing.T) {
 	simulation := NewSimulation()
 	validPos := world.Position{X: 1, Y: 1, Z: 1}
@@ -156,6 +196,16 @@ func removeCommand(commandID string, pos world.Position) netproto.Command {
 	}
 }
 
+func setButtonCommand(commandID string, pos world.Position, pressed bool) netproto.Command {
+	return netproto.Command{
+		Type:          netproto.CommandSetButton,
+		ClientID:      "client-1",
+		CommandID:     commandID,
+		Position:      pos,
+		ButtonPressed: pressed,
+	}
+}
+
 func assertSnapshotBlocks(t *testing.T, snapshot netproto.Snapshot, want []netproto.BlockSnapshot) {
 	t.Helper()
 
@@ -167,6 +217,20 @@ func assertSnapshotBlocks(t *testing.T, snapshot netproto.Snapshot, want []netpr
 			t.Fatalf("snapshot.Blocks[%d] = %+v, want %+v", i, snapshot.Blocks[i], want[i])
 		}
 	}
+}
+
+func assertCircuitSignal(t *testing.T, snapshot netproto.Snapshot, nodeID string, want string) {
+	t.Helper()
+
+	for _, node := range snapshot.Circuit.Nodes {
+		if node.NodeID == nodeID {
+			if node.SignalState != want {
+				t.Fatalf("node %s signal = %s, want %s", nodeID, node.SignalState, want)
+			}
+			return
+		}
+	}
+	t.Fatalf("node %s not found in circuit snapshot: %+v", nodeID, snapshot.Circuit.Nodes)
 }
 
 func assertCircuitNodes(t *testing.T, got []netproto.CircuitNodeSnapshot, want []netproto.CircuitNodeSnapshot) {

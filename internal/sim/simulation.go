@@ -6,9 +6,10 @@ import (
 )
 
 type Simulation struct {
-	tick   TickID
-	bounds world.Dimensions
-	world  *world.World
+	tick         TickID
+	bounds       world.Dimensions
+	world        *world.World
+	buttonStates map[world.Position]bool
 }
 
 type StepInput struct {
@@ -22,8 +23,9 @@ func NewSimulation() *Simulation {
 
 func NewSimulationWithDimensions(bounds world.Dimensions) *Simulation {
 	return &Simulation{
-		bounds: bounds,
-		world:  world.New(bounds),
+		bounds:       bounds,
+		world:        world.New(bounds),
+		buttonStates: make(map[world.Position]bool),
 	}
 }
 
@@ -34,9 +36,32 @@ func (s *Simulation) ApplyCommand(command netproto.Command) error {
 
 	switch command.Type {
 	case netproto.CommandPlaceBlock:
-		return s.world.Set(command.Position, command.BlockType)
+		if err := s.world.Set(command.Position, command.BlockType); err != nil {
+			return err
+		}
+		delete(s.buttonStates, command.Position)
+		return nil
 	case netproto.CommandRemoveBlock:
-		return s.world.Remove(command.Position)
+		if err := s.world.Remove(command.Position); err != nil {
+			return err
+		}
+		delete(s.buttonStates, command.Position)
+		return nil
+	case netproto.CommandSetButton:
+		block, err := s.world.Get(command.Position)
+		if err != nil {
+			return err
+		}
+		if block != world.BlockButton {
+			delete(s.buttonStates, command.Position)
+			return nil
+		}
+		if command.ButtonPressed {
+			s.buttonStates[command.Position] = true
+		} else {
+			delete(s.buttonStates, command.Position)
+		}
+		return nil
 	default:
 		return netproto.ErrUnknownCommandType
 	}
@@ -49,6 +74,7 @@ func (s *Simulation) Step(input StepInput) netproto.Snapshot {
 		Tick:         s.tick,
 		ServerTimeMS: input.ServerTimeMS,
 		World:        s.world,
+		ButtonStates: s.buttonStates,
 		Stats:        input.Stats,
 	})
 }

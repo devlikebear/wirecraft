@@ -16,15 +16,17 @@ type CommandType string
 const (
 	CommandPlaceBlock  CommandType = "place_block"
 	CommandRemoveBlock CommandType = "remove_block"
+	CommandSetButton   CommandType = "set_button"
 )
 
 type Command struct {
-	Type      CommandType     `json:"type"`
-	ClientID  string          `json:"clientId"`
-	CommandID string          `json:"commandId"`
-	TickHint  uint64          `json:"tickHint"`
-	Position  world.Position  `json:"position"`
-	BlockType world.BlockType `json:"blockType"`
+	Type          CommandType     `json:"type"`
+	ClientID      string          `json:"clientId"`
+	CommandID     string          `json:"commandId"`
+	TickHint      uint64          `json:"tickHint"`
+	Position      world.Position  `json:"position"`
+	BlockType     world.BlockType `json:"blockType"`
+	ButtonPressed bool            `json:"buttonPressed"`
 }
 
 func (c Command) Validate(bounds world.Dimensions) error {
@@ -45,6 +47,8 @@ func (c Command) Validate(bounds world.Dimensions) error {
 		}
 		return nil
 	case CommandRemoveBlock:
+		return nil
+	case CommandSetButton:
 		return nil
 	default:
 		return ErrUnknownCommandType

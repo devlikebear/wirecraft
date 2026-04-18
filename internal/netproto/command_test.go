@@ -36,6 +36,34 @@ func TestCommandValidateAcceptsPlaceAndRemove(t *testing.T) {
 	}
 }
 
+func TestCommandValidateAcceptsSetButton(t *testing.T) {
+	bounds := world.Dimensions{X: 32, Y: 32, Z: 16}
+
+	press := Command{
+		Type:          CommandSetButton,
+		ClientID:      "client-1",
+		CommandID:     "cmd-1",
+		TickHint:      7,
+		Position:      world.Position{X: 1, Y: 2, Z: 3},
+		ButtonPressed: true,
+	}
+	if err := press.Validate(bounds); err != nil {
+		t.Fatalf("Validate(press) error = %v, want nil", err)
+	}
+
+	release := Command{
+		Type:          CommandSetButton,
+		ClientID:      "client-1",
+		CommandID:     "cmd-2",
+		TickHint:      8,
+		Position:      world.Position{X: 1, Y: 2, Z: 3},
+		ButtonPressed: false,
+	}
+	if err := release.Validate(bounds); err != nil {
+		t.Fatalf("Validate(release) error = %v, want nil", err)
+	}
+}
+
 func TestCommandValidateRejectsMissingIdentifiers(t *testing.T) {
 	bounds := world.Dimensions{X: 32, Y: 32, Z: 16}
 
@@ -100,12 +128,13 @@ func TestCommandValidateRejectsUnknownCommandType(t *testing.T) {
 
 func TestCommandJSONRoundTrip(t *testing.T) {
 	command := Command{
-		Type:      CommandPlaceBlock,
-		ClientID:  "client-1",
-		CommandID: "cmd-1",
-		TickHint:  11,
-		Position:  world.Position{X: 4, Y: 5, Z: 6},
-		BlockType: world.BlockDebugMover,
+		Type:          CommandSetButton,
+		ClientID:      "client-1",
+		CommandID:     "cmd-1",
+		TickHint:      11,
+		Position:      world.Position{X: 4, Y: 5, Z: 6},
+		BlockType:     world.BlockDebugMover,
+		ButtonPressed: true,
 	}
 
 	encoded, err := json.Marshal(command)

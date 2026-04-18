@@ -228,7 +228,7 @@ Run circuit extraction/evaluation during simulation steps and include circuit de
 
 ## Work Order 20: Add Button Input Command
 
-GitHub issue: [#23 WO-20: Add button input command](https://github.com/devlikebear/wirecraft/issues/23)
+Status: Completed. GitHub issue: [#23](https://github.com/devlikebear/wirecraft/issues/23).
 
 ## Goal
 
@@ -250,16 +250,16 @@ Add a server-authoritative command for button press/release state and feed that 
 
 ## Steps
 
-- [ ] Add `set_button` command type and validation.
-- [ ] Store button state by block position inside simulation state.
-- [ ] Feed button state into circuit evaluation.
-- [ ] Add tests for press/release affecting output signal.
+- [x] Add `set_button` command type and validation.
+- [x] Store button state by block position inside simulation state.
+- [x] Feed button state into circuit evaluation.
+- [x] Add tests for press/release affecting output signal.
 
 ## Acceptance Criteria
 
-- [ ] `go test ./internal/netproto/...` passes.
-- [ ] `go test ./internal/sim/...` passes.
-- [ ] `go test ./...` passes.
+- [x] `go test ./internal/netproto/...` passes.
+- [x] `go test ./internal/sim/...` passes.
+- [x] `go test ./...` passes.
 
 ## Verification Commands
 
@@ -271,7 +271,7 @@ Add a server-authoritative command for button press/release state and feed that 
 
 ## Work Order 21: Add Circuit Block Toolbar
 
-GitHub issue: create when active.
+GitHub issue: [#24 WO-21: Add circuit block toolbar](https://github.com/devlikebear/wirecraft/issues/24)
 
 ## Goal
 

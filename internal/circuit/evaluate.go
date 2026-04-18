@@ -4,10 +4,18 @@ type Evaluation struct {
 	states map[NodeID]SignalState
 }
 
+type EvaluationInput struct {
+	ButtonStates map[NodeID]SignalState
+}
+
 func EvaluateGraph(graph Graph) Evaluation {
+	return EvaluateGraphWithInput(graph, EvaluationInput{})
+}
+
+func EvaluateGraphWithInput(graph Graph, input EvaluationInput) Evaluation {
 	nodes := graph.Nodes()
 	adjacency := buildAdjacency(graph.Edges())
-	states := initialStates(nodes)
+	states := initialStates(nodes, input)
 
 	maxIterations := len(nodes) + 1
 	for range maxIterations {
@@ -15,7 +23,7 @@ func EvaluateGraph(graph Graph) Evaluation {
 		changed := false
 
 		for _, node := range nodes {
-			state := evaluateNode(node, neighborStates(adjacency[node.ID], states))
+			state := evaluateNode(node, neighborStates(adjacency[node.ID], states), input)
 			next[node.ID] = state
 			if state != states[node.ID] {
 				changed = true
@@ -56,20 +64,20 @@ func buildAdjacency(edges []Edge) map[NodeID][]NodeID {
 	return adjacency
 }
 
-func initialStates(nodes []Node) map[NodeID]SignalState {
+func initialStates(nodes []Node, input EvaluationInput) map[NodeID]SignalState {
 	states := make(map[NodeID]SignalState, len(nodes))
 	for _, node := range nodes {
-		states[node.ID] = initialStateForNode(node)
+		states[node.ID] = initialStateForNode(node, input)
 	}
 	return states
 }
 
-func initialStateForNode(node Node) SignalState {
+func initialStateForNode(node Node, input EvaluationInput) SignalState {
 	switch node.Type {
 	case NodeTypePowerSource:
 		return SignalHigh
 	case NodeTypeButton:
-		return SignalLow
+		return buttonState(node.ID, input)
 	default:
 		return SignalUnknown
 	}
@@ -87,12 +95,12 @@ func neighborStates(neighborIDs []NodeID, states map[NodeID]SignalState) []Signa
 	return neighbors
 }
 
-func evaluateNode(node Node, neighbors []SignalState) SignalState {
+func evaluateNode(node Node, neighbors []SignalState, input EvaluationInput) SignalState {
 	switch node.Type {
 	case NodeTypePowerSource:
 		return SignalHigh
 	case NodeTypeButton:
-		return SignalLow
+		return buttonState(node.ID, input)
 	case NodeTypeWire, NodeTypeMCUOutput:
 		return relayState(neighbors)
 	case NodeTypeAndGate:
@@ -100,6 +108,17 @@ func evaluateNode(node Node, neighbors []SignalState) SignalState {
 	default:
 		return SignalUnknown
 	}
+}
+
+func buttonState(nodeID NodeID, input EvaluationInput) SignalState {
+	state, ok := input.ButtonStates[nodeID]
+	if !ok {
+		return SignalLow
+	}
+	if state == SignalHigh {
+		return SignalHigh
+	}
+	return SignalLow
 }
 
 func relayState(neighbors []SignalState) SignalState {
