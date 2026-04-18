@@ -12,7 +12,7 @@ Build the smallest server-authoritative voxel loop: Go owns world state and tick
 
 ## Work Order 1: Scaffold Go Project And Embedded Web Boundary
 
-GitHub issue: [#2 WO-1: Scaffold Go project and embedded web boundary](https://github.com/devlikebear/wirecraft/issues/2)
+Status: Completed. GitHub issue: [#2](https://github.com/devlikebear/wirecraft/issues/2).
 
 ## Goal
 
@@ -34,18 +34,18 @@ Create the repository's executable skeleton: Go module, server entrypoint, packa
 
 ## Steps
 
-- [ ] Create `go.mod` with module `github.com/devlikebear/wirecraft`.
-- [ ] Add `cmd/wirecraft-server/main.go` with flag-based host/port config and graceful startup.
-- [ ] Add `internal/server/server.go` with `New()` returning an `http.Handler` or server struct.
-- [ ] Add `internal/webui/embed.go` documenting the future `go:embed dist` boundary.
-- [ ] Update `README.md` with local development and future embedded release shape.
+- [x] Create `go.mod` with module `github.com/devlikebear/wirecraft`.
+- [x] Add `cmd/wirecraft-server/main.go` with flag-based host/port config and graceful startup.
+- [x] Add `internal/server/server.go` with `New()` returning an `http.Handler` or server struct.
+- [x] Add `internal/webui/embed.go` documenting the future `go:embed dist` boundary.
+- [x] Update `README.md` with local development and future embedded release shape.
 
 ## Acceptance Criteria
 
-- [ ] `go test ./...` passes.
-- [ ] `go run ./cmd/wirecraft-server` starts an HTTP server.
-- [ ] `GET /healthz` returns 200 with a minimal response.
-- [ ] README explains development mode versus embedded release mode.
+- [x] `go test ./...` passes.
+- [x] `go run ./cmd/wirecraft-server` starts an HTTP server.
+- [x] `GET /healthz` returns 200 with a minimal response.
+- [x] README explains development mode versus embedded release mode.
 
 ## Verification Commands
 

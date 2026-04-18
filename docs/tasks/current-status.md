@@ -30,11 +30,15 @@ Goal: create the smallest server-authoritative 3D editing loop. The Go server ow
 
 GitHub issue: [#1 Phase 1: Authoritative Voxel Loop](https://github.com/devlikebear/wirecraft/issues/1)
 
+## Completed Work
+
+- [x] [#2 WO-1: Scaffold Go project and embedded web boundary](https://github.com/devlikebear/wirecraft/issues/2)
+
 ## Next Work Order
 
-Start with **WO-1** in [`phase-1-work-orders.md`](./phase-1-work-orders.md).
+Start with **WO-2** in [`phase-1-work-orders.md`](./phase-1-work-orders.md).
 
-GitHub issue: [#2 WO-1: Scaffold Go project and embedded web boundary](https://github.com/devlikebear/wirecraft/issues/2)
+GitHub issue: [#3 WO-2: Add tick clock and voxel world core](https://github.com/devlikebear/wirecraft/issues/3)
 
 ## GitHub Issue Index
 
@@ -54,5 +58,5 @@ GitHub issue: [#2 WO-1: Scaffold Go project and embedded web boundary](https://g
 
 ## Open Decisions
 
-- WebSocket library: choose during WO-2. Default preference is a small maintained package such as `github.com/coder/websocket`.
+- WebSocket library: choose before WebSocket protocol implementation. Default preference is a small maintained package such as `github.com/coder/websocket`.
 - Exact frontend test runner: choose during WO-3. Default preference is Vitest.

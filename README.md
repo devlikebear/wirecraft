@@ -17,4 +17,33 @@ WireCraft is an online maker sandbox for building circuits, mechanisms, and smal
 
 ## Current Status
 
-Planning documents are ready. Implementation starts with Phase 1: Authoritative Voxel Loop.
+Phase 1 implementation is in progress.
+
+- Completed: WO-1 scaffolded the Go server and embedded web boundary.
+- Next: WO-2 adds the fixed tick clock and voxel world core.
+
+## Development
+
+Run the Go server:
+
+```sh
+go run ./cmd/wirecraft-server
+```
+
+The server listens on `127.0.0.1:8080` by default.
+
+Health check:
+
+```sh
+curl http://127.0.0.1:8080/healthz
+```
+
+Run tests:
+
+```sh
+go test ./...
+```
+
+## Web UI Packaging
+
+During development, the TypeScript/Three.js app will run through Vite. For release builds, Vite output will be copied into `internal/webui/dist` and embedded in the Go binary with `go:embed`.
