@@ -20,7 +20,9 @@ WireCraft is an online maker sandbox for building circuits, mechanisms, and smal
 Phase 1 implementation is in progress.
 
 - Completed: WO-1 scaffolded the Go server and embedded web boundary.
-- Next: WO-2 adds the fixed tick clock and voxel world core.
+- Completed: WO-2 added the fixed tick clock and voxel world core.
+- Completed: WO-3 initialized the Vite + Three.js client skeleton.
+- Next: WO-4 adds command and snapshot protocol types.
 
 ## Development
 
@@ -42,6 +44,21 @@ Run tests:
 
 ```sh
 go test ./...
+```
+
+Run the web client:
+
+```sh
+cd web
+npm install
+npm run dev
+```
+
+Build the web client:
+
+```sh
+cd web
+npm run build
 ```
 
 ## Web UI Packaging

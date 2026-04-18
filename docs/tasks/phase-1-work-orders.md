@@ -101,7 +101,7 @@ Implement test-first server simulation primitives: fixed tick timing and determi
 
 ## Work Order 3: Initialize Vite Three.js Client Skeleton
 
-GitHub issue: [#4 WO-3: Initialize Vite Three.js client skeleton](https://github.com/devlikebear/wirecraft/issues/4)
+Status: Completed. GitHub issue: [#4](https://github.com/devlikebear/wirecraft/issues/4).
 
 ## Goal
 
@@ -123,20 +123,64 @@ Create the TypeScript frontend scaffold with a minimal Three.js scene and packag
 
 ## Steps
 
-- [ ] Initialize `web/` as a Vite + TypeScript project using npm.
-- [ ] Add Three.js dependency.
-- [ ] Render a minimal scene with camera, renderer, grid helper, and basic lighting.
-- [ ] Add scripts for `dev`, `build`, and `test` or a placeholder test command if the test runner is introduced later.
-- [ ] Update `README.md` with Go server and Vite client commands.
+- [x] Initialize `web/` as a Vite + TypeScript project using npm.
+- [x] Add Three.js dependency.
+- [x] Render a minimal scene with camera, renderer, grid helper, and basic lighting.
+- [x] Add scripts for `dev`, `build`, and `test` or a placeholder test command if the test runner is introduced later.
+- [x] Update `README.md` with Go server and Vite client commands.
 
 ## Acceptance Criteria
 
-- [ ] `cd web && npm install` completes.
-- [ ] `cd web && npm run build` succeeds.
-- [ ] Opening the Vite dev server shows a nonblank Three.js scene.
-- [ ] README gives exact commands for local development.
+- [x] `cd web && npm install` completes.
+- [x] `cd web && npm run build` succeeds.
+- [x] Opening the Vite dev server shows a nonblank Three.js scene.
+- [x] README gives exact commands for local development.
 
 ## Verification Commands
 
 - `cd web && npm install`
 - `cd web && npm run build`
+
+---
+
+## Work Order 4: Add Command And Snapshot Protocol Types
+
+GitHub issue: [#5 WO-4: Add command and snapshot protocol types](https://github.com/devlikebear/wirecraft/issues/5)
+
+## Goal
+
+Define the server-side protocol data types for client edit commands and world snapshots before adding WebSocket transport.
+
+## Non-goals
+
+- Do not implement WebSocket transport yet.
+- Do not connect the TypeScript client yet.
+- Do not implement raycasting or interpolation.
+
+## Touch points (<=5)
+
+- `internal/netproto/command.go`
+- `internal/netproto/command_test.go`
+- `internal/netproto/snapshot.go`
+- `internal/netproto/snapshot_test.go`
+- `docs/tasks/phase-1-work-orders.md`
+
+## Steps
+
+- [ ] Define command types for `place_block` and `remove_block`.
+- [ ] Define command fields: `clientId`, `commandId`, `tickHint`, `position`, `blockType`.
+- [ ] Add command validation tests for valid edits, out-of-bounds positions, invalid block types, and unknown command types.
+- [ ] Define snapshot type with `tick`, `serverTimeMs`, `blocks`, `entities`, and `stats` fields.
+- [ ] Add JSON round-trip tests for command and snapshot payloads.
+
+## Acceptance Criteria
+
+- [ ] `go test ./internal/netproto/...` passes.
+- [ ] `go test ./...` passes.
+- [ ] Protocol structs reuse `internal/world.Position` and `internal/world.BlockType` where appropriate.
+- [ ] No server transport or frontend files are touched.
+
+## Verification Commands
+
+- `go test ./internal/netproto/...`
+- `go test ./...`
