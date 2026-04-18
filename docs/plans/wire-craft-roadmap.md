@@ -57,6 +57,8 @@ Wire Craft는 서버 권한 구조를 기반으로 복셀 조립, 회로 시뮬�
 
 ### Phase 1: Authoritative Voxel Loop — 서버 권한 3D 편집 루프
 
+Status: Completed. Tracking issue: [#1](https://github.com/devlikebear/wirecraft/issues/1).
+
 - **목표**: 한 명 이상의 클라이언트가 서버에 접속해 복셀을 배치/삭제하고, 서버 snapshot을 보간 렌더링하는 최소 샌드박스가 동작한다.
 - **포함 기능**: Go 서버 tick loop, WebSocket protocol, voxel world model, Three.js rendering, raycast edit command, interpolation buffer
 - **예상 소요**: 1-2주
@@ -64,6 +66,8 @@ Wire Craft는 서버 권한 구조를 기반으로 복셀 조립, 회로 시뮬�
 - **Checkpoint 요약**: 2개 브라우저 창에서 같은 월드를 보고, dynamic test entity가 jitter 없이 움직인다.
 
 ### Phase 2: Circuit Runtime — 서버 사이드 회로 엔진
+
+Status: Active. Tracking issue: [#17](https://github.com/devlikebear/wirecraft/issues/17).
 
 - **목표**: 서버가 전원, 버튼, 전선, 게이트, MCU output node의 High/Low 상태를 tick마다 결정적으로 계산하고, 초보자가 각 부품의 의미를 component card로 확인한다.
 - **포함 기능**: circuit graph model, signal propagation, block-to-circuit mapping, debug visualization, component card

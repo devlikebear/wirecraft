@@ -11,8 +11,8 @@ This file is the handoff point for new Codex sessions. Start here, then read the
 - Product and MVP: [`../plans/wire-craft-prd.md`](../plans/wire-craft-prd.md)
 - Full roadmap: [`../plans/wire-craft-roadmap.md`](../plans/wire-craft-roadmap.md)
 - Research notes: [`../plans/wire-craft-research-notes.md`](../plans/wire-craft-research-notes.md)
-- Active phase plan: [`../plans/wire-craft-phase-1-authoritative-voxel-loop.md`](../plans/wire-craft-phase-1-authoritative-voxel-loop.md)
-- Active work orders: [`phase-1-work-orders.md`](./phase-1-work-orders.md)
+- Active phase plan: [`../plans/wire-craft-phase-2-circuit-runtime.md`](../plans/wire-craft-phase-2-circuit-runtime.md)
+- Active work orders: [`phase-2-work-orders.md`](./phase-2-work-orders.md)
 
 ## Repository State
 
@@ -24,11 +24,11 @@ This file is the handoff point for new Codex sessions. Start here, then read the
 
 ## Current Phase
 
-**Phase 1: Authoritative Voxel Loop**
+**Phase 2: Circuit Runtime**
 
-Goal: create the smallest server-authoritative 3D editing loop. The Go server owns world state and snapshots; the TypeScript/Three.js client renders snapshots and sends commands only.
+Goal: create the smallest deterministic server-side digital circuit runtime. The Go server maps circuit blocks in the voxel world to graph/state, evaluates High/Low/Unknown signal state, and exposes enough debug state for the client to visualize simple circuits.
 
-GitHub issue: [#1 Phase 1: Authoritative Voxel Loop](https://github.com/devlikebear/wirecraft/issues/1)
+GitHub issue: [#17 Phase 2: Circuit Runtime](https://github.com/devlikebear/wirecraft/issues/17)
 
 ## Completed Work
 
@@ -46,12 +46,13 @@ GitHub issue: [#1 Phase 1: Authoritative Voxel Loop](https://github.com/devlikeb
 - [x] [#13 WO-12: Add dynamic debug entity snapshots](https://github.com/devlikebear/wirecraft/issues/13)
 - [x] [#14 WO-13: Render dynamic debug entity with interpolation](https://github.com/devlikebear/wirecraft/issues/14)
 - [x] [#15 WO-14: Add client debug overlay](https://github.com/devlikebear/wirecraft/issues/15)
+- [x] [#16 Phase 1 checkpoint: Verify authoritative voxel loop](https://github.com/devlikebear/wirecraft/issues/16)
 
 ## Next Work Order
 
-Start with **Phase 1 Checkpoint** in [`phase-1-work-orders.md`](./phase-1-work-orders.md).
+Start with **WO-15** in [`phase-2-work-orders.md`](./phase-2-work-orders.md).
 
-GitHub issue: [#16 Phase 1 checkpoint: Verify authoritative voxel loop](https://github.com/devlikebear/wirecraft/issues/16)
+GitHub issue: [#18 WO-15: Add circuit block types and metadata](https://github.com/devlikebear/wirecraft/issues/18)
 
 ## GitHub Issue Index
 
@@ -71,6 +72,8 @@ GitHub issue: [#16 Phase 1 checkpoint: Verify authoritative voxel loop](https://
 - [#14 WO-13: Render dynamic debug entity with interpolation](https://github.com/devlikebear/wirecraft/issues/14)
 - [#15 WO-14: Add client debug overlay](https://github.com/devlikebear/wirecraft/issues/15)
 - [#16 Phase 1 checkpoint: Verify authoritative voxel loop](https://github.com/devlikebear/wirecraft/issues/16)
+- [#17 Phase 2: Circuit Runtime](https://github.com/devlikebear/wirecraft/issues/17)
+- [#18 WO-15: Add circuit block types and metadata](https://github.com/devlikebear/wirecraft/issues/18)
 
 ## Session Rules
 

@@ -629,7 +629,7 @@ Add a compact in-browser debug overlay that shows WebSocket status, server tick,
 
 ## Phase 1 Checkpoint: Verify Authoritative Voxel Loop
 
-GitHub issue: [#16 Phase 1 checkpoint: Verify authoritative voxel loop](https://github.com/devlikebear/wirecraft/issues/16)
+Status: Completed. GitHub issue: [#16](https://github.com/devlikebear/wirecraft/issues/16).
 
 ## Goal
 
@@ -643,19 +643,19 @@ Run a final Phase 1 checkpoint before starting Phase 2: verify the server-author
 
 ## Steps
 
-- [ ] Run Go server and Vite dev server from a clean checkout.
-- [ ] Verify WebSocket connects and debug overlay updates tick/buffer/entity/FPS values.
-- [ ] Verify voxel place/remove commands round-trip through authoritative snapshots.
-- [ ] Verify dynamic debug entity is visible and moving.
-- [ ] Record any defects as follow-up issues, or close Phase 1 if clean.
+- [x] Run Go server and Vite dev server from a clean checkout.
+- [x] Verify WebSocket connects and debug overlay updates tick/buffer/entity/FPS values.
+- [x] Verify voxel place/remove commands round-trip through authoritative snapshots.
+- [x] Verify dynamic debug entity is visible and moving.
+- [x] Record any defects as follow-up issues, or close Phase 1 if clean.
 
 ## Acceptance Criteria
 
-- [ ] `go test ./...` passes.
-- [ ] `cd web && npm test` passes.
-- [ ] `cd web && npm run build` passes.
-- [ ] Browser smoke test passes with the runtime scenario above.
-- [ ] User approves moving to Phase 2.
+- [x] `go test ./...` passes.
+- [x] `cd web && npm test` passes.
+- [x] `cd web && npm run build` passes.
+- [x] Browser smoke test passes with the runtime scenario above.
+- [x] User approves moving to Phase 2.
 
 ## Verification Commands
 

@@ -10,8 +10,8 @@ _예상 소요: 1-2주_
 
 ## 전제 조건
 
-- [ ] Phase 1 완료 및 사용자 승인
-- [ ] snapshot schema에 block state 또는 circuit debug state를 추가할 수 있는 구조 확보
+- [x] Phase 1 완료 및 사용자 승인
+- [x] snapshot schema에 block state 또는 circuit debug state를 추가할 수 있는 구조 확보
 
 ## 포함 기능
 
