@@ -25,6 +25,7 @@ type Simulation struct {
 type StepInput struct {
 	ServerTimeMS int64
 	DeltaSeconds float64
+	Presence     netproto.PresenceSnapshot
 	Stats        SnapshotStatsInput
 }
 
@@ -85,6 +86,7 @@ func (s *Simulation) Step(input StepInput) netproto.Snapshot {
 		World:            s.world,
 		ButtonStates:     s.sensorInputs.ButtonStates(),
 		ActuatorEntities: s.ActuatorEntities(),
+		Presence:         input.Presence,
 		Stats:            input.Stats,
 	})
 }

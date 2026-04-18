@@ -54,7 +54,7 @@ Introduce a small server-side room model that owns a simulation instance, tracks
 
 ## Work Order 34: Add Client Presence Metadata
 
-Status: Next. GitHub issue: [#41](https://github.com/devlikebear/wirecraft/issues/41).
+Status: Completed. GitHub issue: [#41](https://github.com/devlikebear/wirecraft/issues/41).
 
 ## Goal
 
@@ -77,17 +77,17 @@ Expose lightweight client presence metadata so snapshots/debug UI can show who i
 
 ## Steps
 
-- [ ] Add a minimal server-side client identity model.
-- [ ] Include client count and basic presence metadata in snapshots.
-- [ ] Parse the presence metadata in the TypeScript protocol.
-- [ ] Show the presence count in the debug overlay.
-- [ ] Keep existing snapshot consumers compatible.
+- [x] Add a minimal server-side client identity model.
+- [x] Include client count and basic presence metadata in snapshots.
+- [x] Parse the presence metadata in the TypeScript protocol.
+- [x] Show the presence count in the debug overlay.
+- [x] Keep existing snapshot consumers compatible.
 
 ## Acceptance Criteria
 
-- [ ] `go test ./...` passes.
-- [ ] `cd web && npm test` passes.
-- [ ] `cd web && npm run build` passes.
+- [x] `go test ./...` passes.
+- [x] `cd web && npm test` passes.
+- [x] `cd web && npm run build` passes.
 
 ## Verification Commands
 
@@ -97,9 +97,52 @@ Expose lightweight client presence metadata so snapshots/debug UI can show who i
 
 ---
 
+## Work Order 35: Add Deterministic Command Ordering
+
+Status: Next. GitHub issue: [#42](https://github.com/devlikebear/wirecraft/issues/42).
+
+## Goal
+
+Define and implement deterministic command ordering so same-tick edits are processed consistently across clients and duplicate commands are ignored.
+
+## Non-goals
+
+- Do not add command acknowledgement fields yet.
+- Do not add snapshot delta support yet.
+- Do not add UI conflict resolution controls yet.
+- Do not change room selection or lobby behavior.
+
+## Touch points (<=5)
+
+- `internal/sim/commands.go`
+- `internal/sim/commands_test.go`
+- `internal/sim/simulation.go`
+- `internal/server/room.go`
+- `docs/tasks/phase-4-work-orders.md`
+
+## Steps
+
+- [ ] Document and encode the command ordering key.
+- [ ] Add tests for same-coordinate same-tick command ordering.
+- [ ] Ignore duplicate command IDs from the same client.
+- [ ] Keep room command application deterministic.
+- [ ] Update local task docs after verification.
+
+## Acceptance Criteria
+
+- [ ] `go test ./internal/sim/...` passes.
+- [ ] `go test ./...` passes.
+- [ ] Existing WebSocket command flow remains compatible.
+
+## Verification Commands
+
+- `go test ./internal/sim/...`
+- `go test ./...`
+
+---
+
 ## Planned Work Orders
 
-- [ ] **WO-35: Add deterministic command ordering** — sort same-tick commands and ignore duplicates.
 - [ ] **WO-36: Add command acknowledgement snapshot fields** — expose accepted/rejected command status.
 - [ ] **WO-37: Add changed-set snapshot primitives** — represent full vs delta snapshot payloads.
 - [ ] **WO-38: Apply client delta snapshots** — update the browser state store for delta application.
@@ -109,4 +152,4 @@ Expose lightweight client presence metadata so snapshots/debug UI can show who i
 
 ## Session Handoff
 
-Start the next session from [current-status.md](./current-status.md), then continue with [#41 WO-34](https://github.com/devlikebear/wirecraft/issues/41).
+Start the next session from [current-status.md](./current-status.md), then continue with [#42 WO-35](https://github.com/devlikebear/wirecraft/issues/42).

@@ -44,7 +44,7 @@ _예상 소요: 1-2주_
     - 기본 room 하나로 시작하되 다중 room 확장 가능하게 분리
   - 검증: `go test ./internal/server/...`
 
-- [ ] **T4.A.2** — client identity와 presence snapshot 추가.
+- [x] **T4.A.2** — client identity와 presence snapshot 추가.
   - 파일:
     - `internal/server/client.go`
     - `internal/netproto/snapshot.go`

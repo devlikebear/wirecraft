@@ -37,6 +37,12 @@ func TestSnapshotJSONRoundTrip(t *testing.T) {
 				},
 			},
 		},
+		Presence: PresenceSnapshot{
+			Clients: []ClientPresenceSnapshot{
+				{ID: "client-1", DisplayName: "Client 1"},
+				{ID: "client-2", DisplayName: "Client 2"},
+			},
+		},
 		Stats: SnapshotStats{
 			ClientCount:        2,
 			CommandQueueLength: 4,
@@ -69,6 +75,14 @@ func TestSnapshotJSONRoundTrip(t *testing.T) {
 	for i := range snapshot.Entities {
 		if decoded.Entities[i] != snapshot.Entities[i] {
 			t.Fatalf("decoded Entities[%d] = %+v, want %+v", i, decoded.Entities[i], snapshot.Entities[i])
+		}
+	}
+	if len(decoded.Presence.Clients) != len(snapshot.Presence.Clients) {
+		t.Fatalf("len(decoded.Presence.Clients) = %d, want %d", len(decoded.Presence.Clients), len(snapshot.Presence.Clients))
+	}
+	for i := range snapshot.Presence.Clients {
+		if decoded.Presence.Clients[i] != snapshot.Presence.Clients[i] {
+			t.Fatalf("decoded Presence.Clients[%d] = %+v, want %+v", i, decoded.Presence.Clients[i], snapshot.Presence.Clients[i])
 		}
 	}
 	if decoded.Stats != snapshot.Stats {

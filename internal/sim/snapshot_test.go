@@ -25,6 +25,11 @@ func TestBuildSnapshotFromWorld(t *testing.T) {
 			ClientCount:        3,
 			CommandQueueLength: 5,
 		},
+		Presence: netproto.PresenceSnapshot{
+			Clients: []netproto.ClientPresenceSnapshot{
+				{ID: "client-1", DisplayName: "Client 1"},
+			},
+		},
 	})
 
 	if snapshot.Tick != 9 {
@@ -55,6 +60,9 @@ func TestBuildSnapshotFromWorld(t *testing.T) {
 	}
 	if snapshot.Stats.CommandQueueLength != 5 {
 		t.Fatalf("snapshot.Stats.CommandQueueLength = %d, want 5", snapshot.Stats.CommandQueueLength)
+	}
+	if len(snapshot.Presence.Clients) != 1 || snapshot.Presence.Clients[0].ID != "client-1" {
+		t.Fatalf("snapshot.Presence.Clients = %+v, want client-1", snapshot.Presence.Clients)
 	}
 	if snapshot.Stats.SnapshotBytes <= 0 {
 		t.Fatalf("snapshot.Stats.SnapshotBytes = %d, want positive", snapshot.Stats.SnapshotBytes)

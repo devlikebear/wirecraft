@@ -1,6 +1,7 @@
 package server
 
 import (
+	"sort"
 	"sync"
 	"time"
 
@@ -13,11 +14,12 @@ type RoomID string
 const DefaultRoomID RoomID = "default"
 
 type Room struct {
-	id               RoomID
-	mu               sync.Mutex
-	simulation       *sim.Simulation
-	connectedClients int
-	subscribers      map[chan netproto.Snapshot]struct{}
+	id                RoomID
+	mu                sync.Mutex
+	simulation        *sim.Simulation
+	nextClientIndex   int
+	clients           map[ClientID]ClientPresence
+	subscriberClients map[chan netproto.Snapshot]ClientID
 }
 
 func NewRoom(id RoomID) *Room {
@@ -25,9 +27,10 @@ func NewRoom(id RoomID) *Room {
 		id = DefaultRoomID
 	}
 	return &Room{
-		id:          id,
-		simulation:  sim.NewSimulation(),
-		subscribers: make(map[chan netproto.Snapshot]struct{}),
+		id:                id,
+		simulation:        sim.NewSimulation(),
+		clients:           make(map[ClientID]ClientPresence),
+		subscriberClients: make(map[chan netproto.Snapshot]ClientID),
 	}
 }
 
@@ -48,8 +51,9 @@ func (r *Room) StepSnapshot(now time.Time) netproto.Snapshot {
 
 	return r.simulation.Step(sim.StepInput{
 		ServerTimeMS: now.UnixMilli(),
+		Presence:     r.presenceSnapshotLocked(),
 		Stats: sim.SnapshotStatsInput{
-			ClientCount: r.connectedClients,
+			ClientCount: len(r.clients),
 		},
 	})
 }
@@ -58,19 +62,22 @@ func (r *Room) Subscribe() (<-chan netproto.Snapshot, func()) {
 	snapshots := make(chan netproto.Snapshot, 4)
 
 	r.mu.Lock()
-	r.subscribers[snapshots] = struct{}{}
-	r.connectedClients++
+	r.nextClientIndex++
+	presence := NewClientPresence(r.nextClientIndex)
+	r.clients[presence.ID] = presence
+	r.subscriberClients[snapshots] = presence.ID
 	r.mu.Unlock()
 
 	unsubscribe := func() {
 		r.mu.Lock()
 		defer r.mu.Unlock()
 
-		if _, ok := r.subscribers[snapshots]; !ok {
+		clientID, ok := r.subscriberClients[snapshots]
+		if !ok {
 			return
 		}
-		delete(r.subscribers, snapshots)
-		r.connectedClients--
+		delete(r.subscriberClients, snapshots)
+		delete(r.clients, clientID)
 	}
 
 	return snapshots, unsubscribe
@@ -78,8 +85,8 @@ func (r *Room) Subscribe() (<-chan netproto.Snapshot, func()) {
 
 func (r *Room) PublishSnapshot(snapshot netproto.Snapshot) {
 	r.mu.Lock()
-	subscribers := make([]chan netproto.Snapshot, 0, len(r.subscribers))
-	for subscriber := range r.subscribers {
+	subscribers := make([]chan netproto.Snapshot, 0, len(r.subscriberClients))
+	for subscriber := range r.subscriberClients {
 		subscribers = append(subscribers, subscriber)
 	}
 	r.mu.Unlock()
@@ -90,4 +97,20 @@ func (r *Room) PublishSnapshot(snapshot netproto.Snapshot) {
 		default:
 		}
 	}
+}
+
+func (r *Room) presenceSnapshotLocked() netproto.PresenceSnapshot {
+	clients := make([]ClientPresence, 0, len(r.clients))
+	for _, client := range r.clients {
+		clients = append(clients, client)
+	}
+	sort.Slice(clients, func(i, j int) bool {
+		return clients[i].sequence < clients[j].sequence
+	})
+
+	snapshots := make([]netproto.ClientPresenceSnapshot, 0, len(clients))
+	for _, client := range clients {
+		snapshots = append(snapshots, client.Snapshot())
+	}
+	return netproto.PresenceSnapshot{Clients: snapshots}
 }

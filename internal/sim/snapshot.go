@@ -15,6 +15,7 @@ type SnapshotInput struct {
 	World            *world.World
 	ButtonStates     map[world.Position]bool
 	ActuatorEntities []physics.DynamicEntity
+	Presence         netproto.PresenceSnapshot
 	Stats            SnapshotStatsInput
 }
 
@@ -44,6 +45,7 @@ func BuildSnapshot(input SnapshotInput) netproto.Snapshot {
 		Blocks:       blocks,
 		Entities:     entities,
 		Circuit:      buildCircuitSnapshot(input.World, input.ButtonStates),
+		Presence:     input.Presence,
 		Stats: netproto.SnapshotStats{
 			ClientCount:        input.Stats.ClientCount,
 			CommandQueueLength: input.Stats.CommandQueueLength,

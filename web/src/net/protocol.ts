@@ -47,6 +47,7 @@ export interface Snapshot {
   blocks: BlockSnapshot[];
   entities: EntitySnapshot[];
   circuit: CircuitSnapshot;
+  presence: PresenceSnapshot;
   stats: SnapshotStats;
 }
 
@@ -72,6 +73,15 @@ export interface CircuitNodeSnapshot {
   nodeId: string;
   nodeType: string;
   signalState: SignalState;
+}
+
+export interface PresenceSnapshot {
+  clients: ClientPresenceSnapshot[];
+}
+
+export interface ClientPresenceSnapshot {
+  id: string;
+  displayName: string;
 }
 
 export interface TransformSnapshot {
@@ -111,6 +121,7 @@ export function parseSnapshot(value: unknown): Snapshot | null {
   const blocks = parseArray(value.blocks, parseBlockSnapshot);
   const entities = parseArray(value.entities, parseEntitySnapshot);
   const circuit = parseCircuitSnapshot(value.circuit);
+  const presence = parsePresenceSnapshot(value.presence);
   const stats = parseSnapshotStats(value.stats);
 
   if (
@@ -119,6 +130,7 @@ export function parseSnapshot(value: unknown): Snapshot | null {
     blocks === null ||
     entities === null ||
     circuit === null ||
+    presence === null ||
     stats === null
   ) {
     return null;
@@ -130,6 +142,7 @@ export function parseSnapshot(value: unknown): Snapshot | null {
     blocks,
     entities,
     circuit,
+    presence,
     stats,
   };
 }
@@ -201,6 +214,32 @@ function parseCircuitNodeSnapshot(value: unknown): CircuitNodeSnapshot | null {
     nodeType: value.nodeType,
     signalState: value.signalState,
   };
+}
+
+function parsePresenceSnapshot(value: unknown): PresenceSnapshot | null {
+  if (typeof value === 'undefined') {
+    return { clients: [] };
+  }
+  if (!isRecord(value)) {
+    return null;
+  }
+
+  const clients = parseArray(value.clients, parseClientPresenceSnapshot);
+  if (clients === null) {
+    return null;
+  }
+
+  return { clients };
+}
+
+function parseClientPresenceSnapshot(value: unknown): ClientPresenceSnapshot | null {
+  if (!isRecord(value)) {
+    return null;
+  }
+  if (typeof value.id !== 'string' || typeof value.displayName !== 'string') {
+    return null;
+  }
+  return { id: value.id, displayName: value.displayName };
 }
 
 function parseTransformSnapshot(value: unknown): TransformSnapshot | null {

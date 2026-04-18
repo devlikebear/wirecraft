@@ -71,14 +71,15 @@ Status: active.
 - [x] [#37 WO-32: Add motor and driver component cards](https://github.com/devlikebear/wirecraft/issues/37)
 - [x] [#38 Phase 3 Checkpoint: Verify physical actuators](https://github.com/devlikebear/wirecraft/issues/38)
 - [x] [#40 WO-33: Add server room model](https://github.com/devlikebear/wirecraft/issues/40)
+- [x] [#41 WO-34: Add client presence metadata](https://github.com/devlikebear/wirecraft/issues/41)
 
 ## Next Work Order
 
-Start with **Work Order 34: Add Client Presence Metadata** in [`phase-4-work-orders.md`](./phase-4-work-orders.md).
+Start with **Work Order 35: Add Deterministic Command Ordering** in [`phase-4-work-orders.md`](./phase-4-work-orders.md).
 
-GitHub issue: [#41 WO-34: Add client presence metadata](https://github.com/devlikebear/wirecraft/issues/41)
+GitHub issue: [#42 WO-35: Add deterministic command ordering](https://github.com/devlikebear/wirecraft/issues/42)
 
-Phase 3 is complete and approved. Phase 4 has started; the server now has a default room model that owns simulation, subscribers, and client counts. The next step is exposing lightweight client presence metadata to snapshots and the debug UI.
+Phase 3 is complete and approved. Phase 4 has started; the server now has a default room model that owns simulation, subscribers, client counts, and lightweight presence metadata in snapshots/debug UI. The next step is deterministic command ordering for same-tick edits and duplicate command IDs.
 
 ## GitHub Issue Index
 
@@ -123,6 +124,7 @@ Phase 3 is complete and approved. Phase 4 has started; the server now has a defa
 - [#39 Phase 4: Multiplayer Physics Sync](https://github.com/devlikebear/wirecraft/issues/39)
 - [#40 WO-33: Add server room model](https://github.com/devlikebear/wirecraft/issues/40)
 - [#41 WO-34: Add client presence metadata](https://github.com/devlikebear/wirecraft/issues/41)
+- [#42 WO-35: Add deterministic command ordering](https://github.com/devlikebear/wirecraft/issues/42)
 
 ## Session Rules
 

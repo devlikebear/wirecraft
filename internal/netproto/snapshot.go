@@ -15,6 +15,7 @@ type Snapshot struct {
 	Blocks       []BlockSnapshot  `json:"blocks"`
 	Entities     []EntitySnapshot `json:"entities"`
 	Circuit      CircuitSnapshot  `json:"circuit"`
+	Presence     PresenceSnapshot `json:"presence"`
 	Stats        SnapshotStats    `json:"stats"`
 }
 
@@ -38,6 +39,15 @@ type CircuitNodeSnapshot struct {
 	NodeID      string         `json:"nodeId"`
 	NodeType    string         `json:"nodeType"`
 	SignalState string         `json:"signalState"`
+}
+
+type PresenceSnapshot struct {
+	Clients []ClientPresenceSnapshot `json:"clients"`
+}
+
+type ClientPresenceSnapshot struct {
+	ID          string `json:"id"`
+	DisplayName string `json:"displayName"`
 }
 
 type TransformSnapshot struct {

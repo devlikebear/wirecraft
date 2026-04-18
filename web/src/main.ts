@@ -67,6 +67,7 @@ const clientId = crypto.randomUUID();
 let selectedBlockType = BlockType.Power;
 let wsStatus = 'idle';
 let serverTick: number | null = null;
+let clientCount = 0;
 let voxelBlocks = 0;
 let latestFps: number | null = null;
 let previousFrameTimestampMs: number | null = null;
@@ -77,8 +78,10 @@ const snapshotSocket = new SnapshotSocket({
     voxelRenderer.update(snapshot);
     circuitOverlay.update(snapshot);
     serverTick = snapshot.tick;
+    clientCount = snapshot.presence.clients.length || snapshot.stats.clientCount;
     voxelBlocks = snapshot.blocks.length;
     app.dataset.serverTick = String(snapshot.tick);
+    app.dataset.clientCount = String(clientCount);
     app.dataset.snapshotBuffer = String(snapshots.length);
     app.dataset.voxelBlocks = String(snapshot.blocks.length);
   },
@@ -192,6 +195,7 @@ function animate(timestampMs: number) {
   debugOverlay.update({
     wsStatus,
     serverTick,
+    clientCount,
     snapshotBuffer: snapshots.length,
     renderedEntities: entityRenderer.count,
     fps: latestFps,

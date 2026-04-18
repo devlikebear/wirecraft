@@ -177,6 +177,32 @@ describe('parseSnapshot', () => {
     expect(snapshot?.entities[0]?.transform.position).toEqual({ x: 3, y: 0.5, z: 0 });
   });
 
+  it('parses optional presence metadata from authoritative snapshots', () => {
+    const snapshot = parseSnapshot({
+      tick: 12,
+      serverTimeMs: 1700000000257,
+      blocks: [],
+      entities: [],
+      circuit: { nodes: [] },
+      presence: {
+        clients: [
+          { id: 'client-1', displayName: 'Client 1' },
+          { id: 'client-2', displayName: 'Client 2' },
+        ],
+      },
+      stats: {
+        clientCount: 2,
+        commandQueueLength: 0,
+        snapshotBytes: 144,
+      },
+    });
+
+    expect(snapshot?.presence.clients).toEqual([
+      { id: 'client-1', displayName: 'Client 1' },
+      { id: 'client-2', displayName: 'Client 2' },
+    ]);
+  });
+
   it('rejects invalid circuit signal state', () => {
     const snapshot = parseSnapshot({
       tick: 9,

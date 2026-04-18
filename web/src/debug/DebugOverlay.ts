@@ -2,6 +2,7 @@ export const DEBUG_OVERLAY_TEST_IDS = {
   root: 'wirecraft-debug-overlay',
   wsStatus: 'debug-ws-status',
   serverTick: 'debug-server-tick',
+  clientCount: 'debug-client-count',
   snapshotBuffer: 'debug-snapshot-buffer',
   renderedEntities: 'debug-rendered-entities',
   fps: 'debug-fps',
@@ -10,6 +11,7 @@ export const DEBUG_OVERLAY_TEST_IDS = {
 export interface DebugOverlayState {
   wsStatus: string;
   serverTick: number | null;
+  clientCount: number;
   snapshotBuffer: number;
   renderedEntities: number;
   fps: number | null;
@@ -27,6 +29,7 @@ export interface DebugOverlayRow {
 const rowMeta: Array<Omit<DebugOverlayRow, 'value'>> = [
   { key: 'wsStatus', label: 'WS', testId: DEBUG_OVERLAY_TEST_IDS.wsStatus },
   { key: 'serverTick', label: 'Tick', testId: DEBUG_OVERLAY_TEST_IDS.serverTick },
+  { key: 'clientCount', label: 'Clients', testId: DEBUG_OVERLAY_TEST_IDS.clientCount },
   { key: 'snapshotBuffer', label: 'Buffer', testId: DEBUG_OVERLAY_TEST_IDS.snapshotBuffer },
   { key: 'renderedEntities', label: 'Entities', testId: DEBUG_OVERLAY_TEST_IDS.renderedEntities },
   { key: 'fps', label: 'FPS', testId: DEBUG_OVERLAY_TEST_IDS.fps },
@@ -36,6 +39,7 @@ export function normalizeDebugOverlayState(input: DebugOverlayStateInput): Debug
   return {
     wsStatus: input.wsStatus ?? 'idle',
     serverTick: input.serverTick ?? null,
+    clientCount: Math.max(0, input.clientCount ?? 0),
     snapshotBuffer: Math.max(0, input.snapshotBuffer ?? 0),
     renderedEntities: Math.max(0, input.renderedEntities ?? 0),
     fps: input.fps ?? null,
@@ -117,6 +121,8 @@ function formatDebugValue(key: keyof DebugOverlayState, state: DebugOverlayState
       return state.wsStatus;
     case 'serverTick':
       return state.serverTick === null ? 'n/a' : String(Math.round(state.serverTick));
+    case 'clientCount':
+      return String(Math.round(state.clientCount));
     case 'snapshotBuffer':
       return String(Math.round(state.snapshotBuffer));
     case 'renderedEntities':

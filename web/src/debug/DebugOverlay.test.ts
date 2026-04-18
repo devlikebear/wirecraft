@@ -11,6 +11,7 @@ describe('formatDebugOverlayRows', () => {
     const rows = formatDebugOverlayRows({
       wsStatus: 'open',
       serverTick: 42,
+      clientCount: 2,
       snapshotBuffer: 64,
       renderedEntities: 1,
       fps: 59.6,
@@ -19,6 +20,12 @@ describe('formatDebugOverlayRows', () => {
     expect(rows).toEqual([
       { key: 'wsStatus', label: 'WS', testId: DEBUG_OVERLAY_TEST_IDS.wsStatus, value: 'open' },
       { key: 'serverTick', label: 'Tick', testId: DEBUG_OVERLAY_TEST_IDS.serverTick, value: '42' },
+      {
+        key: 'clientCount',
+        label: 'Clients',
+        testId: DEBUG_OVERLAY_TEST_IDS.clientCount,
+        value: '2',
+      },
       {
         key: 'snapshotBuffer',
         label: 'Buffer',
@@ -38,7 +45,7 @@ describe('formatDebugOverlayRows', () => {
   it('uses readable fallback values before runtime data arrives', () => {
     const rows = formatDebugOverlayRows(normalizeDebugOverlayState({}));
 
-    expect(rows.map((row) => row.value)).toEqual(['idle', 'n/a', '0', '0', 'n/a']);
+    expect(rows.map((row) => row.value)).toEqual(['idle', 'n/a', '0', '0', '0', 'n/a']);
   });
 });
 

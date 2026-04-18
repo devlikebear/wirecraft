@@ -1,6 +1,7 @@
 package server
 
 import (
+	"reflect"
 	"testing"
 	"time"
 
@@ -25,6 +26,33 @@ func TestRoomSubscribeTracksJoinedClientsInSnapshotStats(t *testing.T) {
 	snapshot = room.StepSnapshot(time.UnixMilli(1050))
 	if snapshot.Stats.ClientCount != 1 {
 		t.Fatalf("snapshot.Stats.ClientCount after unsubscribe = %d, want 1", snapshot.Stats.ClientCount)
+	}
+}
+
+func TestRoomIncludesClientPresenceInSnapshots(t *testing.T) {
+	room := NewRoom(DefaultRoomID)
+
+	_, unsubscribeFirst := room.Subscribe()
+	defer unsubscribeFirst()
+	_, unsubscribeSecond := room.Subscribe()
+	defer unsubscribeSecond()
+
+	snapshot := room.StepSnapshot(time.UnixMilli(1000))
+	want := []netproto.ClientPresenceSnapshot{
+		{ID: "client-1", DisplayName: "Client 1"},
+		{ID: "client-2", DisplayName: "Client 2"},
+	}
+	if !reflect.DeepEqual(snapshot.Presence.Clients, want) {
+		t.Fatalf("snapshot.Presence.Clients = %+v, want %+v", snapshot.Presence.Clients, want)
+	}
+
+	unsubscribeFirst()
+	snapshot = room.StepSnapshot(time.UnixMilli(1050))
+	want = []netproto.ClientPresenceSnapshot{
+		{ID: "client-2", DisplayName: "Client 2"},
+	}
+	if !reflect.DeepEqual(snapshot.Presence.Clients, want) {
+		t.Fatalf("snapshot.Presence.Clients after unsubscribe = %+v, want %+v", snapshot.Presence.Clients, want)
 	}
 }
 
