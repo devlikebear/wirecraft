@@ -8,7 +8,11 @@ WireCraft is an online maker sandbox for building circuits, mechanisms, and smal
 - [Development Roadmap](docs/plans/wire-craft-roadmap.md)
 - [Research Notes](docs/plans/wire-craft-research-notes.md)
 
+## Task Tracking
+
+- [Current Status](docs/tasks/current-status.md)
+- [Phase 1 Work Orders](docs/tasks/phase-1-work-orders.md)
+
 ## Current Status
 
 Planning documents are ready. Implementation starts with Phase 1: Authoritative Voxel Loop.
-
