@@ -233,7 +233,7 @@ Make starter circuit blocks visually distinguishable enough that users can actua
 
 ## Work Order 37: Add Changed-Set Snapshot Primitives
 
-Status: Next. GitHub issue: [#44](https://github.com/devlikebear/wirecraft/issues/44).
+Status: Completed. GitHub issue: [#44](https://github.com/devlikebear/wirecraft/issues/44).
 
 ## Goal
 
@@ -256,17 +256,17 @@ Introduce snapshot primitives that can represent full snapshots and changed-set 
 
 ## Steps
 
-- [ ] Define full vs changed-set snapshot schema fields.
-- [ ] Add changed block and removed block primitives.
-- [ ] Add changed entity primitives.
-- [ ] Preserve periodic/full snapshot compatibility.
-- [ ] Update local task docs after verification.
+- [x] Define full vs changed-set snapshot schema fields.
+- [x] Add changed block and removed block primitives.
+- [x] Add changed entity primitives.
+- [x] Preserve periodic/full snapshot compatibility.
+- [x] Update local task docs after verification.
 
 ## Acceptance Criteria
 
-- [ ] `go test ./internal/sim/...` passes.
-- [ ] `go test ./...` passes.
-- [ ] Existing full snapshot consumers remain compatible.
+- [x] `go test ./internal/sim/...` passes.
+- [x] `go test ./...` passes.
+- [x] Existing full snapshot consumers remain compatible.
 
 ## Verification Commands
 
@@ -275,13 +275,56 @@ Introduce snapshot primitives that can represent full snapshots and changed-set 
 
 ---
 
+## Work Order 38: Apply Client Delta Snapshots
+
+Status: Next. GitHub issue: [#46](https://github.com/devlikebear/wirecraft/issues/46).
+
+## Goal
+
+Teach the browser state layer to accept full snapshots and apply changed-set snapshot payloads produced by the server snapshot primitives.
+
+## Non-goals
+
+- Do not remove full snapshot support.
+- Do not add compression or binary protocol.
+- Do not implement server-side delta streaming policy yet beyond consuming the schema.
+- Do not redesign the UI.
+
+## Touch points (<=5)
+
+- `web/src/net/protocol.ts`
+- `web/src/state/snapshotStore.ts`
+- `web/src/state/snapshotStore.test.ts`
+- `web/src/render/VoxelRenderer.ts`
+- `docs/tasks/phase-4-work-orders.md`
+
+## Steps
+
+- [ ] Parse full vs changed-set snapshot fields in TypeScript.
+- [ ] Add state-store logic for changed blocks and removed blocks.
+- [ ] Add entity changed-set application.
+- [ ] Preserve full snapshot reset behavior.
+- [ ] Update local task docs after verification.
+
+## Acceptance Criteria
+
+- [ ] `cd web && npm test` passes.
+- [ ] `cd web && npm run build` passes.
+- [ ] Existing full snapshot rendering remains compatible.
+
+## Verification Commands
+
+- `cd web && npm test`
+- `cd web && npm run build`
+
+---
+
 ## Planned Work Orders
 
-- [ ] **WO-38: Apply client delta snapshots** — update the browser state store for delta application.
 - [ ] **WO-39: Add basic actuator collision constraints** — clamp actuator motion against occupied solids.
 - [ ] **WO-40: Add server metrics logging** — expose tick duration, queue length, bytes, and client count.
 - [ ] **Phase 4 checkpoint** — verify 2-4 client collaboration, conflict handling, collision, and observability.
 
 ## Session Handoff
 
-Start the next session from [current-status.md](./current-status.md), then continue with [#44 WO-37](https://github.com/devlikebear/wirecraft/issues/44).
+Start the next session from [current-status.md](./current-status.md), then continue with [#46 WO-38](https://github.com/devlikebear/wirecraft/issues/46).

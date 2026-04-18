@@ -45,19 +45,27 @@ func BuildSnapshot(input SnapshotInput) netproto.Snapshot {
 	}
 
 	snapshot := netproto.Snapshot{
-		Tick:         uint64(input.Tick),
-		ServerTimeMS: input.ServerTimeMS,
-		Blocks:       blocks,
-		Entities:     entities,
-		Circuit:      buildCircuitSnapshot(input.World, input.ButtonStates),
-		Presence:     input.Presence,
-		CommandAcks:  commandAcks,
+		Mode:            netproto.SnapshotModeFull,
+		Tick:            uint64(input.Tick),
+		ServerTimeMS:    input.ServerTimeMS,
+		Blocks:          blocks,
+		ChangedBlocks:   []netproto.BlockSnapshot{},
+		RemovedBlocks:   []world.Position{},
+		Entities:        entities,
+		ChangedEntities: []netproto.EntitySnapshot{},
+		Circuit:         buildCircuitSnapshot(input.World, input.ButtonStates),
+		Presence:        input.Presence,
+		CommandAcks:     commandAcks,
 		Stats: netproto.SnapshotStats{
 			ClientCount:        input.Stats.ClientCount,
 			CommandQueueLength: input.Stats.CommandQueueLength,
 		},
 	}
 
+	return finalizeSnapshot(snapshot)
+}
+
+func finalizeSnapshot(snapshot netproto.Snapshot) netproto.Snapshot {
 	encoded, err := json.Marshal(snapshot)
 	if err == nil {
 		snapshot.Stats.SnapshotBytes = len(encoded)

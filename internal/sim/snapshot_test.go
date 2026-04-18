@@ -35,6 +35,12 @@ func TestBuildSnapshotFromWorld(t *testing.T) {
 	if snapshot.Tick != 9 {
 		t.Fatalf("snapshot.Tick = %d, want 9", snapshot.Tick)
 	}
+	if snapshot.Mode != netproto.SnapshotModeFull {
+		t.Fatalf("snapshot.Mode = %q, want %q", snapshot.Mode, netproto.SnapshotModeFull)
+	}
+	if len(snapshot.ChangedBlocks) != 0 || len(snapshot.RemovedBlocks) != 0 || len(snapshot.ChangedEntities) != 0 {
+		t.Fatalf("changed-set fields = blocks:%+v removed:%+v entities:%+v, want empty full snapshot primitives", snapshot.ChangedBlocks, snapshot.RemovedBlocks, snapshot.ChangedEntities)
+	}
 	if snapshot.ServerTimeMS != 1700000000999 {
 		t.Fatalf("snapshot.ServerTimeMS = %d, want 1700000000999", snapshot.ServerTimeMS)
 	}

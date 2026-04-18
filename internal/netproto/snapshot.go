@@ -9,6 +9,13 @@ const (
 	EntityTypeMotor      = "motor"
 )
 
+type SnapshotMode string
+
+const (
+	SnapshotModeFull       SnapshotMode = "full"
+	SnapshotModeChangedSet SnapshotMode = "changed_set"
+)
+
 type CommandAckStatus string
 
 const (
@@ -17,14 +24,19 @@ const (
 )
 
 type Snapshot struct {
-	Tick         uint64               `json:"tick"`
-	ServerTimeMS int64                `json:"serverTimeMs"`
-	Blocks       []BlockSnapshot      `json:"blocks"`
-	Entities     []EntitySnapshot     `json:"entities"`
-	Circuit      CircuitSnapshot      `json:"circuit"`
-	Presence     PresenceSnapshot     `json:"presence"`
-	CommandAcks  []CommandAckSnapshot `json:"commandAcks"`
-	Stats        SnapshotStats        `json:"stats"`
+	Mode            SnapshotMode         `json:"mode"`
+	Tick            uint64               `json:"tick"`
+	BaseTick        uint64               `json:"baseTick,omitempty"`
+	ServerTimeMS    int64                `json:"serverTimeMs"`
+	Blocks          []BlockSnapshot      `json:"blocks"`
+	ChangedBlocks   []BlockSnapshot      `json:"changedBlocks"`
+	RemovedBlocks   []world.Position     `json:"removedBlocks"`
+	Entities        []EntitySnapshot     `json:"entities"`
+	ChangedEntities []EntitySnapshot     `json:"changedEntities"`
+	Circuit         CircuitSnapshot      `json:"circuit"`
+	Presence        PresenceSnapshot     `json:"presence"`
+	CommandAcks     []CommandAckSnapshot `json:"commandAcks"`
+	Stats           SnapshotStats        `json:"stats"`
 }
 
 type BlockSnapshot struct {

@@ -82,7 +82,7 @@ _예상 소요: 1-2주_
 
 ### 작업 그룹 C: Snapshot efficiency
 
-- [ ] **T4.C.1** — changed-set snapshot 구현.
+- [x] **T4.C.1** — changed-set snapshot 구현.
   - 파일:
     - `internal/netproto/snapshot.go`
     - `internal/sim/snapshot_builder.go`

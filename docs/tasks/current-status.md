@@ -75,14 +75,15 @@ Status: active.
 - [x] [#42 WO-35: Add deterministic command ordering](https://github.com/devlikebear/wirecraft/issues/42)
 - [x] [#43 WO-36: Add command acknowledgement snapshot fields](https://github.com/devlikebear/wirecraft/issues/43)
 - [x] [#45 WO-36A: Improve circuit block visual readability](https://github.com/devlikebear/wirecraft/issues/45)
+- [x] [#44 WO-37: Add changed-set snapshot primitives](https://github.com/devlikebear/wirecraft/issues/44)
 
 ## Next Work Order
 
-Start with **Work Order 37: Add Changed-Set Snapshot Primitives** in [`phase-4-work-orders.md`](./phase-4-work-orders.md).
+Start with **Work Order 38: Apply Client Delta Snapshots** in [`phase-4-work-orders.md`](./phase-4-work-orders.md).
 
-GitHub issue: [#44 WO-37: Add changed-set snapshot primitives](https://github.com/devlikebear/wirecraft/issues/44)
+GitHub issue: [#46 WO-38: Apply client delta snapshots](https://github.com/devlikebear/wirecraft/issues/46)
 
-Phase 3 is complete and approved. Phase 4 has started; the server now has a default room model that owns simulation, subscribers, client counts, lightweight presence metadata, deterministic same-tick command ordering, duplicate command suppression, and command acknowledgement metadata in snapshots. Circuit blocks now have distinct visual profiles so starter circuits are easier to compose. The next step is adding changed-set snapshot primitives while preserving full snapshot fallback.
+Phase 3 is complete and approved. Phase 4 has started; the server now has a default room model that owns simulation, subscribers, client counts, lightweight presence metadata, deterministic same-tick command ordering, duplicate command suppression, and command acknowledgement metadata in snapshots. Circuit blocks now have distinct visual profiles, and server snapshots now have full vs changed-set primitives with changed blocks, removed blocks, and changed entities. The next step is teaching the browser state layer to apply changed-set snapshots while preserving full snapshot fallback.
 
 ## GitHub Issue Index
 
@@ -131,6 +132,7 @@ Phase 3 is complete and approved. Phase 4 has started; the server now has a defa
 - [#43 WO-36: Add command acknowledgement snapshot fields](https://github.com/devlikebear/wirecraft/issues/43)
 - [#44 WO-37: Add changed-set snapshot primitives](https://github.com/devlikebear/wirecraft/issues/44)
 - [#45 WO-36A: Improve circuit block visual readability](https://github.com/devlikebear/wirecraft/issues/45)
+- [#46 WO-38: Apply client delta snapshots](https://github.com/devlikebear/wirecraft/issues/46)
 
 ## Session Rules
 
