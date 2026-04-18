@@ -54,6 +54,9 @@ func TestWebSocketSendsSnapshots(t *testing.T) {
 	if snapshot.Stats.SnapshotBytes <= 0 {
 		t.Fatalf("snapshot.Stats.SnapshotBytes = %d, want positive", snapshot.Stats.SnapshotBytes)
 	}
+	if !snapshotContainsEntity(snapshot, netproto.EntityIDDebugMover, netproto.EntityTypeDebugMover) {
+		t.Fatalf("snapshot.Entities = %+v, want debug mover entity", snapshot.Entities)
+	}
 }
 
 func TestWebSocketAppliesCommandAndReturnsAuthoritativeSnapshot(t *testing.T) {
@@ -101,6 +104,15 @@ func websocketURL(httpURL string, path string) string {
 func snapshotContainsBlock(snapshot netproto.Snapshot, pos world.Position, blockType world.BlockType) bool {
 	for _, block := range snapshot.Blocks {
 		if block.Position == pos && block.BlockType == blockType {
+			return true
+		}
+	}
+	return false
+}
+
+func snapshotContainsEntity(snapshot netproto.Snapshot, id string, entityType string) bool {
+	for _, entity := range snapshot.Entities {
+		if entity.ID == id && entity.Type == entityType {
 			return true
 		}
 	}

@@ -496,7 +496,7 @@ Add pure TypeScript interpolation primitives for buffered server snapshots so re
 
 ## Work Order 12: Add Dynamic Debug Entity Snapshots
 
-GitHub issue: [#13 WO-12: Add dynamic debug entity snapshots](https://github.com/devlikebear/wirecraft/issues/13)
+Status: Completed. GitHub issue: [#13](https://github.com/devlikebear/wirecraft/issues/13).
 
 ## Goal
 
@@ -518,21 +518,65 @@ Emit a deterministic moving debug entity from the Go simulation snapshots so the
 
 ## Steps
 
-- [ ] Add deterministic debug entity transform generation from tick or server time.
-- [ ] Include the debug entity in full snapshots emitted by `sim.BuildSnapshot` or `sim.Simulation.Step`.
-- [ ] Keep entity payload compatible with existing `netproto.EntitySnapshot` transform schema.
-- [ ] Add tests proving entity IDs, types, and positions change deterministically over ticks.
-- [ ] Keep voxel block snapshots unchanged.
+- [x] Add deterministic debug entity transform generation from tick or server time.
+- [x] Include the debug entity in full snapshots emitted by `sim.BuildSnapshot` or `sim.Simulation.Step`.
+- [x] Keep entity payload compatible with existing `netproto.EntitySnapshot` transform schema.
+- [x] Add tests proving entity IDs, types, and positions change deterministically over ticks.
+- [x] Keep voxel block snapshots unchanged.
 
 ## Acceptance Criteria
 
-- [ ] `go test ./internal/sim/...` passes.
-- [ ] `go test ./internal/server/...` passes.
-- [ ] `go test ./...` passes.
-- [ ] No frontend files are touched.
+- [x] `go test ./internal/sim/...` passes.
+- [x] `go test ./internal/server/...` passes.
+- [x] `go test ./...` passes.
+- [x] No frontend files are touched.
 
 ## Verification Commands
 
 - `go test ./internal/sim/...`
 - `go test ./internal/server/...`
 - `go test ./...`
+
+---
+
+## Work Order 13: Render Dynamic Debug Entity with Interpolation
+
+GitHub issue: [#14 WO-13: Render dynamic debug entity with interpolation](https://github.com/devlikebear/wirecraft/issues/14)
+
+## Goal
+
+Render the server-authored debug mover entity in Three.js using the existing snapshot interpolation primitives so browser FPS can smooth the 20Hz server stream.
+
+## Non-goals
+
+- Do not change Go server snapshot generation.
+- Do not add general physics rendering yet.
+- Do not add a debug overlay yet.
+
+## Touch points (<=5)
+
+- `web/src/render/EntityRenderer.ts`
+- `web/src/render/EntityRenderer.test.ts`
+- `web/src/state/snapshotStore.ts`
+- `web/src/main.ts`
+- `docs/tasks/phase-1-work-orders.md`
+
+## Steps
+
+- [ ] Add a small entity renderer that can create/update debug mover meshes by snapshot entity ID.
+- [ ] Use buffered snapshots and `findSnapshotPair` with the default interpolation delay to calculate render transforms.
+- [ ] Apply interpolated position, rotation, and scale to the debug mover mesh.
+- [ ] Keep voxel rendering behavior unchanged.
+- [ ] Add focused tests for interpolated entity transform selection and fallback behavior.
+
+## Acceptance Criteria
+
+- [ ] `cd web && npm test` passes.
+- [ ] `cd web && npm run build` passes.
+- [ ] With Go server and Vite dev server running, a moving debug entity is visible in the scene.
+- [ ] No Go server files are touched.
+
+## Verification Commands
+
+- `cd web && npm test`
+- `cd web && npm run build`

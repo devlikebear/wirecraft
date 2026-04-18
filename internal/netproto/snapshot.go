@@ -2,6 +2,11 @@ package netproto
 
 import "github.com/devlikebear/wirecraft/internal/world"
 
+const (
+	EntityIDDebugMover   = "debug-mover-1"
+	EntityTypeDebugMover = "debug_mover"
+)
+
 type Snapshot struct {
 	Tick         uint64           `json:"tick"`
 	ServerTimeMS int64            `json:"serverTimeMs"`

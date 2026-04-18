@@ -43,12 +43,13 @@ GitHub issue: [#1 Phase 1: Authoritative Voxel Loop](https://github.com/devlikeb
 - [x] [#10 WO-9: Render authoritative snapshots as voxels](https://github.com/devlikebear/wirecraft/issues/10)
 - [x] [#11 WO-10: Add raycast block edit commands](https://github.com/devlikebear/wirecraft/issues/11)
 - [x] [#12 WO-11: Add snapshot interpolation primitives](https://github.com/devlikebear/wirecraft/issues/12)
+- [x] [#13 WO-12: Add dynamic debug entity snapshots](https://github.com/devlikebear/wirecraft/issues/13)
 
 ## Next Work Order
 
-Start with **WO-12** in [`phase-1-work-orders.md`](./phase-1-work-orders.md).
+Start with **WO-13** in [`phase-1-work-orders.md`](./phase-1-work-orders.md).
 
-GitHub issue: [#13 WO-12: Add dynamic debug entity snapshots](https://github.com/devlikebear/wirecraft/issues/13)
+GitHub issue: [#14 WO-13: Render dynamic debug entity with interpolation](https://github.com/devlikebear/wirecraft/issues/14)
 
 ## GitHub Issue Index
 
@@ -65,6 +66,7 @@ GitHub issue: [#13 WO-12: Add dynamic debug entity snapshots](https://github.com
 - [#11 WO-10: Add raycast block edit commands](https://github.com/devlikebear/wirecraft/issues/11)
 - [#12 WO-11: Add snapshot interpolation primitives](https://github.com/devlikebear/wirecraft/issues/12)
 - [#13 WO-12: Add dynamic debug entity snapshots](https://github.com/devlikebear/wirecraft/issues/13)
+- [#14 WO-13: Render dynamic debug entity with interpolation](https://github.com/devlikebear/wirecraft/issues/14)
 
 ## Session Rules
 

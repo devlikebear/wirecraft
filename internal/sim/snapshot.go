@@ -36,7 +36,7 @@ func BuildSnapshot(input SnapshotInput) netproto.Snapshot {
 		Tick:         uint64(input.Tick),
 		ServerTimeMS: input.ServerTimeMS,
 		Blocks:       blocks,
-		Entities:     []netproto.EntitySnapshot{},
+		Entities:     []netproto.EntitySnapshot{buildDebugMoverEntity(input.Tick)},
 		Stats: netproto.SnapshotStats{
 			ClientCount:        input.Stats.ClientCount,
 			CommandQueueLength: input.Stats.CommandQueueLength,
@@ -49,4 +49,22 @@ func BuildSnapshot(input SnapshotInput) netproto.Snapshot {
 	}
 
 	return snapshot
+}
+
+func buildDebugMoverEntity(tick TickID) netproto.EntitySnapshot {
+	step := float64(tick % 16)
+
+	return netproto.EntitySnapshot{
+		ID:   netproto.EntityIDDebugMover,
+		Type: netproto.EntityTypeDebugMover,
+		Transform: netproto.TransformSnapshot{
+			Position: netproto.Vec3{
+				X: 1 + step/8,
+				Y: 1.25,
+				Z: 1 + step/16,
+			},
+			Rotation: netproto.Quat{X: 0, Y: 0, Z: 0, W: 1},
+			Scale:    netproto.Vec3{X: 0.5, Y: 0.5, Z: 0.5},
+		},
+	}
 }
