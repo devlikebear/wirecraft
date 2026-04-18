@@ -189,7 +189,7 @@ Define the server-side protocol data types for client edit commands and world sn
 
 ## Work Order 5: Build Simulation Snapshot From World State
 
-GitHub issue: [#6 WO-5: Build simulation snapshot from world state](https://github.com/devlikebear/wirecraft/issues/6)
+Status: Completed. GitHub issue: [#6](https://github.com/devlikebear/wirecraft/issues/6).
 
 ## Goal
 
@@ -211,21 +211,64 @@ Create the first simulation assembly layer that can build a full snapshot from t
 
 ## Steps
 
-- [ ] Add a deterministic way to list occupied blocks from `world.World`.
-- [ ] Add tests proving occupied blocks are listed in stable coordinate order.
-- [ ] Add a snapshot builder that emits a full `netproto.Snapshot` from tick, server time, world, and stats input.
-- [ ] Add tests proving snapshot blocks match world state and air blocks are omitted.
-- [ ] Keep dynamic entities empty for this work order.
+- [x] Add a deterministic way to list occupied blocks from `world.World`.
+- [x] Add tests proving occupied blocks are listed in stable coordinate order.
+- [x] Add a snapshot builder that emits a full `netproto.Snapshot` from tick, server time, world, and stats input.
+- [x] Add tests proving snapshot blocks match world state and air blocks are omitted.
+- [x] Keep dynamic entities empty for this work order.
 
 ## Acceptance Criteria
 
-- [ ] `go test ./internal/world/...` passes.
+- [x] `go test ./internal/world/...` passes.
+- [x] `go test ./internal/sim/...` passes.
+- [x] `go test ./...` passes.
+- [x] No WebSocket transport or frontend files are touched.
+
+## Verification Commands
+
+- `go test ./internal/world/...`
+- `go test ./internal/sim/...`
+- `go test ./...`
+
+---
+
+## Work Order 6: Add In-Memory Simulation Runner
+
+GitHub issue: [#7 WO-6: Add in-memory simulation runner](https://github.com/devlikebear/wirecraft/issues/7)
+
+## Goal
+
+Add a small in-memory simulation runner that owns a world, applies validated commands, advances ticks, and produces snapshots without network transport.
+
+## Non-goals
+
+- Do not implement WebSocket transport yet.
+- Do not connect the TypeScript client yet.
+- Do not implement interpolation.
+
+## Touch points (<=5)
+
+- `internal/sim/simulation.go`
+- `internal/sim/simulation_test.go`
+- `internal/netproto/command.go`
+- `internal/world/world.go`
+- `docs/tasks/phase-1-work-orders.md`
+
+## Steps
+
+- [ ] Add `Simulation` with default world bounds and current tick.
+- [ ] Add `ApplyCommand` for `place_block` and `remove_block` using command validation.
+- [ ] Add `Step` or `Snapshot` method that advances tick and returns a full snapshot.
+- [ ] Add tests for valid place/remove commands changing world state.
+- [ ] Add tests for invalid commands being rejected without changing world state.
+
+## Acceptance Criteria
+
 - [ ] `go test ./internal/sim/...` passes.
 - [ ] `go test ./...` passes.
 - [ ] No WebSocket transport or frontend files are touched.
 
 ## Verification Commands
 
-- `go test ./internal/world/...`
 - `go test ./internal/sim/...`
 - `go test ./...`

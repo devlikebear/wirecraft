@@ -5,7 +5,6 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/devlikebear/wirecraft/internal/sim"
 	"github.com/devlikebear/wirecraft/internal/world"
 )
 
@@ -16,7 +15,7 @@ func TestCommandValidateAcceptsPlaceAndRemove(t *testing.T) {
 		Type:      CommandPlaceBlock,
 		ClientID:  "client-1",
 		CommandID: "cmd-1",
-		TickHint:  sim.TickID(7),
+		TickHint:  7,
 		Position:  world.Position{X: 1, Y: 2, Z: 3},
 		BlockType: world.BlockSolid,
 	}
@@ -28,7 +27,7 @@ func TestCommandValidateAcceptsPlaceAndRemove(t *testing.T) {
 		Type:      CommandRemoveBlock,
 		ClientID:  "client-1",
 		CommandID: "cmd-2",
-		TickHint:  sim.TickID(8),
+		TickHint:  8,
 		Position:  world.Position{X: 1, Y: 2, Z: 3},
 		BlockType: world.BlockAir,
 	}
@@ -104,7 +103,7 @@ func TestCommandJSONRoundTrip(t *testing.T) {
 		Type:      CommandPlaceBlock,
 		ClientID:  "client-1",
 		CommandID: "cmd-1",
-		TickHint:  sim.TickID(11),
+		TickHint:  11,
 		Position:  world.Position{X: 4, Y: 5, Z: 6},
 		BlockType: world.BlockDebugMover,
 	}

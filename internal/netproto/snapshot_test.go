@@ -4,13 +4,12 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/devlikebear/wirecraft/internal/sim"
 	"github.com/devlikebear/wirecraft/internal/world"
 )
 
 func TestSnapshotJSONRoundTrip(t *testing.T) {
 	snapshot := Snapshot{
-		Tick:         sim.TickID(12),
+		Tick:         12,
 		ServerTimeMS: 1700000000123,
 		Blocks: []BlockSnapshot{
 			{

@@ -3,7 +3,6 @@ package netproto
 import (
 	"errors"
 
-	"github.com/devlikebear/wirecraft/internal/sim"
 	"github.com/devlikebear/wirecraft/internal/world"
 )
 
@@ -23,7 +22,7 @@ type Command struct {
 	Type      CommandType     `json:"type"`
 	ClientID  string          `json:"clientId"`
 	CommandID string          `json:"commandId"`
-	TickHint  sim.TickID      `json:"tickHint"`
+	TickHint  uint64          `json:"tickHint"`
 	Position  world.Position  `json:"position"`
 	BlockType world.BlockType `json:"blockType"`
 }

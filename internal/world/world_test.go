@@ -122,3 +122,52 @@ func TestWorldSetRemoveIsDeterministic(t *testing.T) {
 		t.Fatalf("Get(after repeated remove) = %s, want %s", block, BlockAir)
 	}
 }
+
+func TestWorldOccupiedBlocksReturnsStableCoordinateOrder(t *testing.T) {
+	w := NewDefault()
+	blocks := []Block{
+		{Position: Position{X: 3, Y: 0, Z: 0}, BlockType: BlockSolid},
+		{Position: Position{X: 1, Y: 2, Z: 0}, BlockType: BlockDebugMover},
+		{Position: Position{X: 1, Y: 1, Z: 3}, BlockType: BlockSolid},
+		{Position: Position{X: 1, Y: 1, Z: 1}, BlockType: BlockDebugMover},
+	}
+
+	for _, block := range blocks {
+		if err := w.Set(block.Position, block.BlockType); err != nil {
+			t.Fatalf("Set(%+v) error = %v, want nil", block, err)
+		}
+	}
+
+	got := w.OccupiedBlocks()
+	want := []Block{
+		{Position: Position{X: 1, Y: 1, Z: 1}, BlockType: BlockDebugMover},
+		{Position: Position{X: 1, Y: 1, Z: 3}, BlockType: BlockSolid},
+		{Position: Position{X: 1, Y: 2, Z: 0}, BlockType: BlockDebugMover},
+		{Position: Position{X: 3, Y: 0, Z: 0}, BlockType: BlockSolid},
+	}
+
+	if len(got) != len(want) {
+		t.Fatalf("len(OccupiedBlocks()) = %d, want %d", len(got), len(want))
+	}
+	for i := range want {
+		if got[i] != want[i] {
+			t.Fatalf("OccupiedBlocks()[%d] = %+v, want %+v", i, got[i], want[i])
+		}
+	}
+}
+
+func TestWorldOccupiedBlocksOmitsAir(t *testing.T) {
+	w := NewDefault()
+	pos := Position{X: 2, Y: 2, Z: 2}
+
+	if err := w.Set(pos, BlockSolid); err != nil {
+		t.Fatalf("Set(solid) error = %v, want nil", err)
+	}
+	if err := w.Set(pos, BlockAir); err != nil {
+		t.Fatalf("Set(air) error = %v, want nil", err)
+	}
+
+	if got := w.OccupiedBlocks(); len(got) != 0 {
+		t.Fatalf("OccupiedBlocks() = %+v, want empty", got)
+	}
+}

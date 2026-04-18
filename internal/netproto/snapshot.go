@@ -1,12 +1,9 @@
 package netproto
 
-import (
-	"github.com/devlikebear/wirecraft/internal/sim"
-	"github.com/devlikebear/wirecraft/internal/world"
-)
+import "github.com/devlikebear/wirecraft/internal/world"
 
 type Snapshot struct {
-	Tick         sim.TickID       `json:"tick"`
+	Tick         uint64           `json:"tick"`
 	ServerTimeMS int64            `json:"serverTimeMs"`
 	Blocks       []BlockSnapshot  `json:"blocks"`
 	Entities     []EntitySnapshot `json:"entities"`

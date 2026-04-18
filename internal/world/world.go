@@ -1,6 +1,9 @@
 package world
 
-import "errors"
+import (
+	"errors"
+	"sort"
+)
 
 var (
 	ErrOutOfBounds      = errors.New("position out of bounds")
@@ -17,6 +20,11 @@ type Dimensions struct {
 	X int
 	Y int
 	Z int
+}
+
+type Block struct {
+	Position  Position
+	BlockType BlockType
 }
 
 type World struct {
@@ -77,4 +85,31 @@ func (w *World) Remove(pos Position) error {
 
 	delete(w.blocks, pos)
 	return nil
+}
+
+func (w *World) OccupiedBlocks() []Block {
+	blocks := make([]Block, 0, len(w.blocks))
+	for pos, blockType := range w.blocks {
+		if blockType == BlockAir {
+			continue
+		}
+		blocks = append(blocks, Block{
+			Position:  pos,
+			BlockType: blockType,
+		})
+	}
+
+	sort.Slice(blocks, func(i, j int) bool {
+		a := blocks[i].Position
+		b := blocks[j].Position
+		if a.X != b.X {
+			return a.X < b.X
+		}
+		if a.Y != b.Y {
+			return a.Y < b.Y
+		}
+		return a.Z < b.Z
+	})
+
+	return blocks
 }
