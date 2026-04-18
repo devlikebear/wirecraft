@@ -90,6 +90,62 @@ func TestWorldRejectsInvalidBlockType(t *testing.T) {
 	}
 }
 
+func TestBlockTypesIncludeCircuitBlocksAndKeepPhase1Values(t *testing.T) {
+	if BlockAir != 0 {
+		t.Fatalf("BlockAir = %d, want 0", BlockAir)
+	}
+	if BlockSolid != 1 {
+		t.Fatalf("BlockSolid = %d, want 1", BlockSolid)
+	}
+	if BlockDebugMover != 2 {
+		t.Fatalf("BlockDebugMover = %d, want 2", BlockDebugMover)
+	}
+
+	cases := []struct {
+		block BlockType
+		name  string
+	}{
+		{BlockPower, "power"},
+		{BlockWire, "wire"},
+		{BlockButton, "button"},
+		{BlockAndGate, "and_gate"},
+		{BlockMCUOutput, "mcu_output"},
+	}
+	for _, tc := range cases {
+		if !tc.block.Valid() {
+			t.Fatalf("%s block should be valid", tc.name)
+		}
+		if got := tc.block.String(); got != tc.name {
+			t.Fatalf("%s String() = %q, want %q", tc.name, got, tc.name)
+		}
+	}
+}
+
+func TestWorldAcceptsCircuitBlocks(t *testing.T) {
+	w := NewDefault()
+	circuitBlocks := []BlockType{
+		BlockPower,
+		BlockWire,
+		BlockButton,
+		BlockAndGate,
+		BlockMCUOutput,
+	}
+
+	for index, blockType := range circuitBlocks {
+		pos := Position{X: index, Y: 0, Z: 0}
+		if err := w.Set(pos, blockType); err != nil {
+			t.Fatalf("Set(%s) error = %v, want nil", blockType, err)
+		}
+		got, err := w.Get(pos)
+		if err != nil {
+			t.Fatalf("Get(%s) error = %v, want nil", blockType, err)
+		}
+		if got != blockType {
+			t.Fatalf("Get(%+v) = %s, want %s", pos, got, blockType)
+		}
+	}
+}
+
 func TestWorldSetRemoveIsDeterministic(t *testing.T) {
 	w := NewDefault()
 	pos := Position{X: 7, Y: 8, Z: 9}

@@ -19,7 +19,7 @@ Add the smallest deterministic server-side digital circuit runtime. The server s
 
 ## Work Order 15: Add Circuit Block Types and Metadata
 
-GitHub issue: [#18 WO-15: Add circuit block types and metadata](https://github.com/devlikebear/wirecraft/issues/18)
+Status: Completed. GitHub issue: [#18](https://github.com/devlikebear/wirecraft/issues/18).
 
 ## Goal
 
@@ -42,18 +42,18 @@ Add the first Phase 2 circuit domain foundation: circuit-capable block types and
 
 ## Steps
 
-- [ ] Add block types for power, wire, button, AND gate, and MCU output.
-- [ ] Add circuit-facing metadata helpers for block role and pin requirements.
-- [ ] Keep existing block numeric values stable for current protocol compatibility.
-- [ ] Add tests for circuit block validity and metadata completeness.
-- [ ] Keep Phase 1 block behavior unchanged.
+- [x] Add block types for power, wire, button, AND gate, and MCU output.
+- [x] Add circuit-facing metadata helpers for block role and pin requirements.
+- [x] Keep existing block numeric values stable for current protocol compatibility.
+- [x] Add tests for circuit block validity and metadata completeness.
+- [x] Keep Phase 1 block behavior unchanged.
 
 ## Acceptance Criteria
 
-- [ ] `go test ./internal/world/...` passes.
-- [ ] `go test ./internal/circuit/...` passes.
-- [ ] `go test ./...` passes.
-- [ ] No frontend files are touched.
+- [x] `go test ./internal/world/...` passes.
+- [x] `go test ./internal/circuit/...` passes.
+- [x] `go test ./...` passes.
+- [x] No frontend files are touched.
 
 ## Verification Commands
 
@@ -65,7 +65,7 @@ Add the first Phase 2 circuit domain foundation: circuit-capable block types and
 
 ## Work Order 16: Add Circuit Graph Primitives
 
-GitHub issue: create when active.
+GitHub issue: [#19 WO-16: Add circuit graph primitives](https://github.com/devlikebear/wirecraft/issues/19)
 
 ## Goal
 
