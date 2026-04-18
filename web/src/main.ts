@@ -1,4 +1,5 @@
 import './styles.css';
+import { DebugOverlay, calculateFps } from './debug/DebugOverlay';
 import { EditController } from './input/EditController';
 import { BlockType, type Position } from './net/protocol';
 import { SnapshotSocket } from './net/socket';
@@ -55,18 +56,27 @@ scene.add(grid);
 
 const voxelRenderer = new VoxelRenderer(scene);
 const entityRenderer = new EntityRenderer(scene);
+const debugOverlay = new DebugOverlay(app);
 const snapshots = new SnapshotStore({ maxSnapshots: 64 });
 const clientId = crypto.randomUUID();
+let wsStatus = 'idle';
+let serverTick: number | null = null;
+let voxelBlocks = 0;
+let latestFps: number | null = null;
+let previousFrameTimestampMs: number | null = null;
 
 const snapshotSocket = new SnapshotSocket({
   onSnapshot: (snapshot) => {
     snapshots.append(snapshot);
     voxelRenderer.update(snapshot);
+    serverTick = snapshot.tick;
+    voxelBlocks = snapshot.blocks.length;
     app.dataset.serverTick = String(snapshot.tick);
     app.dataset.snapshotBuffer = String(snapshots.length);
     app.dataset.voxelBlocks = String(snapshot.blocks.length);
   },
   onStatusChange: (status) => {
+    wsStatus = status;
     app.dataset.wsStatus = status;
     console.info(`[wirecraft] websocket ${status}`);
   },
@@ -90,6 +100,7 @@ editController.connect();
 
 window.addEventListener('beforeunload', () => {
   editController.disconnect();
+  debugOverlay.dispose();
   entityRenderer.dispose();
   voxelRenderer.dispose();
   snapshotSocket.close();
@@ -134,7 +145,9 @@ window.addEventListener('resize', () => {
   renderer.setSize(window.innerWidth, window.innerHeight);
 });
 
-function animate() {
+function animate(timestampMs: number) {
+  latestFps = calculateFps(previousFrameTimestampMs, timestampMs) ?? latestFps;
+  previousFrameTimestampMs = timestampMs;
   scene.rotation.y += (targetYaw - scene.rotation.y) * 0.035;
 
   const renderServerTimeMs = snapshots.renderServerTimeMs(Date.now(), DEFAULT_INTERPOLATION_DELAY_MS);
@@ -143,6 +156,16 @@ function animate() {
     app.dataset.renderServerTimeMs = String(Math.round(renderServerTimeMs));
     app.dataset.renderedEntities = String(entityRenderer.count);
   }
+
+  debugOverlay.update({
+    wsStatus,
+    serverTick,
+    snapshotBuffer: snapshots.length,
+    renderedEntities: entityRenderer.count,
+    fps: latestFps,
+  });
+  app.dataset.fps = latestFps === null ? '' : String(latestFps);
+  app.dataset.debugVoxelBlocks = String(voxelBlocks);
 
   renderer.render(scene, camera);
   requestAnimationFrame(animate);

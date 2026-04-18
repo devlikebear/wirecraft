@@ -45,12 +45,13 @@ GitHub issue: [#1 Phase 1: Authoritative Voxel Loop](https://github.com/devlikeb
 - [x] [#12 WO-11: Add snapshot interpolation primitives](https://github.com/devlikebear/wirecraft/issues/12)
 - [x] [#13 WO-12: Add dynamic debug entity snapshots](https://github.com/devlikebear/wirecraft/issues/13)
 - [x] [#14 WO-13: Render dynamic debug entity with interpolation](https://github.com/devlikebear/wirecraft/issues/14)
+- [x] [#15 WO-14: Add client debug overlay](https://github.com/devlikebear/wirecraft/issues/15)
 
 ## Next Work Order
 
-Start with **WO-14** in [`phase-1-work-orders.md`](./phase-1-work-orders.md).
+Start with **Phase 1 Checkpoint** in [`phase-1-work-orders.md`](./phase-1-work-orders.md).
 
-GitHub issue: [#15 WO-14: Add client debug overlay](https://github.com/devlikebear/wirecraft/issues/15)
+GitHub issue: [#16 Phase 1 checkpoint: Verify authoritative voxel loop](https://github.com/devlikebear/wirecraft/issues/16)
 
 ## GitHub Issue Index
 
@@ -69,6 +70,7 @@ GitHub issue: [#15 WO-14: Add client debug overlay](https://github.com/devlikebe
 - [#13 WO-12: Add dynamic debug entity snapshots](https://github.com/devlikebear/wirecraft/issues/13)
 - [#14 WO-13: Render dynamic debug entity with interpolation](https://github.com/devlikebear/wirecraft/issues/14)
 - [#15 WO-14: Add client debug overlay](https://github.com/devlikebear/wirecraft/issues/15)
+- [#16 Phase 1 checkpoint: Verify authoritative voxel loop](https://github.com/devlikebear/wirecraft/issues/16)
 
 ## Session Rules
 

@@ -585,7 +585,7 @@ Render the server-authored debug mover entity in Three.js using the existing sna
 
 ## Work Order 14: Add Client Debug Overlay
 
-GitHub issue: [#15 WO-14: Add client debug overlay](https://github.com/devlikebear/wirecraft/issues/15)
+Status: Completed. GitHub issue: [#15](https://github.com/devlikebear/wirecraft/issues/15).
 
 ## Goal
 
@@ -607,20 +607,58 @@ Add a compact in-browser debug overlay that shows WebSocket status, server tick,
 
 ## Steps
 
-- [ ] Add a small debug overlay component with stable DOM test selectors.
-- [ ] Show WebSocket status, server tick, snapshot buffer length, rendered entity count, and FPS.
-- [ ] Update FPS from the animation loop without forcing layout-heavy work.
-- [ ] Keep the overlay visually compact and non-blocking over the 3D scene.
-- [ ] Add focused tests for formatting and overlay state updates.
+- [x] Add a small debug overlay component with stable DOM test selectors.
+- [x] Show WebSocket status, server tick, snapshot buffer length, rendered entity count, and FPS.
+- [x] Update FPS from the animation loop without forcing layout-heavy work.
+- [x] Keep the overlay visually compact and non-blocking over the 3D scene.
+- [x] Add focused tests for formatting and overlay state updates.
 
 ## Acceptance Criteria
 
-- [ ] `cd web && npm test` passes.
-- [ ] `cd web && npm run build` passes.
-- [ ] With Go server and Vite dev server running, overlay values update while the scene is active.
-- [ ] No Go server files are touched.
+- [x] `cd web && npm test` passes.
+- [x] `cd web && npm run build` passes.
+- [x] With Go server and Vite dev server running, overlay values update while the scene is active.
+- [x] No Go server files are touched.
 
 ## Verification Commands
 
+- `cd web && npm test`
+- `cd web && npm run build`
+
+---
+
+## Phase 1 Checkpoint: Verify Authoritative Voxel Loop
+
+GitHub issue: [#16 Phase 1 checkpoint: Verify authoritative voxel loop](https://github.com/devlikebear/wirecraft/issues/16)
+
+## Goal
+
+Run a final Phase 1 checkpoint before starting Phase 2: verify the server-authoritative voxel loop, browser edit flow, dynamic debug entity interpolation, and debug overlay in a single runtime scenario, then capture any follow-up fixes.
+
+## Non-goals
+
+- Do not start Phase 2 until the checkpoint is reviewed and approved.
+- Do not add circuit engine features in this checkpoint.
+- Do not redesign the UI beyond small validation fixes.
+
+## Steps
+
+- [ ] Run Go server and Vite dev server from a clean checkout.
+- [ ] Verify WebSocket connects and debug overlay updates tick/buffer/entity/FPS values.
+- [ ] Verify voxel place/remove commands round-trip through authoritative snapshots.
+- [ ] Verify dynamic debug entity is visible and moving.
+- [ ] Record any defects as follow-up issues, or close Phase 1 if clean.
+
+## Acceptance Criteria
+
+- [ ] `go test ./...` passes.
+- [ ] `cd web && npm test` passes.
+- [ ] `cd web && npm run build` passes.
+- [ ] Browser smoke test passes with the runtime scenario above.
+- [ ] User approves moving to Phase 2.
+
+## Verification Commands
+
+- `go test ./...`
 - `cd web && npm test`
 - `cd web && npm run build`
