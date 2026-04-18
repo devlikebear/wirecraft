@@ -452,7 +452,7 @@ Let users place and remove voxel blocks from the Three.js scene through raycast-
 
 ## Work Order 11: Add Snapshot Interpolation Primitives
 
-GitHub issue: [#12 WO-11: Add snapshot interpolation primitives](https://github.com/devlikebear/wirecraft/issues/12)
+Status: Completed. GitHub issue: [#12](https://github.com/devlikebear/wirecraft/issues/12).
 
 ## Goal
 
@@ -474,20 +474,65 @@ Add pure TypeScript interpolation primitives for buffered server snapshots so re
 
 ## Steps
 
-- [ ] Add `findSnapshotPair(buffer, renderServerTimeMs)` for before/after snapshot lookup.
-- [ ] Add alpha calculation for two snapshot timestamps.
-- [ ] Add transform interpolation helpers for position lerp and quaternion slerp-compatible values.
-- [ ] Add fallback behavior when before or after snapshot is missing.
-- [ ] Add tests for pair lookup, alpha bounds, and transform interpolation.
+- [x] Add `findSnapshotPair(buffer, renderServerTimeMs)` for before/after snapshot lookup.
+- [x] Add alpha calculation for two snapshot timestamps.
+- [x] Add transform interpolation helpers for position lerp and quaternion slerp-compatible values.
+- [x] Add fallback behavior when before or after snapshot is missing.
+- [x] Add tests for pair lookup, alpha bounds, and transform interpolation.
 
 ## Acceptance Criteria
 
-- [ ] `cd web && npm test` passes.
-- [ ] `cd web && npm run build` passes.
-- [ ] Logic is pure and independent from Three.js render objects.
-- [ ] No Go server files are touched.
+- [x] `cd web && npm test` passes.
+- [x] `cd web && npm run build` passes.
+- [x] Logic is pure and independent from Three.js render objects.
+- [x] No Go server files are touched.
 
 ## Verification Commands
 
 - `cd web && npm test`
 - `cd web && npm run build`
+
+---
+
+## Work Order 12: Add Dynamic Debug Entity Snapshots
+
+GitHub issue: [#13 WO-12: Add dynamic debug entity snapshots](https://github.com/devlikebear/wirecraft/issues/13)
+
+## Goal
+
+Emit a deterministic moving debug entity from the Go simulation snapshots so the frontend can validate interpolation against server-authoritative dynamic state.
+
+## Non-goals
+
+- Do not implement frontend interpolation rendering yet.
+- Do not add physics or collision for dynamic entities.
+- Do not change voxel edit behavior.
+
+## Touch points (<=5)
+
+- `internal/sim/snapshot.go`
+- `internal/sim/snapshot_test.go`
+- `internal/netproto/snapshot.go`
+- `internal/server/ws_test.go`
+- `docs/tasks/phase-1-work-orders.md`
+
+## Steps
+
+- [ ] Add deterministic debug entity transform generation from tick or server time.
+- [ ] Include the debug entity in full snapshots emitted by `sim.BuildSnapshot` or `sim.Simulation.Step`.
+- [ ] Keep entity payload compatible with existing `netproto.EntitySnapshot` transform schema.
+- [ ] Add tests proving entity IDs, types, and positions change deterministically over ticks.
+- [ ] Keep voxel block snapshots unchanged.
+
+## Acceptance Criteria
+
+- [ ] `go test ./internal/sim/...` passes.
+- [ ] `go test ./internal/server/...` passes.
+- [ ] `go test ./...` passes.
+- [ ] No frontend files are touched.
+
+## Verification Commands
+
+- `go test ./internal/sim/...`
+- `go test ./internal/server/...`
+- `go test ./...`

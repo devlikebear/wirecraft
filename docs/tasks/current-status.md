@@ -42,12 +42,13 @@ GitHub issue: [#1 Phase 1: Authoritative Voxel Loop](https://github.com/devlikeb
 - [x] [#9 WO-8: Add TypeScript WebSocket client and snapshot store](https://github.com/devlikebear/wirecraft/issues/9)
 - [x] [#10 WO-9: Render authoritative snapshots as voxels](https://github.com/devlikebear/wirecraft/issues/10)
 - [x] [#11 WO-10: Add raycast block edit commands](https://github.com/devlikebear/wirecraft/issues/11)
+- [x] [#12 WO-11: Add snapshot interpolation primitives](https://github.com/devlikebear/wirecraft/issues/12)
 
 ## Next Work Order
 
-Start with **WO-11** in [`phase-1-work-orders.md`](./phase-1-work-orders.md).
+Start with **WO-12** in [`phase-1-work-orders.md`](./phase-1-work-orders.md).
 
-GitHub issue: [#12 WO-11: Add snapshot interpolation primitives](https://github.com/devlikebear/wirecraft/issues/12)
+GitHub issue: [#13 WO-12: Add dynamic debug entity snapshots](https://github.com/devlikebear/wirecraft/issues/13)
 
 ## GitHub Issue Index
 
@@ -63,6 +64,7 @@ GitHub issue: [#12 WO-11: Add snapshot interpolation primitives](https://github.
 - [#10 WO-9: Render authoritative snapshots as voxels](https://github.com/devlikebear/wirecraft/issues/10)
 - [#11 WO-10: Add raycast block edit commands](https://github.com/devlikebear/wirecraft/issues/11)
 - [#12 WO-11: Add snapshot interpolation primitives](https://github.com/devlikebear/wirecraft/issues/12)
+- [#13 WO-12: Add dynamic debug entity snapshots](https://github.com/devlikebear/wirecraft/issues/13)
 
 ## Session Rules
 

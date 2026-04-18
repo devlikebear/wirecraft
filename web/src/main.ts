@@ -3,6 +3,7 @@ import { EditController } from './input/EditController';
 import { BlockType, type Position } from './net/protocol';
 import { SnapshotSocket } from './net/socket';
 import { VoxelRenderer } from './render/VoxelRenderer';
+import { DEFAULT_INTERPOLATION_DELAY_MS } from './sim/interpolation';
 import { SnapshotStore } from './state/snapshotStore';
 import {
   AmbientLight,
@@ -21,6 +22,8 @@ const app = document.querySelector<HTMLElement>('#app');
 if (!app) {
   throw new Error('Missing #app root element');
 }
+
+app.dataset.interpolationDelayMs = String(DEFAULT_INTERPOLATION_DELAY_MS);
 
 const scene = new Scene();
 scene.background = new Color(0x101211);
