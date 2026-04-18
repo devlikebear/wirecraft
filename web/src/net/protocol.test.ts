@@ -203,6 +203,58 @@ describe('parseSnapshot', () => {
     ]);
   });
 
+  it('parses optional command acknowledgements from authoritative snapshots', () => {
+    const snapshot = parseSnapshot({
+      tick: 13,
+      serverTimeMs: 1700000000307,
+      blocks: [],
+      entities: [],
+      circuit: { nodes: [] },
+      commandAcks: [
+        { clientId: 'client-1', commandId: 'cmd-1', status: 'accepted' },
+        {
+          clientId: 'client-1',
+          commandId: 'cmd-1',
+          status: 'rejected',
+          reason: 'duplicate_command',
+        },
+      ],
+      stats: {
+        clientCount: 1,
+        commandQueueLength: 2,
+        snapshotBytes: 188,
+      },
+    });
+
+    expect(snapshot?.commandAcks).toEqual([
+      { clientId: 'client-1', commandId: 'cmd-1', status: 'accepted' },
+      {
+        clientId: 'client-1',
+        commandId: 'cmd-1',
+        status: 'rejected',
+        reason: 'duplicate_command',
+      },
+    ]);
+  });
+
+  it('rejects invalid command acknowledgement statuses', () => {
+    const snapshot = parseSnapshot({
+      tick: 13,
+      serverTimeMs: 1700000000307,
+      blocks: [],
+      entities: [],
+      circuit: { nodes: [] },
+      commandAcks: [{ clientId: 'client-1', commandId: 'cmd-1', status: 'pending' }],
+      stats: {
+        clientCount: 1,
+        commandQueueLength: 1,
+        snapshotBytes: 188,
+      },
+    });
+
+    expect(snapshot).toBeNull();
+  });
+
   it('rejects invalid circuit signal state', () => {
     const snapshot = parseSnapshot({
       tick: 9,

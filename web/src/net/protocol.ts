@@ -48,6 +48,7 @@ export interface Snapshot {
   entities: EntitySnapshot[];
   circuit: CircuitSnapshot;
   presence: PresenceSnapshot;
+  commandAcks: CommandAckSnapshot[];
   stats: SnapshotStats;
 }
 
@@ -82,6 +83,15 @@ export interface PresenceSnapshot {
 export interface ClientPresenceSnapshot {
   id: string;
   displayName: string;
+}
+
+export type CommandAckStatus = 'accepted' | 'rejected';
+
+export interface CommandAckSnapshot {
+  clientId: string;
+  commandId: string;
+  status: CommandAckStatus;
+  reason?: string;
 }
 
 export interface TransformSnapshot {
@@ -122,6 +132,7 @@ export function parseSnapshot(value: unknown): Snapshot | null {
   const entities = parseArray(value.entities, parseEntitySnapshot);
   const circuit = parseCircuitSnapshot(value.circuit);
   const presence = parsePresenceSnapshot(value.presence);
+  const commandAcks = parseCommandAcks(value.commandAcks);
   const stats = parseSnapshotStats(value.stats);
 
   if (
@@ -131,6 +142,7 @@ export function parseSnapshot(value: unknown): Snapshot | null {
     entities === null ||
     circuit === null ||
     presence === null ||
+    commandAcks === null ||
     stats === null
   ) {
     return null;
@@ -143,6 +155,7 @@ export function parseSnapshot(value: unknown): Snapshot | null {
     entities,
     circuit,
     presence,
+    commandAcks,
     stats,
   };
 }
@@ -242,6 +255,42 @@ function parseClientPresenceSnapshot(value: unknown): ClientPresenceSnapshot | n
   return { id: value.id, displayName: value.displayName };
 }
 
+function parseCommandAcks(value: unknown): CommandAckSnapshot[] | null {
+  if (typeof value === 'undefined') {
+    return [];
+  }
+  return parseArray(value, parseCommandAckSnapshot);
+}
+
+function parseCommandAckSnapshot(value: unknown): CommandAckSnapshot | null {
+  if (!isRecord(value)) {
+    return null;
+  }
+  if (
+    typeof value.clientId !== 'string' ||
+    typeof value.commandId !== 'string' ||
+    !isCommandAckStatus(value.status)
+  ) {
+    return null;
+  }
+  if (typeof value.reason !== 'undefined' && typeof value.reason !== 'string') {
+    return null;
+  }
+
+  return typeof value.reason === 'string'
+    ? {
+        clientId: value.clientId,
+        commandId: value.commandId,
+        status: value.status,
+        reason: value.reason,
+      }
+    : {
+        clientId: value.clientId,
+        commandId: value.commandId,
+        status: value.status,
+      };
+}
+
 function parseTransformSnapshot(value: unknown): TransformSnapshot | null {
   if (!isRecord(value)) {
     return null;
@@ -322,6 +371,10 @@ function isBlockType(value: unknown): value is BlockType {
 
 function isSignalState(value: unknown): value is SignalState {
   return value === 'unknown' || value === 'low' || value === 'high';
+}
+
+function isCommandAckStatus(value: unknown): value is CommandAckStatus {
+  return value === 'accepted' || value === 'rejected';
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {

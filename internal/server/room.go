@@ -45,15 +45,12 @@ func (r *Room) ApplyCommand(command netproto.Command) error {
 	r.mu.Lock()
 	defer r.mu.Unlock()
 
-	if err := r.simulation.ValidateCommand(command); err != nil {
-		return err
-	}
 	r.nextCommandSequence++
 	r.commandQueue = append(r.commandQueue, sim.QueuedCommand{
 		Command:          command,
 		ReceivedSequence: r.nextCommandSequence,
 	})
-	return nil
+	return r.simulation.ValidateCommand(command)
 }
 
 func (r *Room) StepSnapshot(now time.Time) netproto.Snapshot {

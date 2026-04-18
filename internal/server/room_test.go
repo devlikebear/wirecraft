@@ -147,6 +147,30 @@ func TestRoomIgnoresDuplicateClientCommandIDsWhenStepping(t *testing.T) {
 	}
 }
 
+func TestRoomReturnsValidationErrorAndPublishesRejectedAck(t *testing.T) {
+	room := NewRoom(DefaultRoomID)
+
+	err := room.ApplyCommand(netproto.Command{
+		Type:      netproto.CommandPlaceBlock,
+		ClientID:  "client-1",
+		CommandID: "cmd-1",
+		TickHint:  10,
+		Position:  world.Position{X: 99, Y: 0, Z: 0},
+		BlockType: world.BlockPower,
+	})
+	if err == nil {
+		t.Fatal("room.ApplyCommand(invalid) error = nil, want validation error")
+	}
+
+	snapshot := room.StepSnapshot(time.UnixMilli(1000))
+	want := []netproto.CommandAckSnapshot{
+		{ClientID: "client-1", CommandID: "cmd-1", Status: netproto.CommandAckRejected, Reason: "position out of bounds"},
+	}
+	if !reflect.DeepEqual(snapshot.CommandAcks, want) {
+		t.Fatalf("snapshot.CommandAcks = %+v, want %+v", snapshot.CommandAcks, want)
+	}
+}
+
 func TestRoomPublishesSnapshotsToSubscribers(t *testing.T) {
 	room := NewRoom(DefaultRoomID)
 	snapshots, unsubscribe := room.Subscribe()

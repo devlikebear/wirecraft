@@ -73,14 +73,15 @@ Status: active.
 - [x] [#40 WO-33: Add server room model](https://github.com/devlikebear/wirecraft/issues/40)
 - [x] [#41 WO-34: Add client presence metadata](https://github.com/devlikebear/wirecraft/issues/41)
 - [x] [#42 WO-35: Add deterministic command ordering](https://github.com/devlikebear/wirecraft/issues/42)
+- [x] [#43 WO-36: Add command acknowledgement snapshot fields](https://github.com/devlikebear/wirecraft/issues/43)
 
 ## Next Work Order
 
-Start with **Work Order 36: Add Command Acknowledgement Snapshot Fields** in [`phase-4-work-orders.md`](./phase-4-work-orders.md).
+Start with **Work Order 37: Add Changed-Set Snapshot Primitives** in [`phase-4-work-orders.md`](./phase-4-work-orders.md).
 
-GitHub issue: [#43 WO-36: Add command acknowledgement snapshot fields](https://github.com/devlikebear/wirecraft/issues/43)
+GitHub issue: [#44 WO-37: Add changed-set snapshot primitives](https://github.com/devlikebear/wirecraft/issues/44)
 
-Phase 3 is complete and approved. Phase 4 has started; the server now has a default room model that owns simulation, subscribers, client counts, lightweight presence metadata, and deterministic same-tick command ordering with duplicate command IDs ignored per client. The next step is exposing accepted/rejected command acknowledgement metadata in snapshots.
+Phase 3 is complete and approved. Phase 4 has started; the server now has a default room model that owns simulation, subscribers, client counts, lightweight presence metadata, deterministic same-tick command ordering, duplicate command suppression, and command acknowledgement metadata in snapshots. The next step is adding changed-set snapshot primitives while preserving full snapshot fallback.
 
 ## GitHub Issue Index
 
@@ -127,6 +128,7 @@ Phase 3 is complete and approved. Phase 4 has started; the server now has a defa
 - [#41 WO-34: Add client presence metadata](https://github.com/devlikebear/wirecraft/issues/41)
 - [#42 WO-35: Add deterministic command ordering](https://github.com/devlikebear/wirecraft/issues/42)
 - [#43 WO-36: Add command acknowledgement snapshot fields](https://github.com/devlikebear/wirecraft/issues/43)
+- [#44 WO-37: Add changed-set snapshot primitives](https://github.com/devlikebear/wirecraft/issues/44)
 
 ## Session Rules
 

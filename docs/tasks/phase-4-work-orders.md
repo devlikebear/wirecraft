@@ -143,7 +143,7 @@ Define and implement deterministic command ordering so same-tick edits are proce
 
 ## Work Order 36: Add Command Acknowledgement Snapshot Fields
 
-Status: Next. GitHub issue: [#43](https://github.com/devlikebear/wirecraft/issues/43).
+Status: Completed. GitHub issue: [#43](https://github.com/devlikebear/wirecraft/issues/43).
 
 ## Goal
 
@@ -166,17 +166,17 @@ Expose lightweight command acknowledgement metadata in snapshots so clients can 
 
 ## Steps
 
-- [ ] Define compact command acknowledgement snapshot fields.
-- [ ] Record accepted/rejected command IDs during command application.
-- [ ] Parse acknowledgement metadata in the TypeScript protocol.
-- [ ] Preserve existing WebSocket command flow.
-- [ ] Update local task docs after verification.
+- [x] Define compact command acknowledgement snapshot fields.
+- [x] Record accepted/rejected command IDs during command application.
+- [x] Parse acknowledgement metadata in the TypeScript protocol.
+- [x] Preserve existing WebSocket command flow.
+- [x] Update local task docs after verification.
 
 ## Acceptance Criteria
 
-- [ ] `go test ./...` passes.
-- [ ] `cd web && npm test` passes.
-- [ ] `cd web && npm run build` passes.
+- [x] `go test ./...` passes.
+- [x] `cd web && npm test` passes.
+- [x] `cd web && npm run build` passes.
 
 ## Verification Commands
 
@@ -186,9 +186,52 @@ Expose lightweight command acknowledgement metadata in snapshots so clients can 
 
 ---
 
+## Work Order 37: Add Changed-Set Snapshot Primitives
+
+Status: Next. GitHub issue: [#44](https://github.com/devlikebear/wirecraft/issues/44).
+
+## Goal
+
+Introduce snapshot primitives that can represent full snapshots and changed-set snapshots with changed blocks, removed blocks, and changed entities while preserving full snapshot fallback.
+
+## Non-goals
+
+- Do not implement browser-side delta application yet.
+- Do not remove full snapshots.
+- Do not add compression or binary protocol.
+- Do not change room selection or lobby behavior.
+
+## Touch points (<=5)
+
+- `internal/netproto/snapshot.go`
+- `internal/sim/snapshot_builder.go`
+- `internal/sim/snapshot_builder_test.go`
+- `internal/sim/snapshot.go`
+- `docs/tasks/phase-4-work-orders.md`
+
+## Steps
+
+- [ ] Define full vs changed-set snapshot schema fields.
+- [ ] Add changed block and removed block primitives.
+- [ ] Add changed entity primitives.
+- [ ] Preserve periodic/full snapshot compatibility.
+- [ ] Update local task docs after verification.
+
+## Acceptance Criteria
+
+- [ ] `go test ./internal/sim/...` passes.
+- [ ] `go test ./...` passes.
+- [ ] Existing full snapshot consumers remain compatible.
+
+## Verification Commands
+
+- `go test ./internal/sim/...`
+- `go test ./...`
+
+---
+
 ## Planned Work Orders
 
-- [ ] **WO-37: Add changed-set snapshot primitives** — represent full vs delta snapshot payloads.
 - [ ] **WO-38: Apply client delta snapshots** — update the browser state store for delta application.
 - [ ] **WO-39: Add basic actuator collision constraints** — clamp actuator motion against occupied solids.
 - [ ] **WO-40: Add server metrics logging** — expose tick duration, queue length, bytes, and client count.
@@ -196,4 +239,4 @@ Expose lightweight command acknowledgement metadata in snapshots so clients can 
 
 ## Session Handoff
 
-Start the next session from [current-status.md](./current-status.md), then continue with [#43 WO-36](https://github.com/devlikebear/wirecraft/issues/43).
+Start the next session from [current-status.md](./current-status.md), then continue with [#44 WO-37](https://github.com/devlikebear/wirecraft/issues/44).

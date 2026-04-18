@@ -16,6 +16,7 @@ type SnapshotInput struct {
 	ButtonStates     map[world.Position]bool
 	ActuatorEntities []physics.DynamicEntity
 	Presence         netproto.PresenceSnapshot
+	CommandAcks      []netproto.CommandAckSnapshot
 	Stats            SnapshotStatsInput
 }
 
@@ -38,6 +39,10 @@ func BuildSnapshot(input SnapshotInput) netproto.Snapshot {
 	}
 
 	entities := append([]netproto.EntitySnapshot{buildDebugMoverEntity(input.Tick)}, buildActuatorEntities(input.ActuatorEntities)...)
+	commandAcks := append([]netproto.CommandAckSnapshot(nil), input.CommandAcks...)
+	if commandAcks == nil {
+		commandAcks = []netproto.CommandAckSnapshot{}
+	}
 
 	snapshot := netproto.Snapshot{
 		Tick:         uint64(input.Tick),
@@ -46,6 +51,7 @@ func BuildSnapshot(input SnapshotInput) netproto.Snapshot {
 		Entities:     entities,
 		Circuit:      buildCircuitSnapshot(input.World, input.ButtonStates),
 		Presence:     input.Presence,
+		CommandAcks:  commandAcks,
 		Stats: netproto.SnapshotStats{
 			ClientCount:        input.Stats.ClientCount,
 			CommandQueueLength: input.Stats.CommandQueueLength,

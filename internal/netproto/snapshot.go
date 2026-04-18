@@ -9,14 +9,22 @@ const (
 	EntityTypeMotor      = "motor"
 )
 
+type CommandAckStatus string
+
+const (
+	CommandAckAccepted CommandAckStatus = "accepted"
+	CommandAckRejected CommandAckStatus = "rejected"
+)
+
 type Snapshot struct {
-	Tick         uint64           `json:"tick"`
-	ServerTimeMS int64            `json:"serverTimeMs"`
-	Blocks       []BlockSnapshot  `json:"blocks"`
-	Entities     []EntitySnapshot `json:"entities"`
-	Circuit      CircuitSnapshot  `json:"circuit"`
-	Presence     PresenceSnapshot `json:"presence"`
-	Stats        SnapshotStats    `json:"stats"`
+	Tick         uint64               `json:"tick"`
+	ServerTimeMS int64                `json:"serverTimeMs"`
+	Blocks       []BlockSnapshot      `json:"blocks"`
+	Entities     []EntitySnapshot     `json:"entities"`
+	Circuit      CircuitSnapshot      `json:"circuit"`
+	Presence     PresenceSnapshot     `json:"presence"`
+	CommandAcks  []CommandAckSnapshot `json:"commandAcks"`
+	Stats        SnapshotStats        `json:"stats"`
 }
 
 type BlockSnapshot struct {
@@ -48,6 +56,13 @@ type PresenceSnapshot struct {
 type ClientPresenceSnapshot struct {
 	ID          string `json:"id"`
 	DisplayName string `json:"displayName"`
+}
+
+type CommandAckSnapshot struct {
+	ClientID  string           `json:"clientId"`
+	CommandID string           `json:"commandId"`
+	Status    CommandAckStatus `json:"status"`
+	Reason    string           `json:"reason,omitempty"`
 }
 
 type TransformSnapshot struct {

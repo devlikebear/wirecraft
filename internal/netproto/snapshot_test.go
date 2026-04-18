@@ -43,6 +43,10 @@ func TestSnapshotJSONRoundTrip(t *testing.T) {
 				{ID: "client-2", DisplayName: "Client 2"},
 			},
 		},
+		CommandAcks: []CommandAckSnapshot{
+			{ClientID: "client-1", CommandID: "cmd-1", Status: CommandAckAccepted},
+			{ClientID: "client-1", CommandID: "cmd-1", Status: CommandAckRejected, Reason: "duplicate_command"},
+		},
 		Stats: SnapshotStats{
 			ClientCount:        2,
 			CommandQueueLength: 4,
@@ -83,6 +87,14 @@ func TestSnapshotJSONRoundTrip(t *testing.T) {
 	for i := range snapshot.Presence.Clients {
 		if decoded.Presence.Clients[i] != snapshot.Presence.Clients[i] {
 			t.Fatalf("decoded Presence.Clients[%d] = %+v, want %+v", i, decoded.Presence.Clients[i], snapshot.Presence.Clients[i])
+		}
+	}
+	if len(decoded.CommandAcks) != len(snapshot.CommandAcks) {
+		t.Fatalf("len(decoded.CommandAcks) = %d, want %d", len(decoded.CommandAcks), len(snapshot.CommandAcks))
+	}
+	for i := range snapshot.CommandAcks {
+		if decoded.CommandAcks[i] != snapshot.CommandAcks[i] {
+			t.Fatalf("decoded CommandAcks[%d] = %+v, want %+v", i, decoded.CommandAcks[i], snapshot.CommandAcks[i])
 		}
 	}
 	if decoded.Stats != snapshot.Stats {

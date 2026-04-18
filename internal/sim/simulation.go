@@ -14,13 +14,14 @@ import (
 const defaultStepDeltaSeconds = 1.0 / 20.0
 
 type Simulation struct {
-	tick              TickID
-	bounds            world.Dimensions
-	world             *world.World
-	sensorInputs      *sensor.Store
-	actuatorEntities  map[physics.EntityID]physics.DynamicEntity
-	processedCommands map[commandIdentity]struct{}
-	lastServerTimeMS  int64
+	tick               TickID
+	bounds             world.Dimensions
+	world              *world.World
+	sensorInputs       *sensor.Store
+	actuatorEntities   map[physics.EntityID]physics.DynamicEntity
+	processedCommands  map[commandIdentity]struct{}
+	pendingCommandAcks []netproto.CommandAckSnapshot
+	lastServerTimeMS   int64
 }
 
 type StepInput struct {
@@ -49,15 +50,24 @@ func (s *Simulation) ValidateCommand(command netproto.Command) error {
 }
 
 func (s *Simulation) ApplyCommand(command netproto.Command) error {
+	ack, err := s.applyCommand(command)
+	s.pendingCommandAcks = append(s.pendingCommandAcks, ack)
+	return err
+}
+
+func (s *Simulation) applyCommand(command netproto.Command) (netproto.CommandAckSnapshot, error) {
 	if err := s.ValidateCommand(command); err != nil {
-		return err
+		return rejectedCommandAck(command, err.Error()), err
 	}
 	if s.hasProcessedCommand(command) {
-		return nil
+		return rejectedCommandAck(command, CommandAckReasonDuplicate), nil
+	}
+
+	if err := s.applyValidatedCommand(command); err != nil {
+		return rejectedCommandAck(command, err.Error()), err
 	}
 	s.markCommandProcessed(command)
-
-	return s.applyValidatedCommand(command)
+	return acceptedCommandAck(command), nil
 }
 
 func (s *Simulation) ApplyCommands(commands []QueuedCommand) []error {
@@ -126,8 +136,18 @@ func (s *Simulation) Step(input StepInput) netproto.Snapshot {
 		ButtonStates:     s.sensorInputs.ButtonStates(),
 		ActuatorEntities: s.ActuatorEntities(),
 		Presence:         input.Presence,
+		CommandAcks:      s.drainCommandAcks(),
 		Stats:            input.Stats,
 	})
+}
+
+func (s *Simulation) drainCommandAcks() []netproto.CommandAckSnapshot {
+	commandAcks := append([]netproto.CommandAckSnapshot(nil), s.pendingCommandAcks...)
+	s.pendingCommandAcks = s.pendingCommandAcks[:0]
+	if commandAcks == nil {
+		return []netproto.CommandAckSnapshot{}
+	}
+	return commandAcks
 }
 
 func (s *Simulation) ActuatorEntities() []physics.DynamicEntity {

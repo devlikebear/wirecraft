@@ -71,7 +71,7 @@ _예상 소요: 1-2주_
     - duplicate command 재전송
   - 검증: `go test ./internal/sim/...`
 
-- [ ] **T4.B.2** — client command acknowledgement.
+- [x] **T4.B.2** — client command acknowledgement.
   - 파일:
     - `internal/netproto/snapshot.go`
     - `web/src/net/socket.ts`

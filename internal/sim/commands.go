@@ -6,6 +6,8 @@ import (
 	"github.com/devlikebear/wirecraft/internal/netproto"
 )
 
+const CommandAckReasonDuplicate = "duplicate_command"
+
 type QueuedCommand struct {
 	Command          netproto.Command
 	ReceivedSequence uint64
@@ -39,5 +41,22 @@ func identityForCommand(command netproto.Command) commandIdentity {
 	return commandIdentity{
 		clientID:  command.ClientID,
 		commandID: command.CommandID,
+	}
+}
+
+func acceptedCommandAck(command netproto.Command) netproto.CommandAckSnapshot {
+	return netproto.CommandAckSnapshot{
+		ClientID:  command.ClientID,
+		CommandID: command.CommandID,
+		Status:    netproto.CommandAckAccepted,
+	}
+}
+
+func rejectedCommandAck(command netproto.Command, reason string) netproto.CommandAckSnapshot {
+	return netproto.CommandAckSnapshot{
+		ClientID:  command.ClientID,
+		CommandID: command.CommandID,
+		Status:    netproto.CommandAckRejected,
+		Reason:    reason,
 	}
 }

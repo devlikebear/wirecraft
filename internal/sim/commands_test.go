@@ -84,6 +84,35 @@ func TestSimulationAllowsSameCommandIDFromDifferentClients(t *testing.T) {
 	})
 }
 
+func TestSimulationSnapshotsIncludeCommandAcknowledgements(t *testing.T) {
+	simulation := NewSimulation()
+	pos := world.Position{X: 1, Y: 1, Z: 1}
+
+	errors := simulation.ApplyCommands([]QueuedCommand{
+		{Command: commandForClient("client-1", "cmd-1", 10, pos, world.BlockSolid), ReceivedSequence: 1},
+		{Command: commandForClient("client-1", "cmd-1", 10, pos, world.BlockPower), ReceivedSequence: 2},
+		{Command: commandForClient("client-2", "cmd-2", 10, world.Position{X: 99, Y: 0, Z: 0}, world.BlockPower), ReceivedSequence: 3},
+	})
+
+	if len(errors) != 1 {
+		t.Fatalf("len(ApplyCommands errors) = %d, want 1", len(errors))
+	}
+	snapshot := simulation.Step(StepInput{})
+	want := []netproto.CommandAckSnapshot{
+		{ClientID: "client-1", CommandID: "cmd-1", Status: netproto.CommandAckAccepted},
+		{ClientID: "client-1", CommandID: "cmd-1", Status: netproto.CommandAckRejected, Reason: "duplicate_command"},
+		{ClientID: "client-2", CommandID: "cmd-2", Status: netproto.CommandAckRejected, Reason: "position out of bounds"},
+	}
+
+	if !reflect.DeepEqual(snapshot.CommandAcks, want) {
+		t.Fatalf("snapshot.CommandAcks = %+v, want %+v", snapshot.CommandAcks, want)
+	}
+	next := simulation.Step(StepInput{})
+	if len(next.CommandAcks) != 0 {
+		t.Fatalf("next.CommandAcks = %+v, want drained empty ack list", next.CommandAcks)
+	}
+}
+
 func commandForClient(clientID string, commandID string, tickHint uint64, pos world.Position, blockType world.BlockType) netproto.Command {
 	return netproto.Command{
 		Type:      netproto.CommandPlaceBlock,
