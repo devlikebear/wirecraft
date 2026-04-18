@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/devlikebear/wirecraft/internal/netproto"
+	"github.com/devlikebear/wirecraft/internal/physics"
 	"github.com/devlikebear/wirecraft/internal/world"
 )
 
@@ -138,6 +139,93 @@ func TestSimulationSetButtonCommandAffectsCircuitState(t *testing.T) {
 	assertCircuitSignal(t, releasedAgain, "2:0:0", "low")
 }
 
+func TestSimulationUpdatesPistonAfterCircuitEvaluation(t *testing.T) {
+	simulation := NewSimulationWithDimensions(world.Dimensions{X: 8, Y: 8, Z: 8})
+	pistonPos := world.Position{X: 2, Y: 0, Z: 0}
+
+	if err := simulation.ApplyCommand(placeCommand("cmd-1", world.Position{X: 0, Y: 0, Z: 0}, world.BlockPower)); err != nil {
+		t.Fatalf("ApplyCommand(power) error = %v, want nil", err)
+	}
+	if err := simulation.ApplyCommand(placeCommand("cmd-2", world.Position{X: 1, Y: 0, Z: 0}, world.BlockWire)); err != nil {
+		t.Fatalf("ApplyCommand(wire) error = %v, want nil", err)
+	}
+	if err := simulation.ApplyCommand(placeCommand("cmd-3", pistonPos, world.BlockPiston)); err != nil {
+		t.Fatalf("ApplyCommand(piston) error = %v, want nil", err)
+	}
+
+	snapshot := simulation.Step(StepInput{DeltaSeconds: 0.25})
+
+	assertActuatorEntities(t, simulation.ActuatorEntities(), []physics.DynamicEntity{
+		{
+			ID:   physics.EntityID("piston:2:0:0"),
+			Type: physics.EntityTypePiston,
+			Transform: physics.Transform{
+				Position: physics.Vec3{X: 3, Y: 0.5, Z: 0},
+				Rotation: physics.IdentityQuat(),
+				Scale:    physics.UnitVec3(),
+			},
+			Target: physics.Transform{
+				Position: physics.Vec3{X: 3, Y: 0.5, Z: 0},
+				Rotation: physics.IdentityQuat(),
+				Scale:    physics.UnitVec3(),
+			},
+		},
+	})
+	if len(snapshot.Entities) != 1 || snapshot.Entities[0].ID != netproto.EntityIDDebugMover {
+		t.Fatalf("snapshot.Entities = %+v, want existing debug mover only", snapshot.Entities)
+	}
+}
+
+func TestSimulationRetractsPistonWhenButtonSignalFallsLow(t *testing.T) {
+	simulation := NewSimulationWithDimensions(world.Dimensions{X: 8, Y: 8, Z: 8})
+	buttonPos := world.Position{X: 0, Y: 0, Z: 0}
+	pistonPos := world.Position{X: 2, Y: 0, Z: 0}
+
+	if err := simulation.ApplyCommand(placeCommand("cmd-1", buttonPos, world.BlockButton)); err != nil {
+		t.Fatalf("ApplyCommand(button) error = %v, want nil", err)
+	}
+	if err := simulation.ApplyCommand(placeCommand("cmd-2", world.Position{X: 1, Y: 0, Z: 0}, world.BlockWire)); err != nil {
+		t.Fatalf("ApplyCommand(wire) error = %v, want nil", err)
+	}
+	if err := simulation.ApplyCommand(placeCommand("cmd-3", pistonPos, world.BlockPiston)); err != nil {
+		t.Fatalf("ApplyCommand(piston) error = %v, want nil", err)
+	}
+
+	simulation.Step(StepInput{DeltaSeconds: 0.25})
+	assertActuatorPosition(t, simulation.ActuatorEntities(), "piston:2:0:0", physics.Vec3{X: 2, Y: 0.5, Z: 0})
+
+	if err := simulation.ApplyCommand(setButtonCommand("cmd-4", buttonPos, true)); err != nil {
+		t.Fatalf("ApplyCommand(press) error = %v, want nil", err)
+	}
+	simulation.Step(StepInput{DeltaSeconds: 0.25})
+	assertActuatorPosition(t, simulation.ActuatorEntities(), "piston:2:0:0", physics.Vec3{X: 3, Y: 0.5, Z: 0})
+
+	if err := simulation.ApplyCommand(setButtonCommand("cmd-5", buttonPos, false)); err != nil {
+		t.Fatalf("ApplyCommand(release) error = %v, want nil", err)
+	}
+	simulation.Step(StepInput{DeltaSeconds: 0.25})
+	assertActuatorPosition(t, simulation.ActuatorEntities(), "piston:2:0:0", physics.Vec3{X: 2, Y: 0.5, Z: 0})
+}
+
+func TestSimulationUsesServerTimeDeltaForActuatorStep(t *testing.T) {
+	simulation := NewSimulationWithDimensions(world.Dimensions{X: 8, Y: 8, Z: 8})
+
+	if err := simulation.ApplyCommand(placeCommand("cmd-1", world.Position{X: 0, Y: 0, Z: 0}, world.BlockPower)); err != nil {
+		t.Fatalf("ApplyCommand(power) error = %v, want nil", err)
+	}
+	if err := simulation.ApplyCommand(placeCommand("cmd-2", world.Position{X: 1, Y: 0, Z: 0}, world.BlockWire)); err != nil {
+		t.Fatalf("ApplyCommand(wire) error = %v, want nil", err)
+	}
+	if err := simulation.ApplyCommand(placeCommand("cmd-3", world.Position{X: 2, Y: 0, Z: 0}, world.BlockPiston)); err != nil {
+		t.Fatalf("ApplyCommand(piston) error = %v, want nil", err)
+	}
+
+	simulation.Step(StepInput{ServerTimeMS: 1000})
+	simulation.Step(StepInput{ServerTimeMS: 1250})
+
+	assertActuatorPosition(t, simulation.ActuatorEntities(), "piston:2:0:0", physics.Vec3{X: 3, Y: 0.5, Z: 0})
+}
+
 func TestSimulationRejectsInvalidCommandWithoutChangingWorld(t *testing.T) {
 	simulation := NewSimulation()
 	validPos := world.Position{X: 1, Y: 1, Z: 1}
@@ -244,4 +332,40 @@ func assertCircuitNodes(t *testing.T, got []netproto.CircuitNodeSnapshot, want [
 			t.Fatalf("circuit nodes[%d] = %+v, want %+v", i, got[i], want[i])
 		}
 	}
+}
+
+func assertActuatorEntities(t *testing.T, got []physics.DynamicEntity, want []physics.DynamicEntity) {
+	t.Helper()
+
+	if len(got) != len(want) {
+		t.Fatalf("len(actuator entities) = %d, want %d: %+v", len(got), len(want), got)
+	}
+	for i := range want {
+		if got[i].ID != want[i].ID {
+			t.Fatalf("actuator[%d].ID = %q, want %q", i, got[i].ID, want[i].ID)
+		}
+		if got[i].Type != want[i].Type {
+			t.Fatalf("actuator[%d].Type = %q, want %q", i, got[i].Type, want[i].Type)
+		}
+		if got[i].Transform != want[i].Transform {
+			t.Fatalf("actuator[%d].Transform = %+v, want %+v", i, got[i].Transform, want[i].Transform)
+		}
+		if got[i].Target != want[i].Target {
+			t.Fatalf("actuator[%d].Target = %+v, want %+v", i, got[i].Target, want[i].Target)
+		}
+	}
+}
+
+func assertActuatorPosition(t *testing.T, got []physics.DynamicEntity, id string, want physics.Vec3) {
+	t.Helper()
+
+	for _, entity := range got {
+		if entity.ID == physics.EntityID(id) {
+			if entity.Transform.Position != want {
+				t.Fatalf("actuator %s position = %+v, want %+v", id, entity.Transform.Position, want)
+			}
+			return
+		}
+	}
+	t.Fatalf("actuator %s not found: %+v", id, got)
 }

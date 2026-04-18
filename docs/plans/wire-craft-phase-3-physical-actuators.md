@@ -76,7 +76,7 @@ _예상 소요: 1-2주_
     - GPIO pin에 motor를 직접 연결하면 invalid wiring 또는 warning으로 처리
   - 검증: `go test ./... && cd web && npm run build`
 
-- [ ] **T3.B.2** — simulation update 순서 확정.
+- [x] **T3.B.2** — simulation update 순서 확정.
   - 파일:
     - `internal/sim/simulation.go`
     - `internal/sim/simulation_test.go`

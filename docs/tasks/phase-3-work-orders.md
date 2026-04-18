@@ -156,7 +156,7 @@ Add the world/protocol/circuit-facing block type foundation for Phase 3 actuator
 
 ## Work Order 27: Integrate Actuator Update Order
 
-Status: Next. GitHub issue: [#32](https://github.com/devlikebear/wirecraft/issues/32).
+Status: Completed. GitHub issue: [#32](https://github.com/devlikebear/wirecraft/issues/32).
 
 ## Goal
 
@@ -179,17 +179,17 @@ Integrate the actuator update order into the simulation loop without exposing fi
 
 ## Steps
 
-- [ ] Define how actuator blocks are discovered from world state.
-- [ ] Map adjacent circuit High/Low state to actuator input.
-- [ ] Update actuator/physics state after circuit evaluation and before snapshot build.
-- [ ] Add tests for button or power signal updating actuator target deterministically.
-- [ ] Keep existing snapshot behavior compatible until transform schema is expanded.
+- [x] Define how actuator blocks are discovered from world state.
+- [x] Map adjacent circuit High/Low state to actuator input.
+- [x] Update actuator/physics state after circuit evaluation and before snapshot build.
+- [x] Add tests for button or power signal updating actuator target deterministically.
+- [x] Keep existing snapshot behavior compatible until transform schema is expanded.
 
 ## Acceptance Criteria
 
-- [ ] `go test ./internal/sim/...` passes.
-- [ ] `go test ./internal/actuator/...` passes.
-- [ ] `go test ./...` passes.
+- [x] `go test ./internal/sim/...` passes.
+- [x] `go test ./internal/actuator/...` passes.
+- [x] `go test ./...` passes.
 
 ## Verification Commands
 
@@ -199,9 +199,57 @@ Integrate the actuator update order into the simulation loop without exposing fi
 
 ---
 
+## Work Order 28: Add Transform Snapshot Schema
+
+Status: Next. GitHub issue: [#33](https://github.com/devlikebear/wirecraft/issues/33).
+
+## Goal
+
+Expose actuator transform state in authoritative snapshots so clients can consume server-computed piston and motor transforms.
+
+## Non-goals
+
+- Do not add client actuator mesh rendering yet.
+- Do not add toolbar placement UI yet.
+- Do not change actuator movement behavior beyond what is needed for snapshot export.
+- Do not implement rigid body collision or joints.
+
+## Touch points (<=5)
+
+- `internal/netproto/snapshot.go`
+- `internal/sim/snapshot.go`
+- `internal/sim/simulation.go`
+- `internal/sim/simulation_test.go`
+- `web/src/net/protocol.ts`
+
+## Steps
+
+- [ ] Add snapshot support for actuator dynamic entities using existing transform shape.
+- [ ] Include actuator entities after the debug mover in deterministic order.
+- [ ] Add Go tests proving actuator transforms appear in snapshots.
+- [ ] Update TypeScript protocol tests for actuator entity payloads.
+- [ ] Keep existing debug mover snapshot behavior compatible.
+
+## Acceptance Criteria
+
+- [ ] `go test ./internal/netproto/...` passes.
+- [ ] `go test ./internal/sim/...` passes.
+- [ ] `go test ./...` passes.
+- [ ] `cd web && npm test` passes.
+- [ ] `cd web && npm run build` passes.
+
+## Verification Commands
+
+- `go test ./internal/netproto/...`
+- `go test ./internal/sim/...`
+- `go test ./...`
+- `cd web && npm test`
+- `cd web && npm run build`
+
+---
+
 ## Planned Work Orders
 
-- [ ] **WO-28: Add transform snapshot schema** — include actuator transforms in authoritative snapshots.
 - [ ] **WO-29: Render actuator meshes** — render piston or motor entities from interpolated server transforms.
 - [ ] **WO-30: Add actuator placement UI** — expose actuator block placement and minimal orientation controls.
 - [ ] **WO-31: Add sensor input extension point** — separate button/proximity-style sensor primitives for later inputs.
@@ -210,4 +258,4 @@ Integrate the actuator update order into the simulation loop without exposing fi
 
 ## Session Handoff
 
-Start the next session from [current-status.md](./current-status.md), then continue with [#32 WO-27](https://github.com/devlikebear/wirecraft/issues/32).
+Start the next session from [current-status.md](./current-status.md), then continue with [#33 WO-28](https://github.com/devlikebear/wirecraft/issues/33).
