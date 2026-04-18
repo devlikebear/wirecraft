@@ -7,7 +7,9 @@ import { CircuitOverlay } from './render/CircuitOverlay';
 import { EntityRenderer } from './render/EntityRenderer';
 import { VoxelRenderer } from './render/VoxelRenderer';
 import { DEFAULT_INTERPOLATION_DELAY_MS } from './sim/interpolation';
+import { cardForBlockType } from './state/componentCards';
 import { SnapshotStore } from './state/snapshotStore';
+import { createInspectPanel } from './ui/InspectPanel';
 import { createToolbar } from './ui/Toolbar';
 import {
   AmbientLight,
@@ -62,7 +64,7 @@ const circuitOverlay = new CircuitOverlay(scene);
 const debugOverlay = new DebugOverlay(app);
 const snapshots = new SnapshotStore({ maxSnapshots: 64 });
 const clientId = crypto.randomUUID();
-let selectedBlockType = BlockType.Solid;
+let selectedBlockType = BlockType.Power;
 let wsStatus = 'idle';
 let serverTick: number | null = null;
 let voxelBlocks = 0;
@@ -91,13 +93,16 @@ const snapshotSocket = new SnapshotSocket({
 });
 snapshotSocket.connect();
 
+const inspectPanel = createInspectPanel(cardForBlockType(selectedBlockType));
 const toolbar = createToolbar({
   selectedBlockType,
   onSelectBlockType: (blockType) => {
     selectedBlockType = blockType;
+    inspectPanel.setCard(cardForBlockType(blockType));
     app.dataset.selectedBlockType = String(blockType);
   },
 });
+app.appendChild(inspectPanel.element);
 app.appendChild(toolbar.element);
 app.dataset.selectedBlockType = String(selectedBlockType);
 

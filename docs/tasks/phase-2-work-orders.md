@@ -355,7 +355,7 @@ Render High/Low/Unknown circuit state in the Three.js scene using authoritative 
 
 ## Work Order 23: Add Starter Component Cards
 
-GitHub issue: [#26 WO-23: Add starter component cards](https://github.com/devlikebear/wirecraft/issues/26)
+Status: Completed. GitHub issue: [#26](https://github.com/devlikebear/wirecraft/issues/26).
 
 ## Goal
 
@@ -377,17 +377,17 @@ Add beginner-friendly component card data and a simple inspect panel for starter
 
 ## Steps
 
-- [ ] Define component card schema with pins, role, wiring notes, warnings, and simplification notes.
-- [ ] Add starter cards for power, wire, button, AND gate, MCU output, LED, and resistor.
-- [ ] Add a compact inspect panel that can show selected component text.
-- [ ] Add validation tests for required card fields.
+- [x] Define component card schema with pins, role, wiring notes, warnings, and simplification notes.
+- [x] Add starter cards for power, wire, button, AND gate, MCU output, LED, and resistor.
+- [x] Add a compact inspect panel that can show selected component text.
+- [x] Add validation tests for required card fields.
 
 ## Acceptance Criteria
 
-- [ ] `go test ./internal/component/...` passes.
-- [ ] `cd web && npm test` passes.
-- [ ] `cd web && npm run build` passes.
-- [ ] Browser can display at least one starter component card.
+- [x] `go test ./internal/component/...` passes.
+- [x] `cd web && npm test` passes.
+- [x] `cd web && npm run build` passes.
+- [x] Browser can display at least one starter component card.
 
 ## Verification Commands
 
@@ -399,7 +399,7 @@ Add beginner-friendly component card data and a simple inspect panel for starter
 
 ## Phase 2 Checkpoint: Verify Circuit Runtime
 
-GitHub issue: create when active.
+GitHub issue: [#27](https://github.com/devlikebear/wirecraft/issues/27)
 
 ## Goal
 
