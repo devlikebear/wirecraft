@@ -63,14 +63,15 @@ GitHub issue: [#28 Phase 3: Physical Actuators](https://github.com/devlikebear/w
 - [x] [#31 WO-26: Add actuator block types](https://github.com/devlikebear/wirecraft/issues/31)
 - [x] [#32 WO-27: Integrate actuator update order](https://github.com/devlikebear/wirecraft/issues/32)
 - [x] [#33 WO-28: Add transform snapshot schema](https://github.com/devlikebear/wirecraft/issues/33)
+- [x] [#34 WO-29: Render actuator meshes](https://github.com/devlikebear/wirecraft/issues/34)
 
 ## Next Work Order
 
-Start with **Work Order 29: Render Actuator Meshes** in [`phase-3-work-orders.md`](./phase-3-work-orders.md).
+Start with **Work Order 30: Add Actuator Placement UI** in [`phase-3-work-orders.md`](./phase-3-work-orders.md).
 
-GitHub issue: [#34 WO-29: Render actuator meshes](https://github.com/devlikebear/wirecraft/issues/34)
+GitHub issue: [#35 WO-30: Add actuator placement UI](https://github.com/devlikebear/wirecraft/issues/35)
 
-Phase 2 is complete and approved. Phase 3 has started; the physics transform/entity foundation, actuator domain model, actuator-facing block/protocol types, internal actuator update order, and transform snapshot export are complete. The next step is rendering actuator entities in the browser.
+Phase 2 is complete and approved. Phase 3 has started; the physics transform/entity foundation, actuator domain model, actuator-facing block/protocol types, internal actuator update order, transform snapshot export, and actuator entity rendering are complete. The next step is exposing actuator placement in the browser UI.
 
 ## GitHub Issue Index
 
@@ -108,6 +109,7 @@ Phase 2 is complete and approved. Phase 3 has started; the physics transform/ent
 - [#32 WO-27: Integrate actuator update order](https://github.com/devlikebear/wirecraft/issues/32)
 - [#33 WO-28: Add transform snapshot schema](https://github.com/devlikebear/wirecraft/issues/33)
 - [#34 WO-29: Render actuator meshes](https://github.com/devlikebear/wirecraft/issues/34)
+- [#35 WO-30: Add actuator placement UI](https://github.com/devlikebear/wirecraft/issues/35)
 
 ## Session Rules
 

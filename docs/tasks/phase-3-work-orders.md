@@ -250,7 +250,7 @@ Expose actuator transform state in authoritative snapshots so clients can consum
 
 ## Work Order 29: Render Actuator Meshes
 
-Status: Next. GitHub issue: [#34](https://github.com/devlikebear/wirecraft/issues/34).
+Status: Completed. GitHub issue: [#34](https://github.com/devlikebear/wirecraft/issues/34).
 
 ## Goal
 
@@ -273,11 +273,55 @@ Render actuator dynamic entities from authoritative snapshots in the browser. Th
 
 ## Steps
 
-- [ ] Treat piston and motor entity types as renderable entities.
-- [ ] Add lightweight actuator mesh/material helpers for piston and motor placeholders.
-- [ ] Keep debug mover rendering behavior compatible.
-- [ ] Add interpolation tests for actuator entities across snapshots.
-- [ ] Add renderer tests proving actuator meshes are created and updated by entity ID.
+- [x] Treat piston and motor entity types as renderable entities.
+- [x] Add lightweight actuator mesh/material helpers for piston and motor placeholders.
+- [x] Keep debug mover rendering behavior compatible.
+- [x] Add interpolation tests for actuator entities across snapshots.
+- [x] Add renderer tests proving actuator meshes are created and updated by entity ID.
+
+## Acceptance Criteria
+
+- [x] `cd web && npm test` passes.
+- [x] `cd web && npm run build` passes.
+- [x] No Go files are touched.
+
+## Verification Commands
+
+- `cd web && npm test`
+- `cd web && npm run build`
+
+---
+
+## Work Order 30: Add Actuator Placement UI
+
+Status: Next. GitHub issue: [#35](https://github.com/devlikebear/wirecraft/issues/35).
+
+## Goal
+
+Expose actuator block placement in the browser toolbar so users can place piston, motor, motor driver, and transistor switch blocks through the existing edit command flow.
+
+## Non-goals
+
+- Do not change server actuator motion behavior.
+- Do not add detailed actuator rendering beyond the current placeholder meshes.
+- Do not implement full orientation controls yet; use existing placement semantics.
+- Do not add sensor or component card content yet.
+
+## Touch points (<=5)
+
+- `web/src/ui/Toolbar.ts`
+- `web/src/ui/Toolbar.test.ts`
+- `web/src/input/EditController.ts`
+- `web/src/state/componentCards.ts`
+- `docs/tasks/phase-3-work-orders.md`
+
+## Steps
+
+- [ ] Add toolbar tools for piston, motor, motor driver, and transistor switch.
+- [ ] Ensure selected actuator block types flow through existing place commands.
+- [ ] Keep remove behavior unchanged.
+- [ ] Add focused toolbar/edit flow tests for actuator selection.
+- [ ] Keep server command validation unchanged.
 
 ## Acceptance Criteria
 
@@ -294,11 +338,10 @@ Render actuator dynamic entities from authoritative snapshots in the browser. Th
 
 ## Planned Work Orders
 
-- [ ] **WO-30: Add actuator placement UI** — expose actuator block placement and minimal orientation controls.
 - [ ] **WO-31: Add sensor input extension point** — separate button/proximity-style sensor primitives for later inputs.
 - [ ] **WO-32: Add motor and driver component cards** — explain motor driver/transistor constraints and simulation simplifications.
 - [ ] **Phase 3 Checkpoint** — verify button-driven actuator motion across server tests, client build, and browser smoke.
 
 ## Session Handoff
 
-Start the next session from [current-status.md](./current-status.md), then continue with [#34 WO-29](https://github.com/devlikebear/wirecraft/issues/34).
+Start the next session from [current-status.md](./current-status.md), then continue with [#35 WO-30](https://github.com/devlikebear/wirecraft/issues/35).

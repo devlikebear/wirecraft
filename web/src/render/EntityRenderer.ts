@@ -1,14 +1,13 @@
 import {
-  BoxGeometry,
   Group,
   Mesh,
-  MeshStandardMaterial,
   type Object3D,
 } from 'three';
-import type { EntitySnapshot, Snapshot, TransformSnapshot } from '../net/protocol';
+import { EntityType, type EntitySnapshot, type Snapshot, type TransformSnapshot } from '../net/protocol';
 import { findSnapshotPair, interpolateTransform } from '../sim/interpolation';
+import { createEntityMesh, disposeEntityMesh, isRenderableEntityType } from './ActuatorMeshes';
 
-export const DEBUG_MOVER_ENTITY_TYPE = 'debug_mover';
+export const DEBUG_MOVER_ENTITY_TYPE = EntityType.DebugMover;
 
 export interface EntityRenderItem {
   id: string;
@@ -47,14 +46,6 @@ export function selectInterpolatedEntityRenderItems(
 export class EntityRenderer {
   readonly object = new Group();
 
-  private readonly geometry = new BoxGeometry(1, 1, 1);
-  private readonly material = new MeshStandardMaterial({
-    color: 0x58a6ff,
-    emissive: 0x0c2d57,
-    emissiveIntensity: 0.45,
-    roughness: 0.35,
-    metalness: 0.12,
-  });
   private readonly meshes = new Map<string, Mesh>();
 
   constructor(private readonly parent: Object3D) {
@@ -78,7 +69,7 @@ export class EntityRenderer {
     for (const [id, mesh] of this.meshes) {
       if (!activeIDs.has(id)) {
         this.object.remove(mesh);
-        mesh.geometry.dispose();
+        disposeEntityMesh(mesh);
         this.meshes.delete(id);
       }
     }
@@ -87,22 +78,26 @@ export class EntityRenderer {
   dispose(): void {
     for (const mesh of this.meshes.values()) {
       this.object.remove(mesh);
-      mesh.geometry.dispose();
+      disposeEntityMesh(mesh);
     }
     this.meshes.clear();
     this.parent.remove(this.object);
-    this.geometry.dispose();
-    this.material.dispose();
   }
 
   private ensureMesh(item: EntityRenderItem): Mesh {
     const existing = this.meshes.get(item.id);
-    if (existing) {
+    if (existing && existing.userData.entityType === item.type) {
       return existing;
     }
+    if (existing) {
+      this.object.remove(existing);
+      disposeEntityMesh(existing);
+      this.meshes.delete(item.id);
+    }
 
-    const mesh = new Mesh(this.geometry.clone(), this.material);
+    const mesh = createEntityMesh(item.type);
     mesh.name = `wirecraft-entity-${item.id}`;
+    mesh.userData.entityType = item.type;
     this.object.add(mesh);
     this.meshes.set(item.id, mesh);
     return mesh;
@@ -121,7 +116,7 @@ export class EntityRenderer {
 }
 
 function renderableEntities(entities: EntitySnapshot[]): EntitySnapshot[] {
-  return entities.filter((entity) => entity.type === DEBUG_MOVER_ENTITY_TYPE);
+  return entities.filter((entity) => isRenderableEntityType(entity.type));
 }
 
 function toRenderItem(entity: EntitySnapshot): EntityRenderItem {

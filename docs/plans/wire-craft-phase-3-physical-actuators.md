@@ -102,7 +102,7 @@ _예상 소요: 1-2주_
 
 ### 작업 그룹 C: Client rendering
 
-- [ ] **T3.C.1** — actuator mesh 렌더링.
+- [x] **T3.C.1** — actuator mesh 렌더링.
   - 파일:
     - `web/src/render/EntityRenderer.ts`
     - `web/src/render/ActuatorMeshes.ts`

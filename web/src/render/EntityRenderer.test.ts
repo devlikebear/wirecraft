@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { Group } from 'three';
-import type { EntitySnapshot, Snapshot } from '../net/protocol';
+import { EntityType, type EntitySnapshot, type Snapshot } from '../net/protocol';
 import {
   DEBUG_MOVER_ENTITY_TYPE,
   EntityRenderer,
@@ -35,6 +35,21 @@ describe('selectInterpolatedEntityRenderItems', () => {
 
     expect(items).toEqual([]);
   });
+
+  it('interpolates actuator entities between buffered snapshots', () => {
+    const items = selectInterpolatedEntityRenderItems(
+      [
+        snapshot(1, 1000, entity('piston:2:0:0', 2, EntityType.Piston)),
+        snapshot(2, 1100, entity('piston:2:0:0', 4, EntityType.Piston)),
+      ],
+      1050,
+    );
+
+    expect(items).toHaveLength(1);
+    expect(items[0].id).toBe('piston:2:0:0');
+    expect(items[0].type).toBe(EntityType.Piston);
+    expect(items[0].transform.position).toEqual({ x: 3, y: 1.25, z: 1 });
+  });
 });
 
 describe('EntityRenderer', () => {
@@ -57,6 +72,33 @@ describe('EntityRenderer', () => {
 
     renderer.dispose();
     expect(parent.children).not.toContain(renderer.object);
+  });
+
+  it('creates actuator meshes by entity type and ID', () => {
+    const parent = new Group();
+    const renderer = new EntityRenderer(parent);
+
+    renderer.updateFromSnapshots(
+      [
+        snapshot(
+          1,
+          1000,
+          entity('debug-mover-1', 0),
+          entity('piston:2:0:0', 2, EntityType.Piston),
+          entity('motor:4:0:0', 4, EntityType.Motor),
+          entity('servo-1', 6, 'servo'),
+        ),
+      ],
+      1000,
+    );
+
+    expect(renderer.count).toBe(3);
+    expect(renderer.object.getObjectByName('wirecraft-entity-debug-mover-1')).toBeTruthy();
+    expect(renderer.object.getObjectByName('wirecraft-entity-piston:2:0:0')).toBeTruthy();
+    expect(renderer.object.getObjectByName('wirecraft-entity-motor:4:0:0')).toBeTruthy();
+    expect(renderer.object.getObjectByName('wirecraft-entity-servo-1')).toBeUndefined();
+
+    renderer.dispose();
   });
 });
 
