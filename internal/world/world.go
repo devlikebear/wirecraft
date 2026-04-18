@@ -33,7 +33,11 @@ type World struct {
 }
 
 func NewDefault() *World {
-	return New(Dimensions{X: 32, Y: 32, Z: 16})
+	return New(DefaultDimensions())
+}
+
+func DefaultDimensions() Dimensions {
+	return Dimensions{X: 32, Y: 32, Z: 16}
 }
 
 func New(dimensions Dimensions) *World {

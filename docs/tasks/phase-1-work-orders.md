@@ -234,7 +234,7 @@ Create the first simulation assembly layer that can build a full snapshot from t
 
 ## Work Order 6: Add In-Memory Simulation Runner
 
-GitHub issue: [#7 WO-6: Add in-memory simulation runner](https://github.com/devlikebear/wirecraft/issues/7)
+Status: Completed. GitHub issue: [#7](https://github.com/devlikebear/wirecraft/issues/7).
 
 ## Goal
 
@@ -256,19 +256,63 @@ Add a small in-memory simulation runner that owns a world, applies validated com
 
 ## Steps
 
-- [ ] Add `Simulation` with default world bounds and current tick.
-- [ ] Add `ApplyCommand` for `place_block` and `remove_block` using command validation.
-- [ ] Add `Step` or `Snapshot` method that advances tick and returns a full snapshot.
-- [ ] Add tests for valid place/remove commands changing world state.
-- [ ] Add tests for invalid commands being rejected without changing world state.
+- [x] Add `Simulation` with default world bounds and current tick.
+- [x] Add `ApplyCommand` for `place_block` and `remove_block` using command validation.
+- [x] Add `Step` or `Snapshot` method that advances tick and returns a full snapshot.
+- [x] Add tests for valid place/remove commands changing world state.
+- [x] Add tests for invalid commands being rejected without changing world state.
 
 ## Acceptance Criteria
 
-- [ ] `go test ./internal/sim/...` passes.
-- [ ] `go test ./...` passes.
-- [ ] No WebSocket transport or frontend files are touched.
+- [x] `go test ./internal/sim/...` passes.
+- [x] `go test ./...` passes.
+- [x] No WebSocket transport or frontend files are touched.
 
 ## Verification Commands
 
 - `go test ./internal/sim/...`
+- `go test ./...`
+
+---
+
+## Work Order 7: Add WebSocket Simulation Stream
+
+GitHub issue: [#8 WO-7: Add WebSocket simulation stream](https://github.com/devlikebear/wirecraft/issues/8)
+
+## Goal
+
+Expose the in-memory simulation through a server-owned WebSocket stream so clients can send edit commands and receive authoritative snapshots.
+
+## Non-goals
+
+- Do not connect the TypeScript client yet.
+- Do not implement interpolation yet.
+- Do not implement persistence or delta snapshots.
+
+## Touch points (<=5)
+
+- `go.mod`
+- `internal/server/server.go`
+- `internal/server/ws.go`
+- `internal/server/ws_test.go`
+- `docs/tasks/phase-1-work-orders.md`
+
+## Steps
+
+- [ ] Choose and add a small maintained WebSocket package.
+- [ ] Register `GET /ws` on the server handler.
+- [ ] Create a server-owned simulation loop that sends full snapshots at a fixed tick rate.
+- [ ] Accept JSON edit commands from the WebSocket and apply them through `sim.Simulation`.
+- [ ] Add server tests for WebSocket connection, command receive, and snapshot response.
+
+## Acceptance Criteria
+
+- [ ] `go test ./internal/server/...` passes.
+- [ ] `go test ./...` passes.
+- [ ] `/ws` rejects non-WebSocket requests cleanly.
+- [ ] No frontend files are touched.
+
+## Verification Commands
+
+- `go test ./internal/server/...`
 - `go test ./...`
