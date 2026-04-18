@@ -19,7 +19,7 @@ Wire Craft는 서버 권한 구조를 기반으로 복셀 조립, 회로 시뮬�
 - [ ] Go 서버가 authoritative world, circuit, actuator state를 고정 tick으로 계산한다.
 - [ ] Three.js 클라이언트가 서버 snapshot을 받아 InstancedMesh 기반 복셀 월드를 렌더링한다.
 - [ ] 클라이언트가 snapshot buffer 기반 interpolation으로 dynamic entity를 부드럽게 표시한다.
-- [ ] 최소 회로(전원, 버튼, 전선, 게이트, MCU output)가 서버에서 결정적으로 평가된다.
+- [x] 최소 회로(전원, 버튼, 전선, 게이트, MCU output)가 서버에서 결정적으로 평가된다.
 - [ ] 회로 신호가 피스톤 또는 모터의 물리적 움직임으로 연결된다.
 - [ ] 2-4명의 클라이언트가 같은 room에 접속해 동일한 상태를 본다.
 - [ ] 초보자용 component card와 guided mission이 최소 1개 동작한다.
@@ -67,7 +67,7 @@ Status: Completed. Tracking issue: [#1](https://github.com/devlikebear/wirecraft
 
 ### Phase 2: Circuit Runtime — 서버 사이드 회로 엔진
 
-Status: Active. Tracking issue: [#17](https://github.com/devlikebear/wirecraft/issues/17).
+Status: Completed. Tracking issue: [#17](https://github.com/devlikebear/wirecraft/issues/17).
 
 - **목표**: 서버가 전원, 버튼, 전선, 게이트, MCU output node의 High/Low 상태를 tick마다 결정적으로 계산하고, 초보자가 각 부품의 의미를 component card로 확인한다.
 - **포함 기능**: circuit graph model, signal propagation, block-to-circuit mapping, debug visualization, component card
@@ -76,6 +76,8 @@ Status: Active. Tracking issue: [#17](https://github.com/devlikebear/wirecraft/i
 - **Checkpoint 요약**: 버튼과 게이트 조합 결과가 모든 클라이언트에서 같은 tick에 표시된다.
 
 ### Phase 3: Physical Actuators — 회로 신호와 물리 블록 결합
+
+Status: Active. Tracking issue: [#28](https://github.com/devlikebear/wirecraft/issues/28).
 
 - **목표**: 회로 출력이 피스톤 또는 모터 블록 움직임으로 변환되고, 클라이언트는 transform snapshot을 보간 렌더링한다.
 - **포함 기능**: actuator component, simple kinematic movement, sensor input stub, transform replication

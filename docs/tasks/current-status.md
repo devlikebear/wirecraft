@@ -11,9 +11,9 @@ This file is the handoff point for new Codex sessions. Start here, then read the
 - Product and MVP: [`../plans/wire-craft-prd.md`](../plans/wire-craft-prd.md)
 - Full roadmap: [`../plans/wire-craft-roadmap.md`](../plans/wire-craft-roadmap.md)
 - Research notes: [`../plans/wire-craft-research-notes.md`](../plans/wire-craft-research-notes.md)
-- Active phase plan: [`../plans/wire-craft-phase-2-circuit-runtime.md`](../plans/wire-craft-phase-2-circuit-runtime.md)
-- Active work orders: [`phase-2-work-orders.md`](./phase-2-work-orders.md)
-- Phase 2 checkpoint report: [`phase-2-checkpoint-report.md`](./phase-2-checkpoint-report.md)
+- Active phase plan: [`../plans/wire-craft-phase-3-physical-actuators.md`](../plans/wire-craft-phase-3-physical-actuators.md)
+- Active work orders: [`phase-3-work-orders.md`](./phase-3-work-orders.md)
+- Recent checkpoint report: [`phase-2-checkpoint-report.md`](./phase-2-checkpoint-report.md)
 
 ## Repository State
 
@@ -25,11 +25,11 @@ This file is the handoff point for new Codex sessions. Start here, then read the
 
 ## Current Phase
 
-**Phase 2: Circuit Runtime**
+**Phase 3: Physical Actuators**
 
-Goal: create the smallest deterministic server-side digital circuit runtime. The Go server maps circuit blocks in the voxel world to graph/state, evaluates High/Low/Unknown signal state, and exposes enough debug state for the client to visualize simple circuits.
+Goal: connect server-authoritative circuit signal state to deterministic physical actuator motion. The server should turn High/Low circuit outputs into kinematic piston or motor transforms, and the client should render those transforms through the existing interpolation path.
 
-GitHub issue: [#17 Phase 2: Circuit Runtime](https://github.com/devlikebear/wirecraft/issues/17)
+GitHub issue: [#28 Phase 3: Physical Actuators](https://github.com/devlikebear/wirecraft/issues/28)
 
 ## Completed Work
 
@@ -57,14 +57,16 @@ GitHub issue: [#17 Phase 2: Circuit Runtime](https://github.com/devlikebear/wire
 - [x] [#24 WO-21: Add circuit block toolbar](https://github.com/devlikebear/wirecraft/issues/24)
 - [x] [#25 WO-22: Visualize circuit signal state](https://github.com/devlikebear/wirecraft/issues/25)
 - [x] [#26 WO-23: Add starter component cards](https://github.com/devlikebear/wirecraft/issues/26)
+- [x] [#27 Phase 2 Checkpoint: Verify circuit runtime](https://github.com/devlikebear/wirecraft/issues/27)
+- [x] [#29 WO-24: Add dynamic entity and transform primitives](https://github.com/devlikebear/wirecraft/issues/29)
 
 ## Next Work Order
 
-Start with **Phase 2 Checkpoint user approval** in [`phase-2-work-orders.md`](./phase-2-work-orders.md).
+Start with **Work Order 25: Add Actuator Component Model** in [`phase-3-work-orders.md`](./phase-3-work-orders.md).
 
-GitHub issue: [#27 Phase 2 Checkpoint: Verify circuit runtime](https://github.com/devlikebear/wirecraft/issues/27)
+GitHub issue: [#30 WO-25: Add actuator component model](https://github.com/devlikebear/wirecraft/issues/30)
 
-Local verification is complete. The remaining checkpoint item is explicit user approval before opening Phase 3 work.
+Phase 2 is complete and approved. Phase 3 has started; the physics transform/entity foundation is complete, and the next step is the actuator domain model.
 
 ## GitHub Issue Index
 
@@ -95,6 +97,9 @@ Local verification is complete. The remaining checkpoint item is explicit user a
 - [#25 WO-22: Visualize circuit signal state](https://github.com/devlikebear/wirecraft/issues/25)
 - [#26 WO-23: Add starter component cards](https://github.com/devlikebear/wirecraft/issues/26)
 - [#27 Phase 2 Checkpoint: Verify circuit runtime](https://github.com/devlikebear/wirecraft/issues/27)
+- [#28 Phase 3: Physical Actuators](https://github.com/devlikebear/wirecraft/issues/28)
+- [#29 WO-24: Add dynamic entity and transform primitives](https://github.com/devlikebear/wirecraft/issues/29)
+- [#30 WO-25: Add actuator component model](https://github.com/devlikebear/wirecraft/issues/30)
 
 ## Session Rules
 

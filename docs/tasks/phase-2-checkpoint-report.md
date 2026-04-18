@@ -6,9 +6,9 @@ GitHub issue: [#27 Phase 2 Checkpoint: Verify circuit runtime](https://github.co
 
 ## Summary
 
-Phase 2 runtime verification is complete locally. The server-authoritative circuit loop can place circuit blocks from the browser, evaluate deterministic signal state on the Go server, stream snapshots over WebSocket, and visualize/read that state in the Three.js client.
+Phase 2 runtime verification is complete. The server-authoritative circuit loop can place circuit blocks from the browser, evaluate deterministic signal state on the Go server, stream snapshots over WebSocket, and visualize/read that state in the Three.js client.
 
-Phase 3 should wait for explicit user approval.
+The user approved moving to Phase 3 on 2026-04-18.
 
 ## Browser Smoke Scenario
 

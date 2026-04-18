@@ -399,7 +399,7 @@ Add beginner-friendly component card data and a simple inspect panel for starter
 
 ## Phase 2 Checkpoint: Verify Circuit Runtime
 
-Status: Verified locally; waiting for user approval to move to Phase 3.
+Status: Completed. User approved moving to Phase 3 on 2026-04-18.
 
 GitHub issue: [#27](https://github.com/devlikebear/wirecraft/issues/27)
 
@@ -422,7 +422,7 @@ Verify the smallest end-to-end digital circuit loop before moving to Phase 3.
 - [x] `cd web && npm run build` passes.
 - [x] Browser smoke test passes for power -> wire -> output.
 - [x] Browser smoke test passes for button-gated output.
-- [ ] User approves moving to Phase 3.
+- [x] User approves moving to Phase 3.
 
 ## Verification Commands
 

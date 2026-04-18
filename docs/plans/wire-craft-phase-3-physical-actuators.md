@@ -10,7 +10,7 @@ _예상 소요: 1-2주_
 
 ## 전제 조건
 
-- [ ] Phase 2 완료 및 사용자 승인
+- [x] Phase 2 완료 및 사용자 승인
 - [ ] snapshot interpolation이 Phase 1에서 동작 중
 - [ ] circuit output state를 simulation layer에서 읽을 수 있음
 
@@ -34,7 +34,7 @@ _예상 소요: 1-2주_
 
 ### 작업 그룹 A: Actuator model
 
-- [ ] **T3.A.1** — dynamic entity와 transform type 정의.
+- [x] **T3.A.1** — dynamic entity와 transform type 정의.
   - 파일:
     - `internal/physics/transform.go`
     - `internal/physics/entity.go`
