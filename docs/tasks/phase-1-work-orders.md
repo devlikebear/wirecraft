@@ -364,7 +364,7 @@ Connect the Vite client to the Go WebSocket endpoint and keep an in-memory snaps
 
 ## Work Order 9: Render Authoritative Snapshots As Voxels
 
-GitHub issue: [#10 WO-9: Render authoritative snapshots as voxels](https://github.com/devlikebear/wirecraft/issues/10)
+Status: Completed. GitHub issue: [#10](https://github.com/devlikebear/wirecraft/issues/10).
 
 ## Goal
 
@@ -386,17 +386,61 @@ Render server-authoritative snapshot blocks in the Three.js scene using an effic
 
 ## Steps
 
-- [ ] Add a `VoxelRenderer` that maps full snapshot blocks into Three.js mesh instances or stable meshes.
-- [ ] Define block materials for solid and debug mover block types.
-- [ ] Replace the static demo footprint with server snapshot-driven voxel updates.
-- [ ] Keep the existing scene, camera, lights, and resize behavior intact.
-- [ ] Add focused tests for snapshot-to-render data mapping where practical.
+- [x] Add a `VoxelRenderer` that maps full snapshot blocks into Three.js mesh instances or stable meshes.
+- [x] Define block materials for solid and debug mover block types.
+- [x] Replace the static demo footprint with server snapshot-driven voxel updates.
+- [x] Keep the existing scene, camera, lights, and resize behavior intact.
+- [x] Add focused tests for snapshot-to-render data mapping where practical.
+
+## Acceptance Criteria
+
+- [x] `cd web && npm test` passes.
+- [x] `cd web && npm run build` passes.
+- [x] With Go server and Vite dev server running, the browser scene reflects blocks received from `/ws` snapshots.
+- [x] No Go server files are touched.
+
+## Verification Commands
+
+- `cd web && npm test`
+- `cd web && npm run build`
+
+---
+
+## Work Order 10: Add Raycast Block Edit Commands
+
+GitHub issue: [#11 WO-10: Add raycast block edit commands](https://github.com/devlikebear/wirecraft/issues/11)
+
+## Goal
+
+Let users place and remove voxel blocks from the Three.js scene through raycast-based pointer input while keeping the server authoritative.
+
+## Non-goals
+
+- Do not implement optimistic client-side world mutation.
+- Do not implement interpolation yet.
+- Do not add advanced toolbars or block palettes.
+
+## Touch points (<=5)
+
+- `web/src/input/EditController.ts`
+- `web/src/input/EditController.test.ts`
+- `web/src/main.ts`
+- `web/src/render/VoxelRenderer.ts`
+- `docs/tasks/phase-1-work-orders.md`
+
+## Steps
+
+- [ ] Add raycast helpers that convert pointer hits into place/remove block positions.
+- [ ] Add an edit controller for left-click place and shift-click or right-click remove.
+- [ ] Send commands through `SnapshotSocket.sendCommand` without mutating local voxel state directly.
+- [ ] Keep command IDs stable and include latest known server tick as `tickHint`.
+- [ ] Add focused tests for edit-position calculation and command payload creation.
 
 ## Acceptance Criteria
 
 - [ ] `cd web && npm test` passes.
 - [ ] `cd web && npm run build` passes.
-- [ ] With Go server and Vite dev server running, the browser scene reflects blocks received from `/ws` snapshots.
+- [ ] With Go server and Vite dev server running, clicking in the scene changes voxels only after a server snapshot arrives.
 - [ ] No Go server files are touched.
 
 ## Verification Commands

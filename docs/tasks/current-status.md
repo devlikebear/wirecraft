@@ -40,12 +40,13 @@ GitHub issue: [#1 Phase 1: Authoritative Voxel Loop](https://github.com/devlikeb
 - [x] [#7 WO-6: Add in-memory simulation runner](https://github.com/devlikebear/wirecraft/issues/7)
 - [x] [#8 WO-7: Add WebSocket simulation stream](https://github.com/devlikebear/wirecraft/issues/8)
 - [x] [#9 WO-8: Add TypeScript WebSocket client and snapshot store](https://github.com/devlikebear/wirecraft/issues/9)
+- [x] [#10 WO-9: Render authoritative snapshots as voxels](https://github.com/devlikebear/wirecraft/issues/10)
 
 ## Next Work Order
 
-Start with **WO-9** in [`phase-1-work-orders.md`](./phase-1-work-orders.md).
+Start with **WO-10** in [`phase-1-work-orders.md`](./phase-1-work-orders.md).
 
-GitHub issue: [#10 WO-9: Render authoritative snapshots as voxels](https://github.com/devlikebear/wirecraft/issues/10)
+GitHub issue: [#11 WO-10: Add raycast block edit commands](https://github.com/devlikebear/wirecraft/issues/11)
 
 ## GitHub Issue Index
 
@@ -59,6 +60,7 @@ GitHub issue: [#10 WO-9: Render authoritative snapshots as voxels](https://githu
 - [#8 WO-7: Add WebSocket simulation stream](https://github.com/devlikebear/wirecraft/issues/8)
 - [#9 WO-8: Add TypeScript WebSocket client and snapshot store](https://github.com/devlikebear/wirecraft/issues/9)
 - [#10 WO-9: Render authoritative snapshots as voxels](https://github.com/devlikebear/wirecraft/issues/10)
+- [#11 WO-10: Add raycast block edit commands](https://github.com/devlikebear/wirecraft/issues/11)
 
 ## Session Rules
 

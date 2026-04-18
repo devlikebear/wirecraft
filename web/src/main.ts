@@ -1,14 +1,13 @@
 import './styles.css';
+import { BlockType, type Position } from './net/protocol';
 import { SnapshotSocket } from './net/socket';
+import { VoxelRenderer } from './render/VoxelRenderer';
 import { SnapshotStore } from './state/snapshotStore';
 import {
   AmbientLight,
-  BoxGeometry,
   Color,
   DirectionalLight,
   GridHelper,
-  Mesh,
-  MeshStandardMaterial,
   PerspectiveCamera,
   Scene,
   SRGBColorSpace,
@@ -21,24 +20,6 @@ const app = document.querySelector<HTMLElement>('#app');
 if (!app) {
   throw new Error('Missing #app root element');
 }
-
-const snapshots = new SnapshotStore({ maxSnapshots: 64 });
-const snapshotSocket = new SnapshotSocket({
-  onSnapshot: (snapshot) => {
-    snapshots.append(snapshot);
-    app.dataset.serverTick = String(snapshot.tick);
-    app.dataset.snapshotBuffer = String(snapshots.length);
-  },
-  onStatusChange: (status) => {
-    app.dataset.wsStatus = status;
-    console.info(`[wirecraft] websocket ${status}`);
-  },
-  onError: (error) => {
-    console.warn('[wirecraft] websocket error', error);
-  },
-});
-snapshotSocket.connect();
-window.addEventListener('beforeunload', () => snapshotSocket.close());
 
 const scene = new Scene();
 scene.background = new Color(0x101211);
@@ -67,39 +48,56 @@ scene.add(fillLight);
 const grid = new GridHelper(18, 18, 0x53635d, 0x27302d);
 scene.add(grid);
 
-const blockGeometry = new BoxGeometry(1, 1, 1);
-const baseMaterial = new MeshStandardMaterial({ color: 0x6d8f7d, roughness: 0.7 });
-const copperMaterial = new MeshStandardMaterial({ color: 0xb56a3c, roughness: 0.58, metalness: 0.15 });
-const moverMaterial = new MeshStandardMaterial({ color: 0xd6c064, roughness: 0.45 });
+const voxelRenderer = new VoxelRenderer(scene);
+const snapshots = new SnapshotStore({ maxSnapshots: 64 });
+const clientId = crypto.randomUUID();
+let commandSequence = 0;
 
-const baseBlocks: Mesh[] = [];
-const footprint = [
-  [-2, 0, -1],
-  [-1, 0, -1],
-  [0, 0, -1],
-  [1, 0, -1],
-  [-2, 0, 0],
-  [1, 0, 0],
-  [-2, 0, 1],
-  [-1, 0, 1],
-  [0, 0, 1],
-  [1, 0, 1],
-];
+const snapshotSocket = new SnapshotSocket({
+  onSnapshot: (snapshot) => {
+    snapshots.append(snapshot);
+    voxelRenderer.update(snapshot);
+    app.dataset.serverTick = String(snapshot.tick);
+    app.dataset.snapshotBuffer = String(snapshots.length);
+    app.dataset.voxelBlocks = String(snapshot.blocks.length);
+  },
+  onStatusChange: (status) => {
+    app.dataset.wsStatus = status;
+    console.info(`[wirecraft] websocket ${status}`);
+  },
+  onError: (error) => {
+    console.warn('[wirecraft] websocket error', error);
+  },
+});
+snapshotSocket.connect();
+window.addEventListener('beforeunload', () => {
+  voxelRenderer.dispose();
+  snapshotSocket.close();
+});
 
-for (const [x, y, z] of footprint) {
-  const block = new Mesh(blockGeometry, baseMaterial);
-  block.position.set(x, y + 0.5, z);
-  scene.add(block);
-  baseBlocks.push(block);
-}
-
-const copperTrace = new Mesh(new BoxGeometry(4.2, 0.08, 0.16), copperMaterial);
-copperTrace.position.set(-0.5, 1.04, 0);
-scene.add(copperTrace);
-
-const debugMover = new Mesh(blockGeometry, moverMaterial);
-debugMover.position.set(0, 1.6, 0);
-scene.add(debugMover);
+window.wirecraft = {
+  placeBlock(position: Position, blockType: BlockType = BlockType.DebugMover) {
+    snapshotSocket.sendCommand({
+      type: 'place_block',
+      clientId,
+      commandId: `client-${++commandSequence}`,
+      tickHint: snapshots.latest()?.tick ?? 0,
+      position,
+      blockType,
+    });
+  },
+  removeBlock(position: Position) {
+    snapshotSocket.sendCommand({
+      type: 'remove_block',
+      clientId,
+      commandId: `client-${++commandSequence}`,
+      tickHint: snapshots.latest()?.tick ?? 0,
+      position,
+      blockType: BlockType.Air,
+    });
+  },
+  snapshots,
+};
 
 const pointer = new Vector2();
 let targetYaw = 0;
@@ -116,10 +114,7 @@ window.addEventListener('resize', () => {
   renderer.setSize(window.innerWidth, window.innerHeight);
 });
 
-function animate(timeMs: number) {
-  const time = timeMs / 1000;
-  debugMover.position.y = 1.6 + Math.sin(time * 2.2) * 0.24;
-  debugMover.rotation.y = time * 0.7;
+function animate() {
   scene.rotation.y += (targetYaw - scene.rotation.y) * 0.035;
 
   renderer.render(scene, camera);
