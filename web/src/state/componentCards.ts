@@ -96,6 +96,48 @@ export const STARTER_COMPONENT_CARDS: ComponentCard[] = [
     warnings: ['Choose resistance and power rating for the actual voltage and load.'],
     simplificationNotes: ['WireCraft documents resistors now but does not simulate analog resistance in Phase 2.'],
   },
+  {
+    id: 'motor',
+    name: 'Motor',
+    role: 'Converts a driver-enabled signal into actuator motion',
+    pins: [
+      { name: 'DRIVE', direction: 'input', signal: 'motor drive' },
+      { name: 'GND', direction: 'input', signal: 'ground reference' },
+    ],
+    wiringNotes: ['Connect motors through a motor driver or transistor switch, not directly to MCU GPIO.'],
+    warnings: ['MCU GPIO pins cannot drive a motor directly.'],
+    simplificationNotes: [
+      'WireCraft models motor enable as a digital driver signal and does not simulate current draw.',
+    ],
+  },
+  {
+    id: 'motor_driver',
+    name: 'Motor Driver',
+    role: 'Lets a low-current logic signal control a motor load',
+    pins: [
+      { name: 'IN', direction: 'input', signal: 'digital' },
+      { name: 'VM', direction: 'input', signal: 'motor supply' },
+      { name: 'OUT', direction: 'output', signal: 'motor drive' },
+    ],
+    wiringNotes: ['Place a motor driver or transistor switch between logic and motor loads.'],
+    warnings: ['Real motor drivers need a rated motor supply, shared ground, and current headroom.'],
+    simplificationNotes: ['WireCraft treats the driver as a digital permission gate for motor actuation.'],
+  },
+  {
+    id: 'transistor_switch',
+    name: 'Transistor Switch',
+    role: 'Switches a motor or other load from a digital control signal',
+    pins: [
+      { name: 'CTRL', direction: 'input', signal: 'digital' },
+      { name: 'LOAD', direction: 'output', signal: 'switched load' },
+      { name: 'GND', direction: 'input', signal: 'ground reference' },
+    ],
+    wiringNotes: ['Use a transistor switch when a logic signal must control a higher-current load.'],
+    warnings: ['Real motor switches need flyback protection and correct current ratings.'],
+    simplificationNotes: [
+      'WireCraft models the switch as digital on/off and ignores analog saturation, heat, and diode behavior.',
+    ],
+  },
 ];
 
 const cardsByID = new Map(STARTER_COMPONENT_CARDS.map((card) => [card.id, card]));
@@ -105,6 +147,9 @@ const cardIDsByBlockType = new Map<BlockType, string>([
   [BlockType.Button, 'button'],
   [BlockType.AndGate, 'and_gate'],
   [BlockType.MCUOutput, 'mcu_output'],
+  [BlockType.Motor, 'motor'],
+  [BlockType.MotorDriver, 'motor_driver'],
+  [BlockType.TransistorSwitch, 'transistor_switch'],
 ]);
 
 export function findComponentCard(id: string): ComponentCard | null {

@@ -134,7 +134,7 @@ _예상 소요: 1-2주_
 
 ### 작업 그룹 E: 초보자 현실 제약 표시
 
-- [ ] **T3.E.1** — motor/driver component card를 추가한다.
+- [x] **T3.E.1** — motor/driver component card를 추가한다.
   - 파일:
     - `internal/component/card.go`
     - `docs/reference/component-cards.md`
@@ -155,7 +155,7 @@ _예상 소요: 1-2주_
 - [ ] 서버 tick에서 actuator transform이 계산된다.
 - [ ] 클라이언트가 actuator transform을 보간 렌더링한다.
 - [x] sensor 확장 지점이 코드상 분리되어 있다.
-- [ ] GPIO pin에 motor를 직접 연결하면 warning 또는 invalid wiring이 표시된다.
+- [x] GPIO pin에 motor를 직접 연결하면 warning 또는 invalid wiring이 표시된다.
 
 **자동 검증:**
 - [ ] 서버 테스트 통과: `go test ./...`

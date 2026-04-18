@@ -66,14 +66,15 @@ GitHub issue: [#28 Phase 3: Physical Actuators](https://github.com/devlikebear/w
 - [x] [#34 WO-29: Render actuator meshes](https://github.com/devlikebear/wirecraft/issues/34)
 - [x] [#35 WO-30: Add actuator placement UI](https://github.com/devlikebear/wirecraft/issues/35)
 - [x] [#36 WO-31: Add sensor input extension point](https://github.com/devlikebear/wirecraft/issues/36)
+- [x] [#37 WO-32: Add motor and driver component cards](https://github.com/devlikebear/wirecraft/issues/37)
 
 ## Next Work Order
 
-Start with **Work Order 32: Add Motor and Driver Component Cards** in [`phase-3-work-orders.md`](./phase-3-work-orders.md).
+Start with **Phase 3 Checkpoint: Verify Physical Actuators** in [`phase-3-work-orders.md`](./phase-3-work-orders.md).
 
-GitHub issue: [#37 WO-32: Add motor and driver component cards](https://github.com/devlikebear/wirecraft/issues/37)
+GitHub issue: [#38 Phase 3 Checkpoint: Verify physical actuators](https://github.com/devlikebear/wirecraft/issues/38)
 
-Phase 2 is complete and approved. Phase 3 has started; the physics transform/entity foundation, actuator domain model, actuator-facing block/protocol types, internal actuator update order, transform snapshot export, actuator entity rendering, actuator placement UI, and sensor input extension point are complete. The next step is adding motor and driver component cards with beginner-facing wiring warnings.
+Phase 2 is complete and approved. Phase 3 has started; the physics transform/entity foundation, actuator domain model, actuator-facing block/protocol types, internal actuator update order, transform snapshot export, actuator entity rendering, actuator placement UI, sensor input extension point, and motor/driver component cards are complete. The next step is the Phase 3 checkpoint verification.
 
 ## GitHub Issue Index
 
@@ -114,6 +115,7 @@ Phase 2 is complete and approved. Phase 3 has started; the physics transform/ent
 - [#35 WO-30: Add actuator placement UI](https://github.com/devlikebear/wirecraft/issues/35)
 - [#36 WO-31: Add sensor input extension point](https://github.com/devlikebear/wirecraft/issues/36)
 - [#37 WO-32: Add motor and driver component cards](https://github.com/devlikebear/wirecraft/issues/37)
+- [#38 Phase 3 Checkpoint: Verify physical actuators](https://github.com/devlikebear/wirecraft/issues/38)
 
 ## Session Rules
 

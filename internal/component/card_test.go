@@ -1,11 +1,25 @@
 package component
 
-import "testing"
+import (
+	"strings"
+	"testing"
+)
 
 func TestStarterCardsIncludeRequiredComponents(t *testing.T) {
 	cards := StarterCards()
 
-	wantIDs := []string{"power", "wire", "button", "and_gate", "mcu_output", "led", "resistor"}
+	wantIDs := []string{
+		"power",
+		"wire",
+		"button",
+		"and_gate",
+		"mcu_output",
+		"led",
+		"resistor",
+		"motor",
+		"motor_driver",
+		"transistor_switch",
+	}
 	gotIDs := make([]string, 0, len(cards))
 	for _, card := range cards {
 		gotIDs = append(gotIDs, card.ID)
@@ -18,6 +32,35 @@ func TestStarterCardsIncludeRequiredComponents(t *testing.T) {
 		if gotIDs[i] != wantIDs[i] {
 			t.Fatalf("StarterCards()[%d].ID = %q, want %q", i, gotIDs[i], wantIDs[i])
 		}
+	}
+}
+
+func TestMotorCardsExplainDriverConstraint(t *testing.T) {
+	motor, ok := FindCard("motor")
+	if !ok {
+		t.Fatal("FindCard(motor) ok = false, want true")
+	}
+	if !containsText(motor.Warnings, "MCU GPIO pins cannot drive a motor directly") {
+		t.Fatalf("motor warnings = %+v, want direct GPIO warning", motor.Warnings)
+	}
+	if !containsText(motor.SimplificationNotes, "WireCraft models motor enable as a digital driver signal") {
+		t.Fatalf("motor simplification notes = %+v, want digital driver simplification", motor.SimplificationNotes)
+	}
+
+	driver, ok := FindCard("motor_driver")
+	if !ok {
+		t.Fatal("FindCard(motor_driver) ok = false, want true")
+	}
+	if !containsText(driver.WiringNotes, "Place a motor driver or transistor switch between logic and motor loads") {
+		t.Fatalf("motor driver wiring notes = %+v, want driver placement guidance", driver.WiringNotes)
+	}
+
+	transistor, ok := FindCard("transistor_switch")
+	if !ok {
+		t.Fatal("FindCard(transistor_switch) ok = false, want true")
+	}
+	if !containsText(transistor.Warnings, "flyback protection") {
+		t.Fatalf("transistor warnings = %+v, want flyback protection warning", transistor.Warnings)
 	}
 }
 
@@ -57,4 +100,13 @@ func TestFindCard(t *testing.T) {
 	if _, ok := FindCard("missing"); ok {
 		t.Fatal("FindCard(missing) ok = true, want false")
 	}
+}
+
+func containsText(values []string, want string) bool {
+	for _, value := range values {
+		if strings.Contains(value, want) {
+			return true
+		}
+	}
+	return false
 }

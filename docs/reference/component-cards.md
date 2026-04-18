@@ -25,6 +25,9 @@ Component cards describe beginner-facing circuit parts before WireCraft has a fu
 | `mcu_output` | MCU Output | Represents a microcontroller output pin or observed endpoint |
 | `led` | LED | Visual indicator for a digital output |
 | `resistor` | Resistor | Limits current or creates a pull-up/pull-down path |
+| `motor` | Motor | Converts a driver-enabled signal into actuator motion |
+| `motor_driver` | Motor Driver | Lets a low-current logic signal control a motor load |
+| `transistor_switch` | Transistor Switch | Switches a motor or other load from a digital control signal |
 
 ## Notes By Component
 
@@ -76,3 +79,24 @@ Component cards describe beginner-facing circuit parts before WireCraft has a fu
 - Wiring: use resistors with LEDs and buttons in real hardware to control current and default voltage.
 - Warning: choose resistance and power rating for the actual voltage and load.
 - Simplification: WireCraft documents resistors now but does not simulate analog resistance in Phase 2.
+
+### Motor
+
+- Pins: `DRIVE` input motor drive, `GND` input ground reference.
+- Wiring: connect motors through a motor driver or transistor switch, not directly to MCU GPIO.
+- Warning: MCU GPIO pins cannot drive a motor directly.
+- Simplification: WireCraft models motor enable as a digital driver signal and does not simulate current draw.
+
+### Motor Driver
+
+- Pins: `IN` input digital, `VM` input motor supply, `OUT` output motor drive.
+- Wiring: place a motor driver or transistor switch between logic and motor loads.
+- Warning: real motor drivers need a rated motor supply, shared ground, and current headroom.
+- Simplification: WireCraft treats the driver as a digital permission gate for motor actuation.
+
+### Transistor Switch
+
+- Pins: `CTRL` input digital, `LOAD` output switched load, `GND` input ground reference.
+- Wiring: use a transistor switch when a logic signal must control a higher-current load.
+- Warning: real motor switches need flyback protection and correct current ratings.
+- Simplification: WireCraft models the switch as digital on/off and ignores analog saturation, heat, and diode behavior.

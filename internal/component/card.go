@@ -149,6 +149,62 @@ var starterCards = []Card{
 			"WireCraft documents resistors now but does not simulate analog resistance in Phase 2.",
 		},
 	},
+	{
+		ID:   "motor",
+		Name: "Motor",
+		Role: "Converts a driver-enabled signal into actuator motion",
+		Pins: []Pin{
+			{Name: "DRIVE", Direction: "input", Signal: "motor drive"},
+			{Name: "GND", Direction: "input", Signal: "ground reference"},
+		},
+		WiringNotes: []string{
+			"Connect motors through a motor driver or transistor switch, not directly to MCU GPIO.",
+		},
+		Warnings: []string{
+			"MCU GPIO pins cannot drive a motor directly.",
+		},
+		SimplificationNotes: []string{
+			"WireCraft models motor enable as a digital driver signal and does not simulate current draw.",
+		},
+	},
+	{
+		ID:   "motor_driver",
+		Name: "Motor Driver",
+		Role: "Lets a low-current logic signal control a motor load",
+		Pins: []Pin{
+			{Name: "IN", Direction: "input", Signal: "digital"},
+			{Name: "VM", Direction: "input", Signal: "motor supply"},
+			{Name: "OUT", Direction: "output", Signal: "motor drive"},
+		},
+		WiringNotes: []string{
+			"Place a motor driver or transistor switch between logic and motor loads.",
+		},
+		Warnings: []string{
+			"Real motor drivers need a rated motor supply, shared ground, and current headroom.",
+		},
+		SimplificationNotes: []string{
+			"WireCraft treats the driver as a digital permission gate for motor actuation.",
+		},
+	},
+	{
+		ID:   "transistor_switch",
+		Name: "Transistor Switch",
+		Role: "Switches a motor or other load from a digital control signal",
+		Pins: []Pin{
+			{Name: "CTRL", Direction: "input", Signal: "digital"},
+			{Name: "LOAD", Direction: "output", Signal: "switched load"},
+			{Name: "GND", Direction: "input", Signal: "ground reference"},
+		},
+		WiringNotes: []string{
+			"Use a transistor switch when a logic signal must control a higher-current load.",
+		},
+		Warnings: []string{
+			"Real motor switches need flyback protection and correct current ratings.",
+		},
+		SimplificationNotes: []string{
+			"WireCraft models the switch as digital on/off and ignores analog saturation, heat, and diode behavior.",
+		},
+	},
 }
 
 func StarterCards() []Card {

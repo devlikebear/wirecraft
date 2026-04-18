@@ -383,7 +383,7 @@ Add a small server-side sensor input extension point so Phase 3 can separate but
 
 ## Work Order 32: Add Motor and Driver Component Cards
 
-Status: Next. GitHub issue: [#37](https://github.com/devlikebear/wirecraft/issues/37).
+Status: Completed. GitHub issue: [#37](https://github.com/devlikebear/wirecraft/issues/37).
 
 ## Goal
 
@@ -406,17 +406,17 @@ Add beginner-facing motor, motor driver, and transistor switch component cards s
 
 ## Steps
 
-- [ ] Add backend component cards for motor, motor driver, and transistor switch.
-- [ ] Add matching frontend inspect-panel cards and block-type mappings.
-- [ ] Include beginner warnings for direct GPIO-to-motor wiring and simplified simulation limits.
-- [ ] Add focused tests for card completeness and block mappings.
-- [ ] Keep runtime simulation behavior unchanged.
+- [x] Add backend component cards for motor, motor driver, and transistor switch.
+- [x] Add matching frontend inspect-panel cards and block-type mappings.
+- [x] Include beginner warnings for direct GPIO-to-motor wiring and simplified simulation limits.
+- [x] Add focused tests for card completeness and block mappings.
+- [x] Keep runtime simulation behavior unchanged.
 
 ## Acceptance Criteria
 
-- [ ] `go test ./internal/component/...` passes.
-- [ ] `cd web && npm test` passes.
-- [ ] `cd web && npm run build` passes.
+- [x] `go test ./internal/component/...` passes.
+- [x] `cd web && npm test` passes.
+- [x] `cd web && npm run build` passes.
 
 ## Verification Commands
 
@@ -427,10 +427,32 @@ Add beginner-facing motor, motor driver, and transistor switch component cards s
 
 ---
 
+## Phase 3 Checkpoint: Verify Physical Actuators
+
+Status: Next. GitHub issue: [#38](https://github.com/devlikebear/wirecraft/issues/38).
+
+## Goal
+
+Verify Phase 3 end-to-end: actuator placement, circuit-driven piston motion, interpolated client rendering, sensor extension point separation, and beginner-facing motor wiring warnings.
+
+## Checklist
+
+- [ ] `go test ./...` passes.
+- [ ] `cd web && npm test` passes.
+- [ ] `cd web && npm run build` passes.
+- [ ] Browser can place piston or motor blocks.
+- [ ] Button or power driven circuit can move a piston.
+- [ ] Button release returns piston toward its base transform.
+- [ ] Client renders interpolated actuator transforms.
+- [ ] Motor / motor driver / transistor switch inspect cards show warnings.
+- [ ] Phase 3 docs and GitHub parent issue are updated.
+
+---
+
 ## Planned Work Orders
 
-- [ ] **Phase 3 Checkpoint** — verify button-driven actuator motion across server tests, client build, and browser smoke.
+- [ ] Phase 4 planning after Phase 3 checkpoint and user approval.
 
 ## Session Handoff
 
-Start the next session from [current-status.md](./current-status.md), then continue with [#37 WO-32](https://github.com/devlikebear/wirecraft/issues/37).
+Start the next session from [current-status.md](./current-status.md), then continue with [#38 Phase 3 Checkpoint](https://github.com/devlikebear/wirecraft/issues/38).
