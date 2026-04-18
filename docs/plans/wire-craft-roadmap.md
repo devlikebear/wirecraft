@@ -77,7 +77,7 @@ Status: Completed. Tracking issue: [#17](https://github.com/devlikebear/wirecraf
 
 ### Phase 3: Physical Actuators — 회로 신호와 물리 블록 결합
 
-Status: Verification complete; awaiting user approval. Tracking issue: [#28](https://github.com/devlikebear/wirecraft/issues/28).
+Status: Completed. Tracking issue: [#28](https://github.com/devlikebear/wirecraft/issues/28).
 
 - **목표**: 회로 출력이 피스톤 또는 모터 블록 움직임으로 변환되고, 클라이언트는 transform snapshot을 보간 렌더링한다.
 - **포함 기능**: actuator component, simple kinematic movement, sensor input stub, transform replication
@@ -86,6 +86,8 @@ Status: Verification complete; awaiting user approval. Tracking issue: [#28](htt
 - **Checkpoint 요약**: 사용자가 버튼을 누르면 피스톤이 서버 계산으로 움직이고 다른 클라이언트에도 동일하게 보인다.
 
 ### Phase 4: Multiplayer Physics Sync — 협업과 동기화 강화
+
+Status: Active. Tracking issue: [#39](https://github.com/devlikebear/wirecraft/issues/39).
 
 - **목표**: 2-4명 협업 환경에서 동시 편집, command conflict, snapshot delta, tick performance를 안정화한다.
 - **포함 기능**: room/session model, command queue, conflict resolution, delta snapshot, basic collision constraints

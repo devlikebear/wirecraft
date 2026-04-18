@@ -4,10 +4,8 @@ import (
 	"context"
 	"fmt"
 	"net/http"
-	"sync"
 	"time"
 
-	"github.com/devlikebear/wirecraft/internal/netproto"
 	"github.com/devlikebear/wirecraft/internal/sim"
 )
 
@@ -16,14 +14,11 @@ type Options struct {
 }
 
 type Server struct {
-	mux              *http.ServeMux
-	clock            sim.Clock
-	mu               sync.Mutex
-	simulation       *sim.Simulation
-	connectedClients int
-	subscribers      map[chan netproto.Snapshot]struct{}
-	ctx              context.Context
-	cancel           context.CancelFunc
+	mux         *http.ServeMux
+	clock       sim.Clock
+	defaultRoom *Room
+	ctx         context.Context
+	cancel      context.CancelFunc
 }
 
 func New() *Server {
@@ -39,8 +34,7 @@ func NewWithOptions(options Options) *Server {
 	ctx, cancel := context.WithCancel(context.Background())
 	server := &Server{
 		clock:       sim.Clock{RateHz: tickRateHz},
-		simulation:  sim.NewSimulation(),
-		subscribers: make(map[chan netproto.Snapshot]struct{}),
+		defaultRoom: NewRoom(DefaultRoomID),
 		ctx:         ctx,
 		cancel:      cancel,
 	}
@@ -72,8 +66,8 @@ func (s *Server) runSimulationLoop() {
 		case <-s.ctx.Done():
 			return
 		case now := <-ticker.C:
-			snapshot := s.stepSnapshot(now)
-			s.publishSnapshot(snapshot)
+			snapshot := s.defaultRoom.StepSnapshot(now)
+			s.defaultRoom.PublishSnapshot(snapshot)
 		}
 	}
 }

@@ -11,8 +11,8 @@ This file is the handoff point for new Codex sessions. Start here, then read the
 - Product and MVP: [`../plans/wire-craft-prd.md`](../plans/wire-craft-prd.md)
 - Full roadmap: [`../plans/wire-craft-roadmap.md`](../plans/wire-craft-roadmap.md)
 - Research notes: [`../plans/wire-craft-research-notes.md`](../plans/wire-craft-research-notes.md)
-- Active phase plan: [`../plans/wire-craft-phase-3-physical-actuators.md`](../plans/wire-craft-phase-3-physical-actuators.md)
-- Active work orders: [`phase-3-work-orders.md`](./phase-3-work-orders.md)
+- Active phase plan: [`../plans/wire-craft-phase-4-multiplayer-physics-sync.md`](../plans/wire-craft-phase-4-multiplayer-physics-sync.md)
+- Active work orders: [`phase-4-work-orders.md`](./phase-4-work-orders.md)
 - Recent checkpoint report: [`phase-3-checkpoint-report.md`](./phase-3-checkpoint-report.md)
 
 ## Repository State
@@ -25,13 +25,13 @@ This file is the handoff point for new Codex sessions. Start here, then read the
 
 ## Current Phase
 
-**Phase 3: Physical Actuators**
+**Phase 4: Multiplayer Physics Sync**
 
-Goal: connect server-authoritative circuit signal state to deterministic physical actuator motion. The server should turn High/Low circuit outputs into kinematic piston or motor transforms, and the client should render those transforms through the existing interpolation path.
+Goal: strengthen WireCraft for 2-4 collaborative users in the same room by separating room/session state, defining deterministic command conflict handling, improving snapshot efficiency, adding basic actuator collision constraints, and exposing tick/snapshot/client observability.
 
-GitHub issue: [#28 Phase 3: Physical Actuators](https://github.com/devlikebear/wirecraft/issues/28)
+GitHub issue: [#39 Phase 4: Multiplayer Physics Sync](https://github.com/devlikebear/wirecraft/issues/39)
 
-Status: verification complete; waiting for user approval before moving to Phase 4.
+Status: active.
 
 ## Completed Work
 
@@ -70,14 +70,15 @@ Status: verification complete; waiting for user approval before moving to Phase 
 - [x] [#36 WO-31: Add sensor input extension point](https://github.com/devlikebear/wirecraft/issues/36)
 - [x] [#37 WO-32: Add motor and driver component cards](https://github.com/devlikebear/wirecraft/issues/37)
 - [x] [#38 Phase 3 Checkpoint: Verify physical actuators](https://github.com/devlikebear/wirecraft/issues/38)
+- [x] [#40 WO-33: Add server room model](https://github.com/devlikebear/wirecraft/issues/40)
 
 ## Next Work Order
 
-Wait for explicit user approval to move to **Phase 4: Multiplayer Physics Sync**.
+Start with **Work Order 34: Add Client Presence Metadata** in [`phase-4-work-orders.md`](./phase-4-work-orders.md).
 
-Phase 3 checkpoint report: [`phase-3-checkpoint-report.md`](./phase-3-checkpoint-report.md)
+GitHub issue: [#41 WO-34: Add client presence metadata](https://github.com/devlikebear/wirecraft/issues/41)
 
-Phase 2 is complete and approved. Phase 3 implementation and checkpoint verification are complete. The next step is user approval before Phase 4 planning and work orders are created.
+Phase 3 is complete and approved. Phase 4 has started; the server now has a default room model that owns simulation, subscribers, and client counts. The next step is exposing lightweight client presence metadata to snapshots and the debug UI.
 
 ## GitHub Issue Index
 
@@ -119,6 +120,9 @@ Phase 2 is complete and approved. Phase 3 implementation and checkpoint verifica
 - [#36 WO-31: Add sensor input extension point](https://github.com/devlikebear/wirecraft/issues/36)
 - [#37 WO-32: Add motor and driver component cards](https://github.com/devlikebear/wirecraft/issues/37)
 - [#38 Phase 3 Checkpoint: Verify physical actuators](https://github.com/devlikebear/wirecraft/issues/38)
+- [#39 Phase 4: Multiplayer Physics Sync](https://github.com/devlikebear/wirecraft/issues/39)
+- [#40 WO-33: Add server room model](https://github.com/devlikebear/wirecraft/issues/40)
+- [#41 WO-34: Add client presence metadata](https://github.com/devlikebear/wirecraft/issues/41)
 
 ## Session Rules
 

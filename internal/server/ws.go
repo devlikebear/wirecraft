@@ -9,7 +9,6 @@ import (
 	"github.com/coder/websocket"
 	"github.com/coder/websocket/wsjson"
 	"github.com/devlikebear/wirecraft/internal/netproto"
-	"github.com/devlikebear/wirecraft/internal/sim"
 )
 
 const websocketWriteTimeout = time.Second
@@ -28,7 +27,7 @@ func (s *Server) handleWebSocket(w http.ResponseWriter, r *http.Request) {
 	}
 	defer conn.Close(websocket.StatusNormalClosure, "")
 
-	snapshots, unsubscribe := s.subscribe()
+	snapshots, unsubscribe := s.defaultRoom.Subscribe()
 	defer unsubscribe()
 
 	ctx, cancel := context.WithCancel(r.Context())
@@ -45,7 +44,7 @@ func (s *Server) handleWebSocket(w http.ResponseWriter, r *http.Request) {
 		case <-readErrors:
 			return
 		case command := <-commands:
-			_ = s.applyCommand(command)
+			_ = s.defaultRoom.ApplyCommand(command)
 		case snapshot := <-snapshots:
 			writeCtx, writeCancel := context.WithTimeout(ctx, websocketWriteTimeout)
 			err := wsjson.Write(writeCtx, conn, snapshot)
@@ -72,63 +71,6 @@ func readCommands(ctx context.Context, conn *websocket.Conn, commands chan<- net
 		case commands <- command:
 		case <-ctx.Done():
 			return
-		}
-	}
-}
-
-func (s *Server) applyCommand(command netproto.Command) error {
-	s.mu.Lock()
-	defer s.mu.Unlock()
-
-	return s.simulation.ApplyCommand(command)
-}
-
-func (s *Server) stepSnapshot(now time.Time) netproto.Snapshot {
-	s.mu.Lock()
-	defer s.mu.Unlock()
-
-	return s.simulation.Step(sim.StepInput{
-		ServerTimeMS: now.UnixMilli(),
-		Stats: sim.SnapshotStatsInput{
-			ClientCount: s.connectedClients,
-		},
-	})
-}
-
-func (s *Server) subscribe() (<-chan netproto.Snapshot, func()) {
-	snapshots := make(chan netproto.Snapshot, 4)
-
-	s.mu.Lock()
-	s.subscribers[snapshots] = struct{}{}
-	s.connectedClients++
-	s.mu.Unlock()
-
-	unsubscribe := func() {
-		s.mu.Lock()
-		defer s.mu.Unlock()
-
-		if _, ok := s.subscribers[snapshots]; !ok {
-			return
-		}
-		delete(s.subscribers, snapshots)
-		s.connectedClients--
-	}
-
-	return snapshots, unsubscribe
-}
-
-func (s *Server) publishSnapshot(snapshot netproto.Snapshot) {
-	s.mu.Lock()
-	subscribers := make([]chan netproto.Snapshot, 0, len(s.subscribers))
-	for subscriber := range s.subscribers {
-		subscribers = append(subscribers, subscriber)
-	}
-	s.mu.Unlock()
-
-	for _, subscriber := range subscribers {
-		select {
-		case subscriber <- snapshot:
-		default:
 		}
 	}
 }

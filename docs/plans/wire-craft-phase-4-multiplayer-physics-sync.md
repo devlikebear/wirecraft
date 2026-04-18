@@ -10,9 +10,9 @@ _예상 소요: 1-2주_
 
 ## 전제 조건
 
-- [ ] Phase 3 완료 및 사용자 승인
-- [ ] 서버 snapshot과 command protocol이 기본 동작 중
-- [ ] actuator transform replication이 구현됨
+- [x] Phase 3 완료 및 사용자 승인
+- [x] 서버 snapshot과 command protocol이 기본 동작 중
+- [x] actuator transform replication이 구현됨
 
 ## 포함 기능
 
@@ -33,7 +33,7 @@ _예상 소요: 1-2주_
 
 ### 작업 그룹 A: Room/session model
 
-- [ ] **T4.A.1** — room model 구현.
+- [x] **T4.A.1** — room model 구현.
   - 파일:
     - `internal/server/room.go`
     - `internal/server/room_test.go`
