@@ -13,11 +13,13 @@ describe('createVoxelRenderItems', () => {
       {
         key: '4:2:6:1',
         blockType: BlockType.Solid,
+        blockPosition: { x: 4, y: 2, z: 6 },
         position: { x: 4, y: 2.5, z: 6 },
       },
       {
         key: '1:0:3:2',
         blockType: BlockType.DebugMover,
+        blockPosition: { x: 1, y: 0, z: 3 },
         position: { x: 1, y: 0.5, z: 3 },
       },
     ]);

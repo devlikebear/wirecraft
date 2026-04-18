@@ -4,13 +4,16 @@ import {
   InstancedMesh,
   Matrix4,
   MeshStandardMaterial,
+  Vector3,
+  type Intersection,
   type Object3D,
 } from 'three';
-import { BlockType, type BlockSnapshot, type Snapshot } from '../net/protocol';
+import { BlockType, type BlockSnapshot, type Position, type Snapshot } from '../net/protocol';
 
 export interface VoxelRenderItem {
   key: string;
   blockType: Exclude<BlockType, typeof BlockType.Air>;
+  blockPosition: Position;
   position: {
     x: number;
     y: number;
@@ -21,6 +24,11 @@ export interface VoxelRenderItem {
 interface ManagedMesh {
   mesh: InstancedMesh;
   capacity: number;
+}
+
+export interface VoxelRaycastHit {
+  position: Position;
+  faceNormal: Position;
 }
 
 const renderableBlockTypes = [BlockType.Solid, BlockType.DebugMover] as const;
@@ -36,6 +44,7 @@ export function createVoxelRenderItems(blocks: BlockSnapshot[]): VoxelRenderItem
     items.push({
       key: `${block.position.x}:${block.position.y}:${block.position.z}:${block.blockType}`,
       blockType: block.blockType,
+      blockPosition: block.position,
       position: {
         x: block.position.x,
         y: block.position.y + 0.5,
@@ -65,6 +74,7 @@ export class VoxelRenderer {
   private readonly geometry = new BoxGeometry(1, 1, 1);
   private readonly transform = new Matrix4();
   private readonly meshes = new Map<VoxelRenderItem['blockType'], ManagedMesh>();
+  private readonly meshItems = new Map<InstancedMesh, VoxelRenderItem[]>();
   private readonly materials = new Map<VoxelRenderItem['blockType'], MeshStandardMaterial>([
     [BlockType.Solid, new MeshStandardMaterial({ color: 0x6d8f7d, roughness: 0.7 })],
     [
@@ -96,7 +106,36 @@ export class VoxelRenderer {
         mesh.setMatrixAt(index, this.transform);
       }
       mesh.instanceMatrix.needsUpdate = true;
+      this.meshItems.set(mesh, items);
     }
+  }
+
+  raycastTargets(): Object3D[] {
+    return [...this.meshes.values()].map(({ mesh }) => mesh);
+  }
+
+  hitFromIntersection(intersection: Intersection<Object3D>): VoxelRaycastHit | null {
+    if (!(intersection.object instanceof InstancedMesh)) {
+      return null;
+    }
+    if (intersection.instanceId === undefined) {
+      return null;
+    }
+
+    const item = this.meshItems.get(intersection.object)?.[intersection.instanceId];
+    if (!item) {
+      return null;
+    }
+
+    const normal = intersection.face?.normal ?? new Vector3(0, 1, 0);
+    return {
+      position: item.blockPosition,
+      faceNormal: {
+        x: Math.round(normal.x),
+        y: Math.round(normal.y),
+        z: Math.round(normal.z),
+      },
+    };
   }
 
   dispose(): void {
@@ -120,6 +159,7 @@ export class VoxelRenderer {
 
     if (existing) {
       this.object.remove(existing.mesh);
+      this.meshItems.delete(existing.mesh);
       existing.mesh.dispose();
     }
 

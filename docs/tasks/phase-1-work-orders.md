@@ -408,7 +408,7 @@ Render server-authoritative snapshot blocks in the Three.js scene using an effic
 
 ## Work Order 10: Add Raycast Block Edit Commands
 
-GitHub issue: [#11 WO-10: Add raycast block edit commands](https://github.com/devlikebear/wirecraft/issues/11)
+Status: Completed. GitHub issue: [#11](https://github.com/devlikebear/wirecraft/issues/11).
 
 ## Goal
 
@@ -430,17 +430,61 @@ Let users place and remove voxel blocks from the Three.js scene through raycast-
 
 ## Steps
 
-- [ ] Add raycast helpers that convert pointer hits into place/remove block positions.
-- [ ] Add an edit controller for left-click place and shift-click or right-click remove.
-- [ ] Send commands through `SnapshotSocket.sendCommand` without mutating local voxel state directly.
-- [ ] Keep command IDs stable and include latest known server tick as `tickHint`.
-- [ ] Add focused tests for edit-position calculation and command payload creation.
+- [x] Add raycast helpers that convert pointer hits into place/remove block positions.
+- [x] Add an edit controller for left-click place and shift-click or right-click remove.
+- [x] Send commands through `SnapshotSocket.sendCommand` without mutating local voxel state directly.
+- [x] Keep command IDs stable and include latest known server tick as `tickHint`.
+- [x] Add focused tests for edit-position calculation and command payload creation.
+
+## Acceptance Criteria
+
+- [x] `cd web && npm test` passes.
+- [x] `cd web && npm run build` passes.
+- [x] With Go server and Vite dev server running, clicking in the scene changes voxels only after a server snapshot arrives.
+- [x] No Go server files are touched.
+
+## Verification Commands
+
+- `cd web && npm test`
+- `cd web && npm run build`
+
+---
+
+## Work Order 11: Add Snapshot Interpolation Primitives
+
+GitHub issue: [#12 WO-11: Add snapshot interpolation primitives](https://github.com/devlikebear/wirecraft/issues/12)
+
+## Goal
+
+Add pure TypeScript interpolation primitives for buffered server snapshots so render code can later smooth 20Hz server state at browser frame rate.
+
+## Non-goals
+
+- Do not implement server-side dynamic entities yet.
+- Do not replace voxel rendering behavior.
+- Do not add a debug overlay yet.
+
+## Touch points (<=5)
+
+- `web/src/sim/interpolation.ts`
+- `web/src/sim/interpolation.test.ts`
+- `web/src/net/protocol.ts`
+- `web/src/main.ts`
+- `docs/tasks/phase-1-work-orders.md`
+
+## Steps
+
+- [ ] Add `findSnapshotPair(buffer, renderServerTimeMs)` for before/after snapshot lookup.
+- [ ] Add alpha calculation for two snapshot timestamps.
+- [ ] Add transform interpolation helpers for position lerp and quaternion slerp-compatible values.
+- [ ] Add fallback behavior when before or after snapshot is missing.
+- [ ] Add tests for pair lookup, alpha bounds, and transform interpolation.
 
 ## Acceptance Criteria
 
 - [ ] `cd web && npm test` passes.
 - [ ] `cd web && npm run build` passes.
-- [ ] With Go server and Vite dev server running, clicking in the scene changes voxels only after a server snapshot arrives.
+- [ ] Logic is pure and independent from Three.js render objects.
 - [ ] No Go server files are touched.
 
 ## Verification Commands

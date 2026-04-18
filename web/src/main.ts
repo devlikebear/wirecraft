@@ -1,4 +1,5 @@
 import './styles.css';
+import { EditController } from './input/EditController';
 import { BlockType, type Position } from './net/protocol';
 import { SnapshotSocket } from './net/socket';
 import { VoxelRenderer } from './render/VoxelRenderer';
@@ -51,7 +52,6 @@ scene.add(grid);
 const voxelRenderer = new VoxelRenderer(scene);
 const snapshots = new SnapshotStore({ maxSnapshots: 64 });
 const clientId = crypto.randomUUID();
-let commandSequence = 0;
 
 const snapshotSocket = new SnapshotSocket({
   onSnapshot: (snapshot) => {
@@ -70,7 +70,21 @@ const snapshotSocket = new SnapshotSocket({
   },
 });
 snapshotSocket.connect();
+
+const editController = new EditController({
+  camera,
+  renderer,
+  worldRoot: scene,
+  voxelRenderer,
+  clientId,
+  blockType: BlockType.DebugMover,
+  getTickHint: () => snapshots.latest()?.tick ?? 0,
+  sendCommand: (command) => snapshotSocket.sendCommand(command),
+});
+editController.connect();
+
 window.addEventListener('beforeunload', () => {
+  editController.disconnect();
   voxelRenderer.dispose();
   snapshotSocket.close();
 });
@@ -80,7 +94,7 @@ window.wirecraft = {
     snapshotSocket.sendCommand({
       type: 'place_block',
       clientId,
-      commandId: `client-${++commandSequence}`,
+      commandId: crypto.randomUUID(),
       tickHint: snapshots.latest()?.tick ?? 0,
       position,
       blockType,
@@ -90,7 +104,7 @@ window.wirecraft = {
     snapshotSocket.sendCommand({
       type: 'remove_block',
       clientId,
-      commandId: `client-${++commandSequence}`,
+      commandId: crypto.randomUUID(),
       tickHint: snapshots.latest()?.tick ?? 0,
       position,
       blockType: BlockType.Air,
