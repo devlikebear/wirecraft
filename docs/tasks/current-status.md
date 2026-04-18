@@ -53,12 +53,13 @@ GitHub issue: [#17 Phase 2: Circuit Runtime](https://github.com/devlikebear/wire
 - [x] [#21 WO-18: Evaluate digital signal state](https://github.com/devlikebear/wirecraft/issues/21)
 - [x] [#22 WO-19: Add circuit state to simulation snapshots](https://github.com/devlikebear/wirecraft/issues/22)
 - [x] [#23 WO-20: Add button input command](https://github.com/devlikebear/wirecraft/issues/23)
+- [x] [#24 WO-21: Add circuit block toolbar](https://github.com/devlikebear/wirecraft/issues/24)
 
 ## Next Work Order
 
-Start with **WO-21** in [`phase-2-work-orders.md`](./phase-2-work-orders.md).
+Start with **WO-22** in [`phase-2-work-orders.md`](./phase-2-work-orders.md).
 
-GitHub issue: [#24 WO-21: Add circuit block toolbar](https://github.com/devlikebear/wirecraft/issues/24)
+GitHub issue: [#25 WO-22: Visualize circuit signal state](https://github.com/devlikebear/wirecraft/issues/25)
 
 ## GitHub Issue Index
 
@@ -86,6 +87,7 @@ GitHub issue: [#24 WO-21: Add circuit block toolbar](https://github.com/devlikeb
 - [#22 WO-19: Add circuit state to simulation snapshots](https://github.com/devlikebear/wirecraft/issues/22)
 - [#23 WO-20: Add button input command](https://github.com/devlikebear/wirecraft/issues/23)
 - [#24 WO-21: Add circuit block toolbar](https://github.com/devlikebear/wirecraft/issues/24)
+- [#25 WO-22: Visualize circuit signal state](https://github.com/devlikebear/wirecraft/issues/25)
 
 ## Session Rules
 

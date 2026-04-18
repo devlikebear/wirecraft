@@ -271,7 +271,7 @@ Add a server-authoritative command for button press/release state and feed that 
 
 ## Work Order 21: Add Circuit Block Toolbar
 
-GitHub issue: [#24 WO-21: Add circuit block toolbar](https://github.com/devlikebear/wirecraft/issues/24)
+Status: Completed. GitHub issue: [#24](https://github.com/devlikebear/wirecraft/issues/24).
 
 ## Goal
 
@@ -293,16 +293,16 @@ Let the browser place Phase 2 circuit block types through a compact toolbar with
 
 ## Steps
 
-- [ ] Add toolbar buttons for solid, power, wire, button, AND gate, and MCU output.
-- [ ] Wire selected block type into existing place command flow.
-- [ ] Keep remove behavior unchanged.
-- [ ] Add focused tests for selected block type and command payload.
+- [x] Add toolbar buttons for solid, power, wire, button, AND gate, and MCU output.
+- [x] Wire selected block type into existing place command flow.
+- [x] Keep remove behavior unchanged.
+- [x] Add focused tests for selected block type and command payload.
 
 ## Acceptance Criteria
 
-- [ ] `cd web && npm test` passes.
-- [ ] `cd web && npm run build` passes.
-- [ ] Browser can place each circuit block type.
+- [x] `cd web && npm test` passes.
+- [x] `cd web && npm run build` passes.
+- [x] Browser can place each circuit block type.
 
 ## Verification Commands
 
@@ -313,7 +313,7 @@ Let the browser place Phase 2 circuit block types through a compact toolbar with
 
 ## Work Order 22: Visualize Circuit Signal State
 
-GitHub issue: create when active.
+GitHub issue: [#25 WO-22: Visualize circuit signal state](https://github.com/devlikebear/wirecraft/issues/25)
 
 ## Goal
 

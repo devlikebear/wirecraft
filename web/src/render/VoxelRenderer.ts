@@ -31,7 +31,15 @@ export interface VoxelRaycastHit {
   faceNormal: Position;
 }
 
-const renderableBlockTypes = [BlockType.Solid, BlockType.DebugMover] as const;
+const renderableBlockTypes = [
+  BlockType.Solid,
+  BlockType.DebugMover,
+  BlockType.Power,
+  BlockType.Wire,
+  BlockType.Button,
+  BlockType.AndGate,
+  BlockType.MCUOutput,
+] as const;
 
 export function createVoxelRenderItems(blocks: BlockSnapshot[]): VoxelRenderItem[] {
   const items: VoxelRenderItem[] = [];
@@ -81,6 +89,17 @@ export class VoxelRenderer {
       BlockType.DebugMover,
       new MeshStandardMaterial({ color: 0xd6c064, roughness: 0.45, metalness: 0.08 }),
     ],
+    [BlockType.Power, new MeshStandardMaterial({ color: 0xf05a4f, roughness: 0.42 })],
+    [
+      BlockType.Wire,
+      new MeshStandardMaterial({ color: 0xc9824a, roughness: 0.58, metalness: 0.12 }),
+    ],
+    [BlockType.Button, new MeshStandardMaterial({ color: 0x4f8df0, roughness: 0.5 })],
+    [
+      BlockType.AndGate,
+      new MeshStandardMaterial({ color: 0x7d6cf2, roughness: 0.45, metalness: 0.04 }),
+    ],
+    [BlockType.MCUOutput, new MeshStandardMaterial({ color: 0x35b58a, roughness: 0.48 })],
   ]);
 
   constructor(parent: Object3D) {

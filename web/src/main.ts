@@ -7,6 +7,7 @@ import { EntityRenderer } from './render/EntityRenderer';
 import { VoxelRenderer } from './render/VoxelRenderer';
 import { DEFAULT_INTERPOLATION_DELAY_MS } from './sim/interpolation';
 import { SnapshotStore } from './state/snapshotStore';
+import { createToolbar } from './ui/Toolbar';
 import {
   AmbientLight,
   Color,
@@ -59,6 +60,7 @@ const entityRenderer = new EntityRenderer(scene);
 const debugOverlay = new DebugOverlay(app);
 const snapshots = new SnapshotStore({ maxSnapshots: 64 });
 const clientId = crypto.randomUUID();
+let selectedBlockType = BlockType.Solid;
 let wsStatus = 'idle';
 let serverTick: number | null = null;
 let voxelBlocks = 0;
@@ -86,13 +88,23 @@ const snapshotSocket = new SnapshotSocket({
 });
 snapshotSocket.connect();
 
+const toolbar = createToolbar({
+  selectedBlockType,
+  onSelectBlockType: (blockType) => {
+    selectedBlockType = blockType;
+    app.dataset.selectedBlockType = String(blockType);
+  },
+});
+app.appendChild(toolbar.element);
+app.dataset.selectedBlockType = String(selectedBlockType);
+
 const editController = new EditController({
   camera,
   renderer,
   worldRoot: scene,
   voxelRenderer,
   clientId,
-  blockType: BlockType.DebugMover,
+  getBlockType: () => selectedBlockType,
   getTickHint: () => snapshots.latest()?.tick ?? 0,
   sendCommand: (command) => snapshotSocket.sendCommand(command),
 });

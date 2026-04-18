@@ -58,6 +58,26 @@ describe('buildEditCommand', () => {
     });
   });
 
+  it('builds place commands with the selected circuit block type', () => {
+    expect(
+      buildEditCommand({
+        mode: 'place',
+        clientId: 'client-1',
+        commandId: 'cmd-3',
+        tickHint: 44,
+        position: { x: 5, y: 0, z: 2 },
+        blockType: BlockType.AndGate,
+      }),
+    ).toEqual({
+      type: 'place_block',
+      clientId: 'client-1',
+      commandId: 'cmd-3',
+      tickHint: 44,
+      position: { x: 5, y: 0, z: 2 },
+      blockType: BlockType.AndGate,
+    });
+  });
+
   it('builds remove commands with air block type', () => {
     expect(
       buildEditCommand({

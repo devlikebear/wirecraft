@@ -33,6 +33,7 @@ export interface EditControllerOptions {
   voxelRenderer: VoxelRenderer;
   clientId: string;
   blockType?: BlockType;
+  getBlockType?: () => BlockType;
   getTickHint: () => number;
   sendCommand: (command: Command) => void;
 }
@@ -80,7 +81,7 @@ export class EditController {
   private readonly worldRoot: Object3D;
   private readonly voxelRenderer: VoxelRenderer;
   private readonly clientId: string;
-  private readonly blockType: BlockType;
+  private readonly getBlockType: () => BlockType;
   private readonly getTickHint: () => number;
   private readonly sendCommand: (command: Command) => void;
   private readonly raycaster = new Raycaster();
@@ -95,7 +96,7 @@ export class EditController {
     this.worldRoot = options.worldRoot;
     this.voxelRenderer = options.voxelRenderer;
     this.clientId = options.clientId;
-    this.blockType = options.blockType ?? BlockType.DebugMover;
+    this.getBlockType = options.getBlockType ?? (() => options.blockType ?? BlockType.DebugMover);
     this.getTickHint = options.getTickHint;
     this.sendCommand = options.sendCommand;
   }
@@ -132,7 +133,7 @@ export class EditController {
         commandId: `${this.clientId}-${++this.commandSequence}`,
         tickHint: this.getTickHint(),
         position,
-        blockType: this.blockType,
+        blockType: this.getBlockType(),
       }),
     );
   };

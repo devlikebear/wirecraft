@@ -2,11 +2,16 @@ export const BlockType = {
   Air: 0,
   Solid: 1,
   DebugMover: 2,
+  Power: 3,
+  Wire: 4,
+  Button: 5,
+  AndGate: 6,
+  MCUOutput: 7,
 } as const;
 
 export type BlockType = (typeof BlockType)[keyof typeof BlockType];
 
-export type CommandType = 'place_block' | 'remove_block';
+export type CommandType = 'place_block' | 'remove_block' | 'set_button';
 
 export interface Position {
   x: number;
@@ -21,6 +26,7 @@ export interface Command {
   tickHint: number;
   position: Position;
   blockType: BlockType;
+  buttonPressed?: boolean;
 }
 
 export interface Snapshot {
@@ -207,7 +213,7 @@ function parseSnapshotStats(value: unknown): SnapshotStats | null {
 }
 
 function isBlockType(value: unknown): value is BlockType {
-  return value === BlockType.Air || value === BlockType.Solid || value === BlockType.DebugMover;
+  return Object.values(BlockType).includes(value as BlockType);
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {
