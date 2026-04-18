@@ -56,6 +56,7 @@ function snapshot(tick: number, serverTimeMs = 1700000000000 + tick): Snapshot {
     serverTimeMs,
     blocks: [],
     entities: [],
+    circuit: { nodes: [] },
     stats: {
       clientCount: 1,
       commandQueueLength: 0,

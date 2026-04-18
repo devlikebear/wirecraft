@@ -3,6 +3,7 @@ import { DebugOverlay, calculateFps } from './debug/DebugOverlay';
 import { EditController } from './input/EditController';
 import { BlockType, type Position } from './net/protocol';
 import { SnapshotSocket } from './net/socket';
+import { CircuitOverlay } from './render/CircuitOverlay';
 import { EntityRenderer } from './render/EntityRenderer';
 import { VoxelRenderer } from './render/VoxelRenderer';
 import { DEFAULT_INTERPOLATION_DELAY_MS } from './sim/interpolation';
@@ -57,6 +58,7 @@ scene.add(grid);
 
 const voxelRenderer = new VoxelRenderer(scene);
 const entityRenderer = new EntityRenderer(scene);
+const circuitOverlay = new CircuitOverlay(scene);
 const debugOverlay = new DebugOverlay(app);
 const snapshots = new SnapshotStore({ maxSnapshots: 64 });
 const clientId = crypto.randomUUID();
@@ -71,6 +73,7 @@ const snapshotSocket = new SnapshotSocket({
   onSnapshot: (snapshot) => {
     snapshots.append(snapshot);
     voxelRenderer.update(snapshot);
+    circuitOverlay.update(snapshot);
     serverTick = snapshot.tick;
     voxelBlocks = snapshot.blocks.length;
     app.dataset.serverTick = String(snapshot.tick);
@@ -113,6 +116,7 @@ editController.connect();
 window.addEventListener('beforeunload', () => {
   editController.disconnect();
   debugOverlay.dispose();
+  circuitOverlay.dispose();
   entityRenderer.dispose();
   voxelRenderer.dispose();
   snapshotSocket.close();

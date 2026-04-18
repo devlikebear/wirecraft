@@ -313,7 +313,7 @@ Let the browser place Phase 2 circuit block types through a compact toolbar with
 
 ## Work Order 22: Visualize Circuit Signal State
 
-GitHub issue: [#25 WO-22: Visualize circuit signal state](https://github.com/devlikebear/wirecraft/issues/25)
+Status: Completed. GitHub issue: [#25](https://github.com/devlikebear/wirecraft/issues/25).
 
 ## Goal
 
@@ -335,16 +335,16 @@ Render High/Low/Unknown circuit state in the Three.js scene using authoritative 
 
 ## Steps
 
-- [ ] Parse circuit state from snapshots.
-- [ ] Add a lightweight visual overlay or material cue for High/Low/Unknown states.
-- [ ] Keep static voxel rendering behavior unchanged.
-- [ ] Add tests for snapshot parsing and render item creation.
+- [x] Parse circuit state from snapshots.
+- [x] Add a lightweight visual overlay or material cue for High/Low/Unknown states.
+- [x] Keep static voxel rendering behavior unchanged.
+- [x] Add tests for snapshot parsing and render item creation.
 
 ## Acceptance Criteria
 
-- [ ] `cd web && npm test` passes.
-- [ ] `cd web && npm run build` passes.
-- [ ] Browser shows signal state changes from authoritative snapshots.
+- [x] `cd web && npm test` passes.
+- [x] `cd web && npm run build` passes.
+- [x] Browser shows signal state changes from authoritative snapshots.
 
 ## Verification Commands
 
@@ -355,7 +355,7 @@ Render High/Low/Unknown circuit state in the Three.js scene using authoritative 
 
 ## Work Order 23: Add Starter Component Cards
 
-GitHub issue: create when active.
+GitHub issue: [#26 WO-23: Add starter component cards](https://github.com/devlikebear/wirecraft/issues/26)
 
 ## Goal
 

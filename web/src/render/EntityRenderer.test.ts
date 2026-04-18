@@ -66,6 +66,7 @@ function snapshot(tick: number, serverTimeMs: number, ...entities: EntitySnapsho
     serverTimeMs,
     blocks: [],
     entities,
+    circuit: { nodes: [] },
     stats: {
       clientCount: 1,
       commandQueueLength: 0,

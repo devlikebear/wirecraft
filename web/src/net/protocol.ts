@@ -34,6 +34,7 @@ export interface Snapshot {
   serverTimeMs: number;
   blocks: BlockSnapshot[];
   entities: EntitySnapshot[];
+  circuit: CircuitSnapshot;
   stats: SnapshotStats;
 }
 
@@ -46,6 +47,19 @@ export interface EntitySnapshot {
   id: string;
   type: string;
   transform: TransformSnapshot;
+}
+
+export type SignalState = 'unknown' | 'low' | 'high';
+
+export interface CircuitSnapshot {
+  nodes: CircuitNodeSnapshot[];
+}
+
+export interface CircuitNodeSnapshot {
+  position: Position;
+  nodeId: string;
+  nodeType: string;
+  signalState: SignalState;
 }
 
 export interface TransformSnapshot {
@@ -84,6 +98,7 @@ export function parseSnapshot(value: unknown): Snapshot | null {
 
   const blocks = parseArray(value.blocks, parseBlockSnapshot);
   const entities = parseArray(value.entities, parseEntitySnapshot);
+  const circuit = parseCircuitSnapshot(value.circuit);
   const stats = parseSnapshotStats(value.stats);
 
   if (
@@ -91,6 +106,7 @@ export function parseSnapshot(value: unknown): Snapshot | null {
     typeof value.serverTimeMs !== 'number' ||
     blocks === null ||
     entities === null ||
+    circuit === null ||
     stats === null
   ) {
     return null;
@@ -101,6 +117,7 @@ export function parseSnapshot(value: unknown): Snapshot | null {
     serverTimeMs: value.serverTimeMs,
     blocks,
     entities,
+    circuit,
     stats,
   };
 }
@@ -135,6 +152,42 @@ function parseEntitySnapshot(value: unknown): EntitySnapshot | null {
     id: value.id,
     type: value.type,
     transform,
+  };
+}
+
+function parseCircuitSnapshot(value: unknown): CircuitSnapshot | null {
+  if (!isRecord(value)) {
+    return null;
+  }
+
+  const nodes = parseArray(value.nodes, parseCircuitNodeSnapshot);
+  if (nodes === null) {
+    return null;
+  }
+
+  return { nodes };
+}
+
+function parseCircuitNodeSnapshot(value: unknown): CircuitNodeSnapshot | null {
+  if (!isRecord(value)) {
+    return null;
+  }
+
+  const position = parsePosition(value.position);
+  if (
+    position === null ||
+    typeof value.nodeId !== 'string' ||
+    typeof value.nodeType !== 'string' ||
+    !isSignalState(value.signalState)
+  ) {
+    return null;
+  }
+
+  return {
+    position,
+    nodeId: value.nodeId,
+    nodeType: value.nodeType,
+    signalState: value.signalState,
   };
 }
 
@@ -214,6 +267,10 @@ function parseSnapshotStats(value: unknown): SnapshotStats | null {
 
 function isBlockType(value: unknown): value is BlockType {
   return Object.values(BlockType).includes(value as BlockType);
+}
+
+function isSignalState(value: unknown): value is SignalState {
+  return value === 'unknown' || value === 'low' || value === 'high';
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {

@@ -13,6 +13,7 @@ describe('parseSnapshot', () => {
         },
       ],
       entities: [],
+      circuit: { nodes: [] },
       stats: {
         clientCount: 1,
         commandQueueLength: 0,
@@ -38,6 +39,7 @@ describe('parseSnapshot', () => {
         },
       ],
       entities: [],
+      circuit: { nodes: [] },
       stats: {
         clientCount: 1,
         commandQueueLength: 0,
@@ -51,12 +53,84 @@ describe('parseSnapshot', () => {
     ]);
   });
 
+  it('parses circuit signal state from authoritative snapshots', () => {
+    const snapshot = parseSnapshot({
+      tick: 9,
+      serverTimeMs: 1700000000107,
+      blocks: [],
+      entities: [],
+      circuit: {
+        nodes: [
+          {
+            position: { X: 4, Y: 1, Z: 2 },
+            nodeId: '4:1:2',
+            nodeType: 'wire',
+            signalState: 'high',
+          },
+          {
+            position: { X: 5, Y: 1, Z: 2 },
+            nodeId: '5:1:2',
+            nodeType: 'mcu_output',
+            signalState: 'low',
+          },
+        ],
+      },
+      stats: {
+        clientCount: 1,
+        commandQueueLength: 0,
+        snapshotBytes: 192,
+      },
+    });
+
+    expect(snapshot?.circuit.nodes).toEqual([
+      {
+        position: { x: 4, y: 1, z: 2 },
+        nodeId: '4:1:2',
+        nodeType: 'wire',
+        signalState: 'high',
+      },
+      {
+        position: { x: 5, y: 1, z: 2 },
+        nodeId: '5:1:2',
+        nodeType: 'mcu_output',
+        signalState: 'low',
+      },
+    ]);
+  });
+
+  it('rejects invalid circuit signal state', () => {
+    const snapshot = parseSnapshot({
+      tick: 9,
+      serverTimeMs: 1700000000107,
+      blocks: [],
+      entities: [],
+      circuit: {
+        nodes: [
+          {
+            position: { X: 4, Y: 1, Z: 2 },
+            nodeId: '4:1:2',
+            nodeType: 'wire',
+            signalState: 'energized',
+          },
+        ],
+      },
+      stats: {
+        clientCount: 1,
+        commandQueueLength: 0,
+        snapshotBytes: 192,
+      },
+    });
+
+    expect(snapshot).toBeNull();
+  });
+
   it('rejects invalid payloads', () => {
     const snapshot = parseSnapshot({
       tick: 'bad',
       serverTimeMs: 1700000000007,
       blocks: [],
       entities: [],
+      circuit: { nodes: [] },
       stats: {
         clientCount: 1,
         commandQueueLength: 0,
