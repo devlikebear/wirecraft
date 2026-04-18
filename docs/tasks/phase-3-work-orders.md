@@ -201,7 +201,7 @@ Integrate the actuator update order into the simulation loop without exposing fi
 
 ## Work Order 28: Add Transform Snapshot Schema
 
-Status: Next. GitHub issue: [#33](https://github.com/devlikebear/wirecraft/issues/33).
+Status: Completed. GitHub issue: [#33](https://github.com/devlikebear/wirecraft/issues/33).
 
 ## Goal
 
@@ -224,19 +224,19 @@ Expose actuator transform state in authoritative snapshots so clients can consum
 
 ## Steps
 
-- [ ] Add snapshot support for actuator dynamic entities using existing transform shape.
-- [ ] Include actuator entities after the debug mover in deterministic order.
-- [ ] Add Go tests proving actuator transforms appear in snapshots.
-- [ ] Update TypeScript protocol tests for actuator entity payloads.
-- [ ] Keep existing debug mover snapshot behavior compatible.
+- [x] Add snapshot support for actuator dynamic entities using existing transform shape.
+- [x] Include actuator entities after the debug mover in deterministic order.
+- [x] Add Go tests proving actuator transforms appear in snapshots.
+- [x] Update TypeScript protocol tests for actuator entity payloads.
+- [x] Keep existing debug mover snapshot behavior compatible.
 
 ## Acceptance Criteria
 
-- [ ] `go test ./internal/netproto/...` passes.
-- [ ] `go test ./internal/sim/...` passes.
-- [ ] `go test ./...` passes.
-- [ ] `cd web && npm test` passes.
-- [ ] `cd web && npm run build` passes.
+- [x] `go test ./internal/netproto/...` passes.
+- [x] `go test ./internal/sim/...` passes.
+- [x] `go test ./...` passes.
+- [x] `cd web && npm test` passes.
+- [x] `cd web && npm run build` passes.
 
 ## Verification Commands
 
@@ -248,9 +248,52 @@ Expose actuator transform state in authoritative snapshots so clients can consum
 
 ---
 
+## Work Order 29: Render Actuator Meshes
+
+Status: Next. GitHub issue: [#34](https://github.com/devlikebear/wirecraft/issues/34).
+
+## Goal
+
+Render actuator dynamic entities from authoritative snapshots in the browser. The client should consume actuator entity transforms and display piston or motor placeholders through the existing interpolation path.
+
+## Non-goals
+
+- Do not add actuator placement toolbar UI yet.
+- Do not change server actuator motion behavior.
+- Do not implement final detailed piston or motor art assets.
+- Do not add rigid body physics or collision.
+
+## Touch points (<=5)
+
+- `web/src/render/EntityRenderer.ts`
+- `web/src/render/EntityRenderer.test.ts`
+- `web/src/render/ActuatorMeshes.ts`
+- `web/src/net/protocol.ts`
+- `docs/tasks/phase-3-work-orders.md`
+
+## Steps
+
+- [ ] Treat piston and motor entity types as renderable entities.
+- [ ] Add lightweight actuator mesh/material helpers for piston and motor placeholders.
+- [ ] Keep debug mover rendering behavior compatible.
+- [ ] Add interpolation tests for actuator entities across snapshots.
+- [ ] Add renderer tests proving actuator meshes are created and updated by entity ID.
+
+## Acceptance Criteria
+
+- [ ] `cd web && npm test` passes.
+- [ ] `cd web && npm run build` passes.
+- [ ] No Go files are touched.
+
+## Verification Commands
+
+- `cd web && npm test`
+- `cd web && npm run build`
+
+---
+
 ## Planned Work Orders
 
-- [ ] **WO-29: Render actuator meshes** — render piston or motor entities from interpolated server transforms.
 - [ ] **WO-30: Add actuator placement UI** — expose actuator block placement and minimal orientation controls.
 - [ ] **WO-31: Add sensor input extension point** — separate button/proximity-style sensor primitives for later inputs.
 - [ ] **WO-32: Add motor and driver component cards** — explain motor driver/transistor constraints and simulation simplifications.
@@ -258,4 +301,4 @@ Expose actuator transform state in authoritative snapshots so clients can consum
 
 ## Session Handoff
 
-Start the next session from [current-status.md](./current-status.md), then continue with [#33 WO-28](https://github.com/devlikebear/wirecraft/issues/33).
+Start the next session from [current-status.md](./current-status.md), then continue with [#34 WO-29](https://github.com/devlikebear/wirecraft/issues/34).

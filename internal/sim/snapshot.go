@@ -5,15 +5,17 @@ import (
 
 	"github.com/devlikebear/wirecraft/internal/circuit"
 	"github.com/devlikebear/wirecraft/internal/netproto"
+	"github.com/devlikebear/wirecraft/internal/physics"
 	"github.com/devlikebear/wirecraft/internal/world"
 )
 
 type SnapshotInput struct {
-	Tick         TickID
-	ServerTimeMS int64
-	World        *world.World
-	ButtonStates map[world.Position]bool
-	Stats        SnapshotStatsInput
+	Tick             TickID
+	ServerTimeMS     int64
+	World            *world.World
+	ButtonStates     map[world.Position]bool
+	ActuatorEntities []physics.DynamicEntity
+	Stats            SnapshotStatsInput
 }
 
 type SnapshotStatsInput struct {
@@ -34,11 +36,13 @@ func BuildSnapshot(input SnapshotInput) netproto.Snapshot {
 		}
 	}
 
+	entities := append([]netproto.EntitySnapshot{buildDebugMoverEntity(input.Tick)}, buildActuatorEntities(input.ActuatorEntities)...)
+
 	snapshot := netproto.Snapshot{
 		Tick:         uint64(input.Tick),
 		ServerTimeMS: input.ServerTimeMS,
 		Blocks:       blocks,
-		Entities:     []netproto.EntitySnapshot{buildDebugMoverEntity(input.Tick)},
+		Entities:     entities,
 		Circuit:      buildCircuitSnapshot(input.World, input.ButtonStates),
 		Stats: netproto.SnapshotStats{
 			ClientCount:        input.Stats.ClientCount,
@@ -112,6 +116,40 @@ func buildDebugMoverEntity(tick TickID) netproto.EntitySnapshot {
 			},
 			Rotation: netproto.Quat{X: 0, Y: 0, Z: 0, W: 1},
 			Scale:    netproto.Vec3{X: 0.5, Y: 0.5, Z: 0.5},
+		},
+	}
+}
+
+func buildActuatorEntities(entities []physics.DynamicEntity) []netproto.EntitySnapshot {
+	sorted := physics.SortEntities(entities)
+	snapshots := make([]netproto.EntitySnapshot, 0, len(sorted))
+	for _, entity := range sorted {
+		snapshots = append(snapshots, netproto.EntitySnapshot{
+			ID:        string(entity.ID),
+			Type:      string(entity.Type),
+			Transform: transformSnapshot(entity.Transform),
+		})
+	}
+	return snapshots
+}
+
+func transformSnapshot(transform physics.Transform) netproto.TransformSnapshot {
+	return netproto.TransformSnapshot{
+		Position: netproto.Vec3{
+			X: transform.Position.X,
+			Y: transform.Position.Y,
+			Z: transform.Position.Z,
+		},
+		Rotation: netproto.Quat{
+			X: transform.Rotation.X,
+			Y: transform.Rotation.Y,
+			Z: transform.Rotation.Z,
+			W: transform.Rotation.W,
+		},
+		Scale: netproto.Vec3{
+			X: transform.Scale.X,
+			Y: transform.Scale.Y,
+			Z: transform.Scale.Z,
 		},
 	}
 }

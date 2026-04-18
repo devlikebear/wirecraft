@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { BlockType, parseSnapshot } from './protocol';
+import { BlockType, EntityType, parseSnapshot } from './protocol';
 
 describe('parseSnapshot', () => {
   it('normalizes Go block positions into client positions', () => {
@@ -135,6 +135,46 @@ describe('parseSnapshot', () => {
         signalState: 'low',
       },
     ]);
+  });
+
+  it('parses actuator entity transforms from authoritative snapshots', () => {
+    const snapshot = parseSnapshot({
+      tick: 11,
+      serverTimeMs: 1700000000207,
+      blocks: [],
+      entities: [
+        {
+          id: 'piston:2:0:0',
+          type: EntityType.Piston,
+          transform: {
+            position: { x: 3, y: 0.5, z: 0 },
+            rotation: { x: 0, y: 0, z: 0, w: 1 },
+            scale: { x: 1, y: 1, z: 1 },
+          },
+        },
+        {
+          id: 'motor:4:0:0',
+          type: EntityType.Motor,
+          transform: {
+            position: { x: 4, y: 0.5, z: 0 },
+            rotation: { x: 0, y: 0, z: 0, w: 1 },
+            scale: { x: 1, y: 1, z: 1 },
+          },
+        },
+      ],
+      circuit: { nodes: [] },
+      stats: {
+        clientCount: 1,
+        commandQueueLength: 0,
+        snapshotBytes: 256,
+      },
+    });
+
+    expect(snapshot?.entities.map((entity) => entity.type)).toEqual([
+      EntityType.Piston,
+      EntityType.Motor,
+    ]);
+    expect(snapshot?.entities[0]?.transform.position).toEqual({ x: 3, y: 0.5, z: 0 });
   });
 
   it('rejects invalid circuit signal state', () => {

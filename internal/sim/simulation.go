@@ -83,11 +83,12 @@ func (s *Simulation) Step(input StepInput) netproto.Snapshot {
 	s.updateActuators(s.stepDeltaSeconds(input))
 
 	return BuildSnapshot(SnapshotInput{
-		Tick:         s.tick,
-		ServerTimeMS: input.ServerTimeMS,
-		World:        s.world,
-		ButtonStates: s.buttonStates,
-		Stats:        input.Stats,
+		Tick:             s.tick,
+		ServerTimeMS:     input.ServerTimeMS,
+		World:            s.world,
+		ButtonStates:     s.buttonStates,
+		ActuatorEntities: s.ActuatorEntities(),
+		Stats:            input.Stats,
 	})
 }
 

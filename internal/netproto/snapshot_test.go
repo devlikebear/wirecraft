@@ -27,6 +27,15 @@ func TestSnapshotJSONRoundTrip(t *testing.T) {
 					Scale:    Vec3{X: 1, Y: 1, Z: 1},
 				},
 			},
+			{
+				ID:   "piston:2:0:0",
+				Type: EntityTypePiston,
+				Transform: TransformSnapshot{
+					Position: Vec3{X: 3, Y: 0.5, Z: 0},
+					Rotation: Quat{X: 0, Y: 0, Z: 0, W: 1},
+					Scale:    Vec3{X: 1, Y: 1, Z: 1},
+				},
+			},
 		},
 		Stats: SnapshotStats{
 			ClientCount:        2,
@@ -54,8 +63,13 @@ func TestSnapshotJSONRoundTrip(t *testing.T) {
 	if len(decoded.Blocks) != 1 || decoded.Blocks[0] != snapshot.Blocks[0] {
 		t.Fatalf("decoded Blocks = %+v, want %+v", decoded.Blocks, snapshot.Blocks)
 	}
-	if len(decoded.Entities) != 1 || decoded.Entities[0] != snapshot.Entities[0] {
-		t.Fatalf("decoded Entities = %+v, want %+v", decoded.Entities, snapshot.Entities)
+	if len(decoded.Entities) != len(snapshot.Entities) {
+		t.Fatalf("len(decoded.Entities) = %d, want %d", len(decoded.Entities), len(snapshot.Entities))
+	}
+	for i := range snapshot.Entities {
+		if decoded.Entities[i] != snapshot.Entities[i] {
+			t.Fatalf("decoded Entities[%d] = %+v, want %+v", i, decoded.Entities[i], snapshot.Entities[i])
+		}
 	}
 	if decoded.Stats != snapshot.Stats {
 		t.Fatalf("decoded Stats = %+v, want %+v", decoded.Stats, snapshot.Stats)

@@ -62,14 +62,15 @@ GitHub issue: [#28 Phase 3: Physical Actuators](https://github.com/devlikebear/w
 - [x] [#30 WO-25: Add actuator component model](https://github.com/devlikebear/wirecraft/issues/30)
 - [x] [#31 WO-26: Add actuator block types](https://github.com/devlikebear/wirecraft/issues/31)
 - [x] [#32 WO-27: Integrate actuator update order](https://github.com/devlikebear/wirecraft/issues/32)
+- [x] [#33 WO-28: Add transform snapshot schema](https://github.com/devlikebear/wirecraft/issues/33)
 
 ## Next Work Order
 
-Start with **Work Order 28: Add Transform Snapshot Schema** in [`phase-3-work-orders.md`](./phase-3-work-orders.md).
+Start with **Work Order 29: Render Actuator Meshes** in [`phase-3-work-orders.md`](./phase-3-work-orders.md).
 
-GitHub issue: [#33 WO-28: Add transform snapshot schema](https://github.com/devlikebear/wirecraft/issues/33)
+GitHub issue: [#34 WO-29: Render actuator meshes](https://github.com/devlikebear/wirecraft/issues/34)
 
-Phase 2 is complete and approved. Phase 3 has started; the physics transform/entity foundation, actuator domain model, actuator-facing block/protocol types, and internal actuator update order are complete. The next step is exposing actuator transforms through authoritative snapshots.
+Phase 2 is complete and approved. Phase 3 has started; the physics transform/entity foundation, actuator domain model, actuator-facing block/protocol types, internal actuator update order, and transform snapshot export are complete. The next step is rendering actuator entities in the browser.
 
 ## GitHub Issue Index
 
@@ -106,6 +107,7 @@ Phase 2 is complete and approved. Phase 3 has started; the physics transform/ent
 - [#31 WO-26: Add actuator block types](https://github.com/devlikebear/wirecraft/issues/31)
 - [#32 WO-27: Integrate actuator update order](https://github.com/devlikebear/wirecraft/issues/32)
 - [#33 WO-28: Add transform snapshot schema](https://github.com/devlikebear/wirecraft/issues/33)
+- [#34 WO-29: Render actuator meshes](https://github.com/devlikebear/wirecraft/issues/34)
 
 ## Session Rules
 

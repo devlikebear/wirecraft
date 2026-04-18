@@ -15,6 +15,14 @@ export const BlockType = {
 
 export type BlockType = (typeof BlockType)[keyof typeof BlockType];
 
+export const EntityType = {
+  DebugMover: 'debug_mover',
+  Piston: 'piston',
+  Motor: 'motor',
+} as const;
+
+export type EntityType = (typeof EntityType)[keyof typeof EntityType];
+
 export type CommandType = 'place_block' | 'remove_block' | 'set_button';
 
 export interface Position {

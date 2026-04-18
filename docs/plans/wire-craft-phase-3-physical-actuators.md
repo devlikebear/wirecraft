@@ -91,7 +91,7 @@ _예상 소요: 1-2주_
     - 버튼 High 후 같은 tick 또는 다음 tick에서 actuator target이 갱신되는지 명확히 검증
   - 검증: `go test ./internal/sim/...`
 
-- [ ] **T3.B.3** — transform snapshot schema 추가.
+- [x] **T3.B.3** — transform snapshot schema 추가.
   - 파일:
     - `internal/netproto/snapshot.go`
     - `web/src/net/protocol.ts`

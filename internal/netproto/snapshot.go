@@ -5,6 +5,8 @@ import "github.com/devlikebear/wirecraft/internal/world"
 const (
 	EntityIDDebugMover   = "debug-mover-1"
 	EntityTypeDebugMover = "debug_mover"
+	EntityTypePiston     = "piston"
+	EntityTypeMotor      = "motor"
 )
 
 type Snapshot struct {

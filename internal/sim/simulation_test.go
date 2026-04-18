@@ -171,8 +171,14 @@ func TestSimulationUpdatesPistonAfterCircuitEvaluation(t *testing.T) {
 			},
 		},
 	})
-	if len(snapshot.Entities) != 1 || snapshot.Entities[0].ID != netproto.EntityIDDebugMover {
-		t.Fatalf("snapshot.Entities = %+v, want existing debug mover only", snapshot.Entities)
+	if len(snapshot.Entities) != 2 {
+		t.Fatalf("len(snapshot.Entities) = %d, want debug mover and piston: %+v", len(snapshot.Entities), snapshot.Entities)
+	}
+	if snapshot.Entities[0].ID != netproto.EntityIDDebugMover {
+		t.Fatalf("snapshot.Entities[0] = %+v, want existing debug mover first", snapshot.Entities[0])
+	}
+	if snapshot.Entities[1].ID != "piston:2:0:0" || snapshot.Entities[1].Type != netproto.EntityTypePiston {
+		t.Fatalf("snapshot.Entities[1] = %+v, want piston entity", snapshot.Entities[1])
 	}
 }
 

@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/devlikebear/wirecraft/internal/netproto"
+	"github.com/devlikebear/wirecraft/internal/physics"
 	"github.com/devlikebear/wirecraft/internal/world"
 )
 
@@ -75,6 +76,48 @@ func TestBuildSnapshotIncludesDeterministicDebugEntity(t *testing.T) {
 	assertDebugMoverEntity(t, second.Entities[0], netproto.Vec3{X: 1.25, Y: 1.25, Z: 1.125})
 	if first.Entities[0].Transform.Position == second.Entities[0].Transform.Position {
 		t.Fatalf("debug entity position did not change: %+v", first.Entities[0].Transform.Position)
+	}
+}
+
+func TestBuildSnapshotIncludesActuatorEntitiesAfterDebugMover(t *testing.T) {
+	snapshot := BuildSnapshot(SnapshotInput{
+		Tick: TickID(4),
+		ActuatorEntities: []physics.DynamicEntity{
+			{
+				ID:   physics.EntityID("piston:2:0:0"),
+				Type: physics.EntityTypePiston,
+				Transform: physics.Transform{
+					Position: physics.Vec3{X: 3, Y: 0.5, Z: 0},
+					Rotation: physics.IdentityQuat(),
+					Scale:    physics.UnitVec3(),
+				},
+			},
+			{
+				ID:   physics.EntityID("motor:4:0:0"),
+				Type: physics.EntityTypeMotor,
+				Transform: physics.Transform{
+					Position: physics.Vec3{X: 4, Y: 0.5, Z: 0},
+					Rotation: physics.IdentityQuat(),
+					Scale:    physics.UnitVec3(),
+				},
+			},
+		},
+	})
+
+	if len(snapshot.Entities) != 3 {
+		t.Fatalf("len(snapshot.Entities) = %d, want 3: %+v", len(snapshot.Entities), snapshot.Entities)
+	}
+	if snapshot.Entities[0].ID != netproto.EntityIDDebugMover {
+		t.Fatalf("snapshot.Entities[0].ID = %q, want debug mover first", snapshot.Entities[0].ID)
+	}
+	if snapshot.Entities[1].ID != "motor:4:0:0" || snapshot.Entities[1].Type != netproto.EntityTypeMotor {
+		t.Fatalf("snapshot.Entities[1] = %+v, want motor entity", snapshot.Entities[1])
+	}
+	if snapshot.Entities[2].ID != "piston:2:0:0" || snapshot.Entities[2].Type != netproto.EntityTypePiston {
+		t.Fatalf("snapshot.Entities[2] = %+v, want piston entity", snapshot.Entities[2])
+	}
+	if snapshot.Entities[2].Transform.Position != (netproto.Vec3{X: 3, Y: 0.5, Z: 0}) {
+		t.Fatalf("piston position = %+v, want exported actuator transform", snapshot.Entities[2].Transform.Position)
 	}
 }
 
