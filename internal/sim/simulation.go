@@ -14,12 +14,13 @@ import (
 const defaultStepDeltaSeconds = 1.0 / 20.0
 
 type Simulation struct {
-	tick             TickID
-	bounds           world.Dimensions
-	world            *world.World
-	sensorInputs     *sensor.Store
-	actuatorEntities map[physics.EntityID]physics.DynamicEntity
-	lastServerTimeMS int64
+	tick              TickID
+	bounds            world.Dimensions
+	world             *world.World
+	sensorInputs      *sensor.Store
+	actuatorEntities  map[physics.EntityID]physics.DynamicEntity
+	processedCommands map[commandIdentity]struct{}
+	lastServerTimeMS  int64
 }
 
 type StepInput struct {
@@ -35,18 +36,41 @@ func NewSimulation() *Simulation {
 
 func NewSimulationWithDimensions(bounds world.Dimensions) *Simulation {
 	return &Simulation{
-		bounds:           bounds,
-		world:            world.New(bounds),
-		sensorInputs:     sensor.NewStore(),
-		actuatorEntities: make(map[physics.EntityID]physics.DynamicEntity),
+		bounds:            bounds,
+		world:             world.New(bounds),
+		sensorInputs:      sensor.NewStore(),
+		actuatorEntities:  make(map[physics.EntityID]physics.DynamicEntity),
+		processedCommands: make(map[commandIdentity]struct{}),
 	}
 }
 
+func (s *Simulation) ValidateCommand(command netproto.Command) error {
+	return command.Validate(s.bounds)
+}
+
 func (s *Simulation) ApplyCommand(command netproto.Command) error {
-	if err := command.Validate(s.bounds); err != nil {
+	if err := s.ValidateCommand(command); err != nil {
 		return err
 	}
+	if s.hasProcessedCommand(command) {
+		return nil
+	}
+	s.markCommandProcessed(command)
 
+	return s.applyValidatedCommand(command)
+}
+
+func (s *Simulation) ApplyCommands(commands []QueuedCommand) []error {
+	var errors []error
+	for _, queued := range OrderQueuedCommands(commands) {
+		if err := s.ApplyCommand(queued.Command); err != nil {
+			errors = append(errors, err)
+		}
+	}
+	return errors
+}
+
+func (s *Simulation) applyValidatedCommand(command netproto.Command) error {
 	switch command.Type {
 	case netproto.CommandPlaceBlock:
 		if err := s.world.Set(command.Position, command.BlockType); err != nil {
@@ -74,6 +98,21 @@ func (s *Simulation) ApplyCommand(command netproto.Command) error {
 	default:
 		return netproto.ErrUnknownCommandType
 	}
+}
+
+func (s *Simulation) hasProcessedCommand(command netproto.Command) bool {
+	if s.processedCommands == nil {
+		s.processedCommands = make(map[commandIdentity]struct{})
+	}
+	_, ok := s.processedCommands[identityForCommand(command)]
+	return ok
+}
+
+func (s *Simulation) markCommandProcessed(command netproto.Command) {
+	if s.processedCommands == nil {
+		s.processedCommands = make(map[commandIdentity]struct{})
+	}
+	s.processedCommands[identityForCommand(command)] = struct{}{}
 }
 
 func (s *Simulation) Step(input StepInput) netproto.Snapshot {

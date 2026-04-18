@@ -14,12 +14,14 @@ type RoomID string
 const DefaultRoomID RoomID = "default"
 
 type Room struct {
-	id                RoomID
-	mu                sync.Mutex
-	simulation        *sim.Simulation
-	nextClientIndex   int
-	clients           map[ClientID]ClientPresence
-	subscriberClients map[chan netproto.Snapshot]ClientID
+	id                  RoomID
+	mu                  sync.Mutex
+	simulation          *sim.Simulation
+	nextClientIndex     int
+	nextCommandSequence uint64
+	commandQueue        []sim.QueuedCommand
+	clients             map[ClientID]ClientPresence
+	subscriberClients   map[chan netproto.Snapshot]ClientID
 }
 
 func NewRoom(id RoomID) *Room {
@@ -29,6 +31,7 @@ func NewRoom(id RoomID) *Room {
 	return &Room{
 		id:                id,
 		simulation:        sim.NewSimulation(),
+		commandQueue:      make([]sim.QueuedCommand, 0),
 		clients:           make(map[ClientID]ClientPresence),
 		subscriberClients: make(map[chan netproto.Snapshot]ClientID),
 	}
@@ -42,18 +45,29 @@ func (r *Room) ApplyCommand(command netproto.Command) error {
 	r.mu.Lock()
 	defer r.mu.Unlock()
 
-	return r.simulation.ApplyCommand(command)
+	if err := r.simulation.ValidateCommand(command); err != nil {
+		return err
+	}
+	r.nextCommandSequence++
+	r.commandQueue = append(r.commandQueue, sim.QueuedCommand{
+		Command:          command,
+		ReceivedSequence: r.nextCommandSequence,
+	})
+	return nil
 }
 
 func (r *Room) StepSnapshot(now time.Time) netproto.Snapshot {
 	r.mu.Lock()
 	defer r.mu.Unlock()
 
+	commands := r.drainCommandQueueLocked()
+	r.simulation.ApplyCommands(commands)
 	return r.simulation.Step(sim.StepInput{
 		ServerTimeMS: now.UnixMilli(),
 		Presence:     r.presenceSnapshotLocked(),
 		Stats: sim.SnapshotStatsInput{
-			ClientCount: len(r.clients),
+			ClientCount:        len(r.clients),
+			CommandQueueLength: len(commands),
 		},
 	})
 }
@@ -97,6 +111,12 @@ func (r *Room) PublishSnapshot(snapshot netproto.Snapshot) {
 		default:
 		}
 	}
+}
+
+func (r *Room) drainCommandQueueLocked() []sim.QueuedCommand {
+	commands := append([]sim.QueuedCommand(nil), r.commandQueue...)
+	r.commandQueue = r.commandQueue[:0]
+	return commands
 }
 
 func (r *Room) presenceSnapshotLocked() netproto.PresenceSnapshot {

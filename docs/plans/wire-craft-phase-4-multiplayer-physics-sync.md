@@ -57,7 +57,7 @@ _예상 소요: 1-2주_
 
 ### 작업 그룹 B: Command conflict handling
 
-- [ ] **T4.B.1** — command ordering 정책 문서화 및 구현.
+- [x] **T4.B.1** — command ordering 정책 문서화 및 구현.
   - 파일:
     - `internal/sim/commands.go`
     - `internal/sim/commands_test.go`
@@ -154,7 +154,7 @@ _예상 소요: 1-2주_
 
 **구현 확인:**
 - [ ] room/session 구조가 분리되어 있다.
-- [ ] command conflict가 결정적으로 처리된다.
+- [x] command conflict가 결정적으로 처리된다.
 - [ ] delta snapshot 또는 changed-set snapshot이 동작한다.
 - [ ] basic collision/constraint로 actuator가 solid block을 뚫지 않는다.
 - [ ] tick/snapshot/client metrics를 확인할 수 있다.

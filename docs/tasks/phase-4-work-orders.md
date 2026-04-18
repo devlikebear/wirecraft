@@ -99,7 +99,7 @@ Expose lightweight client presence metadata so snapshots/debug UI can show who i
 
 ## Work Order 35: Add Deterministic Command Ordering
 
-Status: Next. GitHub issue: [#42](https://github.com/devlikebear/wirecraft/issues/42).
+Status: Completed. GitHub issue: [#42](https://github.com/devlikebear/wirecraft/issues/42).
 
 ## Goal
 
@@ -122,17 +122,17 @@ Define and implement deterministic command ordering so same-tick edits are proce
 
 ## Steps
 
-- [ ] Document and encode the command ordering key.
-- [ ] Add tests for same-coordinate same-tick command ordering.
-- [ ] Ignore duplicate command IDs from the same client.
-- [ ] Keep room command application deterministic.
-- [ ] Update local task docs after verification.
+- [x] Document and encode the command ordering key.
+- [x] Add tests for same-coordinate same-tick command ordering.
+- [x] Ignore duplicate command IDs from the same client.
+- [x] Keep room command application deterministic.
+- [x] Update local task docs after verification.
 
 ## Acceptance Criteria
 
-- [ ] `go test ./internal/sim/...` passes.
-- [ ] `go test ./...` passes.
-- [ ] Existing WebSocket command flow remains compatible.
+- [x] `go test ./internal/sim/...` passes.
+- [x] `go test ./...` passes.
+- [x] Existing WebSocket command flow remains compatible.
 
 ## Verification Commands
 
@@ -141,9 +141,53 @@ Define and implement deterministic command ordering so same-tick edits are proce
 
 ---
 
+## Work Order 36: Add Command Acknowledgement Snapshot Fields
+
+Status: Next. GitHub issue: [#43](https://github.com/devlikebear/wirecraft/issues/43).
+
+## Goal
+
+Expose lightweight command acknowledgement metadata in snapshots so clients can tell which submitted commands were accepted or rejected.
+
+## Non-goals
+
+- Do not build full conflict resolution UI yet.
+- Do not add delta snapshots yet.
+- Do not add lobby or account identity.
+- Do not change room selection behavior.
+
+## Touch points (<=5)
+
+- `internal/netproto/snapshot.go`
+- `internal/sim/commands.go`
+- `internal/sim/simulation.go`
+- `web/src/net/protocol.ts`
+- `web/src/net/socket.ts`
+
+## Steps
+
+- [ ] Define compact command acknowledgement snapshot fields.
+- [ ] Record accepted/rejected command IDs during command application.
+- [ ] Parse acknowledgement metadata in the TypeScript protocol.
+- [ ] Preserve existing WebSocket command flow.
+- [ ] Update local task docs after verification.
+
+## Acceptance Criteria
+
+- [ ] `go test ./...` passes.
+- [ ] `cd web && npm test` passes.
+- [ ] `cd web && npm run build` passes.
+
+## Verification Commands
+
+- `go test ./...`
+- `cd web && npm test`
+- `cd web && npm run build`
+
+---
+
 ## Planned Work Orders
 
-- [ ] **WO-36: Add command acknowledgement snapshot fields** — expose accepted/rejected command status.
 - [ ] **WO-37: Add changed-set snapshot primitives** — represent full vs delta snapshot payloads.
 - [ ] **WO-38: Apply client delta snapshots** — update the browser state store for delta application.
 - [ ] **WO-39: Add basic actuator collision constraints** — clamp actuator motion against occupied solids.
@@ -152,4 +196,4 @@ Define and implement deterministic command ordering so same-tick edits are proce
 
 ## Session Handoff
 
-Start the next session from [current-status.md](./current-status.md), then continue with [#42 WO-35](https://github.com/devlikebear/wirecraft/issues/42).
+Start the next session from [current-status.md](./current-status.md), then continue with [#43 WO-36](https://github.com/devlikebear/wirecraft/issues/43).

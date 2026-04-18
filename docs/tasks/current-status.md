@@ -72,14 +72,15 @@ Status: active.
 - [x] [#38 Phase 3 Checkpoint: Verify physical actuators](https://github.com/devlikebear/wirecraft/issues/38)
 - [x] [#40 WO-33: Add server room model](https://github.com/devlikebear/wirecraft/issues/40)
 - [x] [#41 WO-34: Add client presence metadata](https://github.com/devlikebear/wirecraft/issues/41)
+- [x] [#42 WO-35: Add deterministic command ordering](https://github.com/devlikebear/wirecraft/issues/42)
 
 ## Next Work Order
 
-Start with **Work Order 35: Add Deterministic Command Ordering** in [`phase-4-work-orders.md`](./phase-4-work-orders.md).
+Start with **Work Order 36: Add Command Acknowledgement Snapshot Fields** in [`phase-4-work-orders.md`](./phase-4-work-orders.md).
 
-GitHub issue: [#42 WO-35: Add deterministic command ordering](https://github.com/devlikebear/wirecraft/issues/42)
+GitHub issue: [#43 WO-36: Add command acknowledgement snapshot fields](https://github.com/devlikebear/wirecraft/issues/43)
 
-Phase 3 is complete and approved. Phase 4 has started; the server now has a default room model that owns simulation, subscribers, client counts, and lightweight presence metadata in snapshots/debug UI. The next step is deterministic command ordering for same-tick edits and duplicate command IDs.
+Phase 3 is complete and approved. Phase 4 has started; the server now has a default room model that owns simulation, subscribers, client counts, lightweight presence metadata, and deterministic same-tick command ordering with duplicate command IDs ignored per client. The next step is exposing accepted/rejected command acknowledgement metadata in snapshots.
 
 ## GitHub Issue Index
 
@@ -125,6 +126,7 @@ Phase 3 is complete and approved. Phase 4 has started; the server now has a defa
 - [#40 WO-33: Add server room model](https://github.com/devlikebear/wirecraft/issues/40)
 - [#41 WO-34: Add client presence metadata](https://github.com/devlikebear/wirecraft/issues/41)
 - [#42 WO-35: Add deterministic command ordering](https://github.com/devlikebear/wirecraft/issues/42)
+- [#43 WO-36: Add command acknowledgement snapshot fields](https://github.com/devlikebear/wirecraft/issues/43)
 
 ## Session Rules
 

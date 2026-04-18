@@ -82,6 +82,71 @@ func TestRoomOwnsIndependentSimulationInstance(t *testing.T) {
 	}
 }
 
+func TestRoomAppliesQueuedCommandsDeterministicallyOnStep(t *testing.T) {
+	room := NewRoom(DefaultRoomID)
+	pos := world.Position{X: 1, Y: 1, Z: 1}
+
+	if err := room.ApplyCommand(netproto.Command{
+		Type:      netproto.CommandPlaceBlock,
+		ClientID:  "client-2",
+		CommandID: "cmd-2",
+		TickHint:  10,
+		Position:  pos,
+		BlockType: world.BlockPower,
+	}); err != nil {
+		t.Fatalf("room.ApplyCommand(power) error = %v, want nil", err)
+	}
+	if err := room.ApplyCommand(netproto.Command{
+		Type:      netproto.CommandPlaceBlock,
+		ClientID:  "client-1",
+		CommandID: "cmd-1",
+		TickHint:  10,
+		Position:  pos,
+		BlockType: world.BlockSolid,
+	}); err != nil {
+		t.Fatalf("room.ApplyCommand(solid) error = %v, want nil", err)
+	}
+
+	snapshot := room.StepSnapshot(time.UnixMilli(1000))
+	if !snapshotContainsBlock(snapshot, pos, world.BlockSolid) {
+		t.Fatalf("snapshot blocks = %+v, want last received same-tick command to win", snapshot.Blocks)
+	}
+	if snapshot.Stats.CommandQueueLength != 2 {
+		t.Fatalf("snapshot.Stats.CommandQueueLength = %d, want 2", snapshot.Stats.CommandQueueLength)
+	}
+}
+
+func TestRoomIgnoresDuplicateClientCommandIDsWhenStepping(t *testing.T) {
+	room := NewRoom(DefaultRoomID)
+	pos := world.Position{X: 1, Y: 1, Z: 1}
+
+	if err := room.ApplyCommand(netproto.Command{
+		Type:      netproto.CommandPlaceBlock,
+		ClientID:  "client-1",
+		CommandID: "cmd-1",
+		TickHint:  10,
+		Position:  pos,
+		BlockType: world.BlockSolid,
+	}); err != nil {
+		t.Fatalf("room.ApplyCommand(solid) error = %v, want nil", err)
+	}
+	if err := room.ApplyCommand(netproto.Command{
+		Type:      netproto.CommandPlaceBlock,
+		ClientID:  "client-1",
+		CommandID: "cmd-1",
+		TickHint:  10,
+		Position:  pos,
+		BlockType: world.BlockPower,
+	}); err != nil {
+		t.Fatalf("room.ApplyCommand(duplicate power) error = %v, want nil", err)
+	}
+
+	snapshot := room.StepSnapshot(time.UnixMilli(1000))
+	if !snapshotContainsBlock(snapshot, pos, world.BlockSolid) {
+		t.Fatalf("snapshot blocks = %+v, want duplicate command id to be ignored", snapshot.Blocks)
+	}
+}
+
 func TestRoomPublishesSnapshotsToSubscribers(t *testing.T) {
 	room := NewRoom(DefaultRoomID)
 	snapshots, unsubscribe := room.Subscribe()
