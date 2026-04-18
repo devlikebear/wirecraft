@@ -104,7 +104,7 @@ Implement a deterministic in-memory graph model for circuit nodes, pins, edges, 
 
 ## Work Order 17: Extract Circuit Graph from World Blocks
 
-GitHub issue: [#20 WO-17: Extract circuit graph from world blocks](https://github.com/devlikebear/wirecraft/issues/20)
+Status: Completed. GitHub issue: [#20](https://github.com/devlikebear/wirecraft/issues/20).
 
 ## Goal
 
@@ -126,15 +126,15 @@ Convert circuit-capable voxel blocks into a circuit graph using adjacency rules.
 
 ## Steps
 
-- [ ] Iterate occupied world blocks and include only circuit-capable blocks.
-- [ ] Create graph nodes with stable IDs derived from block position.
-- [ ] Connect adjacent wire/power/button/output blocks by deterministic rules.
-- [ ] Add tests for power-wire-output and disconnected circuits.
+- [x] Iterate occupied world blocks and include only circuit-capable blocks.
+- [x] Create graph nodes with stable IDs derived from block position.
+- [x] Connect adjacent wire/power/button/output blocks by deterministic rules.
+- [x] Add tests for power-wire-output and disconnected circuits.
 
 ## Acceptance Criteria
 
-- [ ] `go test ./internal/circuit/...` passes.
-- [ ] `go test ./internal/world/...` passes.
+- [x] `go test ./internal/circuit/...` passes.
+- [x] `go test ./internal/world/...` passes.
 
 ## Verification Commands
 
@@ -145,7 +145,7 @@ Convert circuit-capable voxel blocks into a circuit graph using adjacency rules.
 
 ## Work Order 18: Evaluate Digital Signal State
 
-GitHub issue: create when active.
+GitHub issue: [#21 WO-18: Evaluate digital signal state](https://github.com/devlikebear/wirecraft/issues/21)
 
 ## Goal
 
