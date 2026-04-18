@@ -12,6 +12,8 @@ WireCraft is an online maker sandbox for building circuits, mechanisms, and smal
 
 - [Current Status](docs/tasks/current-status.md)
 - [Phase 1 Work Orders](docs/tasks/phase-1-work-orders.md)
+- [GitHub Issue: Phase 1](https://github.com/devlikebear/wirecraft/issues/1)
+- [GitHub Issues](https://github.com/devlikebear/wirecraft/issues)
 
 ## Current Status
 

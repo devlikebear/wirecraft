@@ -28,9 +28,20 @@ This file is the handoff point for new Codex sessions. Start here, then read the
 
 Goal: create the smallest server-authoritative 3D editing loop. The Go server owns world state and snapshots; the TypeScript/Three.js client renders snapshots and sends commands only.
 
+GitHub issue: [#1 Phase 1: Authoritative Voxel Loop](https://github.com/devlikebear/wirecraft/issues/1)
+
 ## Next Work Order
 
 Start with **WO-1** in [`phase-1-work-orders.md`](./phase-1-work-orders.md).
+
+GitHub issue: [#2 WO-1: Scaffold Go project and embedded web boundary](https://github.com/devlikebear/wirecraft/issues/2)
+
+## GitHub Issue Index
+
+- [#1 Phase 1: Authoritative Voxel Loop](https://github.com/devlikebear/wirecraft/issues/1)
+- [#2 WO-1: Scaffold Go project and embedded web boundary](https://github.com/devlikebear/wirecraft/issues/2)
+- [#3 WO-2: Add tick clock and voxel world core](https://github.com/devlikebear/wirecraft/issues/3)
+- [#4 WO-3: Initialize Vite Three.js client skeleton](https://github.com/devlikebear/wirecraft/issues/4)
 
 ## Session Rules
 
@@ -38,10 +49,10 @@ Start with **WO-1** in [`phase-1-work-orders.md`](./phase-1-work-orders.md).
 - Prefer small commits using `feat/fix/chore` prefixes.
 - Keep work test-first where possible.
 - Update this file when a work order is completed or the next task changes.
+- Update the matching GitHub issue when a work order is completed.
 - Do not advance to the next phase until the phase checkpoint is complete and the user approves.
 
 ## Open Decisions
 
 - WebSocket library: choose during WO-2. Default preference is a small maintained package such as `github.com/coder/websocket`.
 - Exact frontend test runner: choose during WO-3. Default preference is Vitest.
-

@@ -4,11 +4,15 @@ _Last updated: 2026-04-18_
 
 Phase source: [`../plans/wire-craft-phase-1-authoritative-voxel-loop.md`](../plans/wire-craft-phase-1-authoritative-voxel-loop.md)
 
+GitHub phase issue: [#1 Phase 1: Authoritative Voxel Loop](https://github.com/devlikebear/wirecraft/issues/1)
+
 ## Phase 1 Goal
 
 Build the smallest server-authoritative voxel loop: Go owns world state and ticks, TypeScript/Three.js renders the world, and clients send edit commands without directly mutating authoritative state.
 
 ## Work Order 1: Scaffold Go Project And Embedded Web Boundary
+
+GitHub issue: [#2 WO-1: Scaffold Go project and embedded web boundary](https://github.com/devlikebear/wirecraft/issues/2)
 
 ## Goal
 
@@ -51,6 +55,8 @@ Create the repository's executable skeleton: Go module, server entrypoint, packa
 ---
 
 ## Work Order 2: Add Tick Clock And Voxel World Core
+
+GitHub issue: [#3 WO-2: Add tick clock and voxel world core](https://github.com/devlikebear/wirecraft/issues/3)
 
 ## Goal
 
@@ -95,6 +101,8 @@ Implement test-first server simulation primitives: fixed tick timing and determi
 
 ## Work Order 3: Initialize Vite Three.js Client Skeleton
 
+GitHub issue: [#4 WO-3: Initialize Vite Three.js client skeleton](https://github.com/devlikebear/wirecraft/issues/4)
+
 ## Goal
 
 Create the TypeScript frontend scaffold with a minimal Three.js scene and package scripts that will later connect to the Go server.
@@ -132,4 +140,3 @@ Create the TypeScript frontend scaffold with a minimal Three.js scene and packag
 
 - `cd web && npm install`
 - `cd web && npm run build`
-
