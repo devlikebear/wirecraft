@@ -34,12 +34,26 @@ describe('SnapshotStore', () => {
 
     expect(store.length).toBe(1);
   });
+
+  it('estimates render server time from latest snapshot receipt time and interpolation delay', () => {
+    const store = new SnapshotStore({ maxSnapshots: 2 });
+
+    store.append(snapshot(1, 1000), 5000);
+
+    expect(store.renderServerTimeMs(5170, 120)).toBe(1050);
+  });
+
+  it('returns null render time when empty', () => {
+    const store = new SnapshotStore({ maxSnapshots: 2 });
+
+    expect(store.renderServerTimeMs(5170, 120)).toBeNull();
+  });
 });
 
-function snapshot(tick: number): Snapshot {
+function snapshot(tick: number, serverTimeMs = 1700000000000 + tick): Snapshot {
   return {
     tick,
-    serverTimeMs: 1700000000000 + tick,
+    serverTimeMs,
     blocks: [],
     entities: [],
     stats: {

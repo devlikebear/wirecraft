@@ -2,6 +2,7 @@ import './styles.css';
 import { EditController } from './input/EditController';
 import { BlockType, type Position } from './net/protocol';
 import { SnapshotSocket } from './net/socket';
+import { EntityRenderer } from './render/EntityRenderer';
 import { VoxelRenderer } from './render/VoxelRenderer';
 import { DEFAULT_INTERPOLATION_DELAY_MS } from './sim/interpolation';
 import { SnapshotStore } from './state/snapshotStore';
@@ -53,6 +54,7 @@ const grid = new GridHelper(18, 18, 0x53635d, 0x27302d);
 scene.add(grid);
 
 const voxelRenderer = new VoxelRenderer(scene);
+const entityRenderer = new EntityRenderer(scene);
 const snapshots = new SnapshotStore({ maxSnapshots: 64 });
 const clientId = crypto.randomUUID();
 
@@ -88,6 +90,7 @@ editController.connect();
 
 window.addEventListener('beforeunload', () => {
   editController.disconnect();
+  entityRenderer.dispose();
   voxelRenderer.dispose();
   snapshotSocket.close();
 });
@@ -133,6 +136,13 @@ window.addEventListener('resize', () => {
 
 function animate() {
   scene.rotation.y += (targetYaw - scene.rotation.y) * 0.035;
+
+  const renderServerTimeMs = snapshots.renderServerTimeMs(Date.now(), DEFAULT_INTERPOLATION_DELAY_MS);
+  if (renderServerTimeMs !== null) {
+    entityRenderer.updateFromSnapshots(snapshots.all(), renderServerTimeMs);
+    app.dataset.renderServerTimeMs = String(Math.round(renderServerTimeMs));
+    app.dataset.renderedEntities = String(entityRenderer.count);
+  }
 
   renderer.render(scene, camera);
   requestAnimationFrame(animate);

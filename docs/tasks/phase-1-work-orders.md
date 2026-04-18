@@ -541,7 +541,7 @@ Emit a deterministic moving debug entity from the Go simulation snapshots so the
 
 ## Work Order 13: Render Dynamic Debug Entity with Interpolation
 
-GitHub issue: [#14 WO-13: Render dynamic debug entity with interpolation](https://github.com/devlikebear/wirecraft/issues/14)
+Status: Completed. GitHub issue: [#14](https://github.com/devlikebear/wirecraft/issues/14).
 
 ## Goal
 
@@ -563,17 +563,61 @@ Render the server-authored debug mover entity in Three.js using the existing sna
 
 ## Steps
 
-- [ ] Add a small entity renderer that can create/update debug mover meshes by snapshot entity ID.
-- [ ] Use buffered snapshots and `findSnapshotPair` with the default interpolation delay to calculate render transforms.
-- [ ] Apply interpolated position, rotation, and scale to the debug mover mesh.
-- [ ] Keep voxel rendering behavior unchanged.
-- [ ] Add focused tests for interpolated entity transform selection and fallback behavior.
+- [x] Add a small entity renderer that can create/update debug mover meshes by snapshot entity ID.
+- [x] Use buffered snapshots and `findSnapshotPair` with the default interpolation delay to calculate render transforms.
+- [x] Apply interpolated position, rotation, and scale to the debug mover mesh.
+- [x] Keep voxel rendering behavior unchanged.
+- [x] Add focused tests for interpolated entity transform selection and fallback behavior.
+
+## Acceptance Criteria
+
+- [x] `cd web && npm test` passes.
+- [x] `cd web && npm run build` passes.
+- [x] With Go server and Vite dev server running, a moving debug entity is visible in the scene.
+- [x] No Go server files are touched.
+
+## Verification Commands
+
+- `cd web && npm test`
+- `cd web && npm run build`
+
+---
+
+## Work Order 14: Add Client Debug Overlay
+
+GitHub issue: [#15 WO-14: Add client debug overlay](https://github.com/devlikebear/wirecraft/issues/15)
+
+## Goal
+
+Add a compact in-browser debug overlay that shows WebSocket status, server tick, snapshot buffer length, rendered entity count, and approximate FPS so Phase 1 runtime behavior is easy to verify.
+
+## Non-goals
+
+- Do not change Go server behavior.
+- Do not add user-facing production HUD design yet.
+- Do not add persistence or settings.
+
+## Touch points (<=5)
+
+- `web/src/debug/DebugOverlay.ts`
+- `web/src/debug/DebugOverlay.test.ts`
+- `web/src/main.ts`
+- `web/src/styles.css`
+- `docs/tasks/phase-1-work-orders.md`
+
+## Steps
+
+- [ ] Add a small debug overlay component with stable DOM test selectors.
+- [ ] Show WebSocket status, server tick, snapshot buffer length, rendered entity count, and FPS.
+- [ ] Update FPS from the animation loop without forcing layout-heavy work.
+- [ ] Keep the overlay visually compact and non-blocking over the 3D scene.
+- [ ] Add focused tests for formatting and overlay state updates.
 
 ## Acceptance Criteria
 
 - [ ] `cd web && npm test` passes.
 - [ ] `cd web && npm run build` passes.
-- [ ] With Go server and Vite dev server running, a moving debug entity is visible in the scene.
+- [ ] With Go server and Vite dev server running, overlay values update while the scene is active.
 - [ ] No Go server files are touched.
 
 ## Verification Commands
