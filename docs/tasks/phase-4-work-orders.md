@@ -186,6 +186,51 @@ Expose lightweight command acknowledgement metadata in snapshots so clients can 
 
 ---
 
+## Work Order 36A: Improve Circuit Block Visual Readability
+
+Status: Completed. GitHub issue: [#45](https://github.com/devlikebear/wirecraft/issues/45).
+
+## Goal
+
+Make starter circuit blocks visually distinguishable enough that users can actually compose and inspect simple circuits in the scene.
+
+## Non-goals
+
+- Do not change block protocol values or server simulation behavior.
+- Do not add full UX polish, tutorials, or blueprint editing yet.
+- Do not implement browser-side delta snapshots.
+- Do not add complex imported 3D assets.
+
+## Touch points (<=5)
+
+- `web/src/render/VoxelRenderer.ts`
+- `web/src/render/VoxelRenderer.test.ts`
+- `docs/tasks/phase-4-work-orders.md`
+- `docs/tasks/current-status.md`
+
+## Steps
+
+- [x] Add visual profiles for starter circuit block types.
+- [x] Render Wire as a low thin conductor instead of a cube.
+- [x] Render Power/Button/AND/MCU Output with distinct silhouettes.
+- [x] Keep raycast/edit behavior compatible with existing block positions.
+- [x] Verify with unit tests, build, and a browser smoke screenshot.
+
+## Acceptance Criteria
+
+- [x] `cd web && npm test` passes.
+- [x] `cd web && npm run build` passes.
+- [x] Browser smoke shows circuit blocks with visibly distinct shapes.
+- [x] `go test ./...` remains green.
+
+## Verification Commands
+
+- `cd web && npm test`
+- `cd web && npm run build`
+- `go test ./...`
+
+---
+
 ## Work Order 37: Add Changed-Set Snapshot Primitives
 
 Status: Next. GitHub issue: [#44](https://github.com/devlikebear/wirecraft/issues/44).

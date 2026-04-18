@@ -1,5 +1,7 @@
 import {
+  type BufferGeometry,
   BoxGeometry,
+  CylinderGeometry,
   Group,
   InstancedMesh,
   Matrix4,
@@ -26,6 +28,21 @@ interface ManagedMesh {
   capacity: number;
 }
 
+export type VoxelGeometryProfile =
+  | {
+      geometry: 'box';
+      width: number;
+      height: number;
+      depth: number;
+    }
+  | {
+      geometry: 'cylinder';
+      radiusTop: number;
+      radiusBottom: number;
+      height: number;
+      radialSegments: number;
+    };
+
 export interface VoxelRaycastHit {
   position: Position;
   faceNormal: Position;
@@ -41,6 +58,70 @@ const renderableBlockTypes = [
   BlockType.MCUOutput,
 ] as const;
 
+const defaultVoxelProfile: VoxelGeometryProfile = {
+  geometry: 'box',
+  width: 1,
+  height: 1,
+  depth: 1,
+};
+
+const visualProfiles = new Map<BlockType, VoxelGeometryProfile>([
+  [BlockType.Solid, defaultVoxelProfile],
+  [BlockType.DebugMover, defaultVoxelProfile],
+  [
+    BlockType.Power,
+    {
+      geometry: 'cylinder',
+      radiusTop: 0.26,
+      radiusBottom: 0.42,
+      height: 0.72,
+      radialSegments: 18,
+    },
+  ],
+  [
+    BlockType.Wire,
+    {
+      geometry: 'box',
+      width: 0.9,
+      height: 0.14,
+      depth: 0.32,
+    },
+  ],
+  [
+    BlockType.Button,
+    {
+      geometry: 'cylinder',
+      radiusTop: 0.34,
+      radiusBottom: 0.42,
+      height: 0.22,
+      radialSegments: 18,
+    },
+  ],
+  [
+    BlockType.AndGate,
+    {
+      geometry: 'box',
+      width: 0.9,
+      height: 0.46,
+      depth: 0.62,
+    },
+  ],
+  [
+    BlockType.MCUOutput,
+    {
+      geometry: 'cylinder',
+      radiusTop: 0.36,
+      radiusBottom: 0.36,
+      height: 0.56,
+      radialSegments: 18,
+    },
+  ],
+]);
+
+export function voxelVisualProfileForBlockType(blockType: BlockType): VoxelGeometryProfile {
+  return visualProfiles.get(blockType) ?? defaultVoxelProfile;
+}
+
 export function createVoxelRenderItems(blocks: BlockSnapshot[]): VoxelRenderItem[] {
   const items: VoxelRenderItem[] = [];
 
@@ -49,13 +130,15 @@ export function createVoxelRenderItems(blocks: BlockSnapshot[]): VoxelRenderItem
       continue;
     }
 
+    const blockType = block.blockType as VoxelRenderItem['blockType'];
+    const profile = voxelVisualProfileForBlockType(blockType);
     items.push({
       key: `${block.position.x}:${block.position.y}:${block.position.z}:${block.blockType}`,
-      blockType: block.blockType,
+      blockType,
       blockPosition: block.position,
       position: {
         x: block.position.x,
-        y: block.position.y + 0.5,
+        y: block.position.y + profile.height / 2,
         z: block.position.z,
       },
     });
@@ -79,7 +162,12 @@ export function groupVoxelRenderItems(items: VoxelRenderItem[]): Map<VoxelRender
 export class VoxelRenderer {
   readonly object = new Group();
 
-  private readonly geometry = new BoxGeometry(1, 1, 1);
+  private readonly geometries = new Map<VoxelRenderItem['blockType'], BufferGeometry>(
+    renderableBlockTypes.map((blockType) => [
+      blockType,
+      createGeometry(voxelVisualProfileForBlockType(blockType)),
+    ]),
+  );
   private readonly transform = new Matrix4();
   private readonly meshes = new Map<VoxelRenderItem['blockType'], ManagedMesh>();
   private readonly meshItems = new Map<InstancedMesh, VoxelRenderItem[]>();
@@ -89,7 +177,15 @@ export class VoxelRenderer {
       BlockType.DebugMover,
       new MeshStandardMaterial({ color: 0xd6c064, roughness: 0.45, metalness: 0.08 }),
     ],
-    [BlockType.Power, new MeshStandardMaterial({ color: 0xf05a4f, roughness: 0.42 })],
+    [
+      BlockType.Power,
+      new MeshStandardMaterial({
+        color: 0xf05a4f,
+        emissive: 0x7f1f18,
+        emissiveIntensity: 0.35,
+        roughness: 0.42,
+      }),
+    ],
     [
       BlockType.Wire,
       new MeshStandardMaterial({ color: 0xc9824a, roughness: 0.58, metalness: 0.12 }),
@@ -99,7 +195,15 @@ export class VoxelRenderer {
       BlockType.AndGate,
       new MeshStandardMaterial({ color: 0x7d6cf2, roughness: 0.45, metalness: 0.04 }),
     ],
-    [BlockType.MCUOutput, new MeshStandardMaterial({ color: 0x35b58a, roughness: 0.48 })],
+    [
+      BlockType.MCUOutput,
+      new MeshStandardMaterial({
+        color: 0x35b58a,
+        emissive: 0x0c5f43,
+        emissiveIntensity: 0.26,
+        roughness: 0.48,
+      }),
+    ],
   ]);
 
   constructor(parent: Object3D) {
@@ -163,7 +267,9 @@ export class VoxelRenderer {
       mesh.dispose();
     }
     this.meshes.clear();
-    this.geometry.dispose();
+    for (const geometry of this.geometries.values()) {
+      geometry.dispose();
+    }
     for (const material of this.materials.values()) {
       material.dispose();
     }
@@ -186,8 +292,12 @@ export class VoxelRenderer {
     if (!material) {
       throw new Error(`Missing material for block type ${blockType}`);
     }
+    const geometry = this.geometries.get(blockType);
+    if (!geometry) {
+      throw new Error(`Missing geometry for block type ${blockType}`);
+    }
 
-    const mesh = new InstancedMesh(this.geometry, material, requiredCapacity);
+    const mesh = new InstancedMesh(geometry, material, requiredCapacity);
     mesh.name = `wirecraft-voxels-${blockType}`;
     mesh.count = 0;
     this.object.add(mesh);
@@ -195,5 +305,19 @@ export class VoxelRenderer {
     const managed = { mesh, capacity: requiredCapacity };
     this.meshes.set(blockType, managed);
     return managed;
+  }
+}
+
+function createGeometry(profile: VoxelGeometryProfile): BufferGeometry {
+  switch (profile.geometry) {
+    case 'box':
+      return new BoxGeometry(profile.width, profile.height, profile.depth);
+    case 'cylinder':
+      return new CylinderGeometry(
+        profile.radiusTop,
+        profile.radiusBottom,
+        profile.height,
+        profile.radialSegments,
+      );
   }
 }
