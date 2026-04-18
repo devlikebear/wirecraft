@@ -399,6 +399,8 @@ Add beginner-friendly component card data and a simple inspect panel for starter
 
 ## Phase 2 Checkpoint: Verify Circuit Runtime
 
+Status: Verified locally; waiting for user approval to move to Phase 3.
+
 GitHub issue: [#27](https://github.com/devlikebear/wirecraft/issues/27)
 
 ## Goal
@@ -407,19 +409,19 @@ Verify the smallest end-to-end digital circuit loop before moving to Phase 3.
 
 ## Steps
 
-- [ ] Place power, wire, button, AND gate, and MCU output blocks.
-- [ ] Verify server evaluates signal state deterministically each tick.
-- [ ] Verify button input changes snapshot signal state.
-- [ ] Verify browser visualizes High/Low/Unknown state.
-- [ ] Verify starter component cards are readable in the inspect panel.
+- [x] Place power, wire, button, AND gate, and MCU output blocks.
+- [x] Verify server evaluates signal state deterministically each tick.
+- [x] Verify button input changes snapshot signal state.
+- [x] Verify browser visualizes High/Low/Unknown state.
+- [x] Verify starter component cards are readable in the inspect panel.
 
 ## Acceptance Criteria
 
-- [ ] `go test ./...` passes.
-- [ ] `cd web && npm test` passes.
-- [ ] `cd web && npm run build` passes.
-- [ ] Browser smoke test passes for power -> wire -> output.
-- [ ] Browser smoke test passes for button-gated output.
+- [x] `go test ./...` passes.
+- [x] `cd web && npm test` passes.
+- [x] `cd web && npm run build` passes.
+- [x] Browser smoke test passes for power -> wire -> output.
+- [x] Browser smoke test passes for button-gated output.
 - [ ] User approves moving to Phase 3.
 
 ## Verification Commands

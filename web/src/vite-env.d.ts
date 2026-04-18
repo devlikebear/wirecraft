@@ -8,6 +8,7 @@ declare global {
     wirecraft: {
       placeBlock(position: Position, blockType?: BlockType): void;
       removeBlock(position: Position): void;
+      setButton(position: Position, buttonPressed: boolean): void;
       snapshots: SnapshotStore;
     };
   }

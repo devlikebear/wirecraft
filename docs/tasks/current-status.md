@@ -13,6 +13,7 @@ This file is the handoff point for new Codex sessions. Start here, then read the
 - Research notes: [`../plans/wire-craft-research-notes.md`](../plans/wire-craft-research-notes.md)
 - Active phase plan: [`../plans/wire-craft-phase-2-circuit-runtime.md`](../plans/wire-craft-phase-2-circuit-runtime.md)
 - Active work orders: [`phase-2-work-orders.md`](./phase-2-work-orders.md)
+- Phase 2 checkpoint report: [`phase-2-checkpoint-report.md`](./phase-2-checkpoint-report.md)
 
 ## Repository State
 
@@ -59,9 +60,11 @@ GitHub issue: [#17 Phase 2: Circuit Runtime](https://github.com/devlikebear/wire
 
 ## Next Work Order
 
-Start with **Phase 2 Checkpoint** in [`phase-2-work-orders.md`](./phase-2-work-orders.md).
+Start with **Phase 2 Checkpoint user approval** in [`phase-2-work-orders.md`](./phase-2-work-orders.md).
 
 GitHub issue: [#27 Phase 2 Checkpoint: Verify circuit runtime](https://github.com/devlikebear/wirecraft/issues/27)
+
+Local verification is complete. The remaining checkpoint item is explicit user approval before opening Phase 3 work.
 
 ## GitHub Issue Index
 

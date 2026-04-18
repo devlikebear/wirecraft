@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { BlockType } from '../net/protocol';
 import {
   adjacentPosition,
+  buildSetButtonCommand,
   buildEditCommand,
   editModeFromPointer,
   positionFromGroundPoint,
@@ -95,6 +96,28 @@ describe('buildEditCommand', () => {
       tickHint: 43,
       position: { x: 1, y: 2, z: 3 },
       blockType: BlockType.Air,
+    });
+  });
+});
+
+describe('buildSetButtonCommand', () => {
+  it('builds server-authoritative button input commands', () => {
+    expect(
+      buildSetButtonCommand({
+        clientId: 'client-1',
+        commandId: 'cmd-4',
+        tickHint: 45,
+        position: { x: 2, y: 0, z: 1 },
+        buttonPressed: true,
+      }),
+    ).toEqual({
+      type: 'set_button',
+      clientId: 'client-1',
+      commandId: 'cmd-4',
+      tickHint: 45,
+      position: { x: 2, y: 0, z: 1 },
+      blockType: BlockType.Air,
+      buttonPressed: true,
     });
   });
 });

@@ -1,6 +1,6 @@
 import './styles.css';
 import { DebugOverlay, calculateFps } from './debug/DebugOverlay';
-import { EditController } from './input/EditController';
+import { EditController, buildSetButtonCommand } from './input/EditController';
 import { BlockType, type Position } from './net/protocol';
 import { SnapshotSocket } from './net/socket';
 import { CircuitOverlay } from './render/CircuitOverlay';
@@ -147,6 +147,17 @@ window.wirecraft = {
       position,
       blockType: BlockType.Air,
     });
+  },
+  setButton(position: Position, buttonPressed: boolean) {
+    snapshotSocket.sendCommand(
+      buildSetButtonCommand({
+        clientId,
+        commandId: crypto.randomUUID(),
+        tickHint: snapshots.latest()?.tick ?? 0,
+        position,
+        buttonPressed,
+      }),
+    );
   },
   snapshots,
 };

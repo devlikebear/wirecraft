@@ -26,6 +26,14 @@ export interface BuildEditCommandInput {
   blockType: BlockType;
 }
 
+export interface BuildSetButtonCommandInput {
+  clientId: string;
+  commandId: string;
+  tickHint: number;
+  position: Position;
+  buttonPressed: boolean;
+}
+
 export interface EditControllerOptions {
   camera: Camera;
   renderer: WebGLRenderer;
@@ -72,6 +80,18 @@ export function buildEditCommand(input: BuildEditCommandInput): Command {
     tickHint: input.tickHint,
     position: input.position,
     blockType: input.mode === 'place' ? input.blockType : BlockType.Air,
+  };
+}
+
+export function buildSetButtonCommand(input: BuildSetButtonCommandInput): Command {
+  return {
+    type: 'set_button',
+    clientId: input.clientId,
+    commandId: input.commandId,
+    tickHint: input.tickHint,
+    position: input.position,
+    blockType: BlockType.Air,
+    buttonPressed: input.buttonPressed,
   };
 }
 
