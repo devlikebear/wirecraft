@@ -48,12 +48,13 @@ GitHub issue: [#17 Phase 2: Circuit Runtime](https://github.com/devlikebear/wire
 - [x] [#15 WO-14: Add client debug overlay](https://github.com/devlikebear/wirecraft/issues/15)
 - [x] [#16 Phase 1 checkpoint: Verify authoritative voxel loop](https://github.com/devlikebear/wirecraft/issues/16)
 - [x] [#18 WO-15: Add circuit block types and metadata](https://github.com/devlikebear/wirecraft/issues/18)
+- [x] [#19 WO-16: Add circuit graph primitives](https://github.com/devlikebear/wirecraft/issues/19)
 
 ## Next Work Order
 
-Start with **WO-16** in [`phase-2-work-orders.md`](./phase-2-work-orders.md).
+Start with **WO-17** in [`phase-2-work-orders.md`](./phase-2-work-orders.md).
 
-GitHub issue: [#19 WO-16: Add circuit graph primitives](https://github.com/devlikebear/wirecraft/issues/19)
+GitHub issue: [#20 WO-17: Extract circuit graph from world blocks](https://github.com/devlikebear/wirecraft/issues/20)
 
 ## GitHub Issue Index
 
@@ -76,6 +77,7 @@ GitHub issue: [#19 WO-16: Add circuit graph primitives](https://github.com/devli
 - [#17 Phase 2: Circuit Runtime](https://github.com/devlikebear/wirecraft/issues/17)
 - [#18 WO-15: Add circuit block types and metadata](https://github.com/devlikebear/wirecraft/issues/18)
 - [#19 WO-16: Add circuit graph primitives](https://github.com/devlikebear/wirecraft/issues/19)
+- [#20 WO-17: Extract circuit graph from world blocks](https://github.com/devlikebear/wirecraft/issues/20)
 
 ## Session Rules
 

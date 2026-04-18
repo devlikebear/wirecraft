@@ -12,6 +12,24 @@ const (
 	RoleOutput      BlockRole = "output"
 )
 
+type NodeType string
+
+const (
+	NodeTypePowerSource NodeType = "power_source"
+	NodeTypeWire        NodeType = "wire"
+	NodeTypeButton      NodeType = "button"
+	NodeTypeAndGate     NodeType = "and_gate"
+	NodeTypeMCUOutput   NodeType = "mcu_output"
+)
+
+type SignalState uint8
+
+const (
+	SignalUnknown SignalState = iota
+	SignalLow
+	SignalHigh
+)
+
 type BlockMetadata struct {
 	BlockType   world.BlockType
 	DisplayName string
@@ -78,4 +96,32 @@ func IsCircuitBlock(block world.BlockType) bool {
 func MetadataForBlock(block world.BlockType) (BlockMetadata, bool) {
 	metadata, ok := metadataByBlock[block]
 	return metadata, ok
+}
+
+func NodeTypeForBlockRole(role BlockRole) (NodeType, bool) {
+	switch role {
+	case RolePowerSource:
+		return NodeTypePowerSource, true
+	case RoleConductor:
+		return NodeTypeWire, true
+	case RoleSwitch:
+		return NodeTypeButton, true
+	case RoleLogicGate:
+		return NodeTypeAndGate, true
+	case RoleOutput:
+		return NodeTypeMCUOutput, true
+	default:
+		return "", false
+	}
+}
+
+func (s SignalState) String() string {
+	switch s {
+	case SignalLow:
+		return "low"
+	case SignalHigh:
+		return "high"
+	default:
+		return "unknown"
+	}
 }

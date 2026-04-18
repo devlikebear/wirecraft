@@ -65,7 +65,7 @@ Add the first Phase 2 circuit domain foundation: circuit-capable block types and
 
 ## Work Order 16: Add Circuit Graph Primitives
 
-GitHub issue: [#19 WO-16: Add circuit graph primitives](https://github.com/devlikebear/wirecraft/issues/19)
+Status: Completed. GitHub issue: [#19](https://github.com/devlikebear/wirecraft/issues/19).
 
 ## Goal
 
@@ -86,15 +86,15 @@ Implement a deterministic in-memory graph model for circuit nodes, pins, edges, 
 
 ## Steps
 
-- [ ] Add `NodeID`, `NodeType`, `SignalState`, `PinID`, and edge structures.
-- [ ] Add deterministic node/edge sorting helpers.
-- [ ] Add validation for duplicate nodes and missing edge endpoints.
-- [ ] Add tests for graph construction and deterministic ordering.
+- [x] Add `NodeID`, `NodeType`, `SignalState`, `PinID`, and edge structures.
+- [x] Add deterministic node/edge sorting helpers.
+- [x] Add validation for duplicate nodes and missing edge endpoints.
+- [x] Add tests for graph construction and deterministic ordering.
 
 ## Acceptance Criteria
 
-- [ ] `go test ./internal/circuit/...` passes.
-- [ ] No world, sim, server, or frontend files are touched.
+- [x] `go test ./internal/circuit/...` passes.
+- [x] No world, sim, server, or frontend files are touched.
 
 ## Verification Commands
 
@@ -104,7 +104,7 @@ Implement a deterministic in-memory graph model for circuit nodes, pins, edges, 
 
 ## Work Order 17: Extract Circuit Graph from World Blocks
 
-GitHub issue: create when active.
+GitHub issue: [#20 WO-17: Extract circuit graph from world blocks](https://github.com/devlikebear/wirecraft/issues/20)
 
 ## Goal
 
