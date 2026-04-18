@@ -65,14 +65,15 @@ GitHub issue: [#28 Phase 3: Physical Actuators](https://github.com/devlikebear/w
 - [x] [#33 WO-28: Add transform snapshot schema](https://github.com/devlikebear/wirecraft/issues/33)
 - [x] [#34 WO-29: Render actuator meshes](https://github.com/devlikebear/wirecraft/issues/34)
 - [x] [#35 WO-30: Add actuator placement UI](https://github.com/devlikebear/wirecraft/issues/35)
+- [x] [#36 WO-31: Add sensor input extension point](https://github.com/devlikebear/wirecraft/issues/36)
 
 ## Next Work Order
 
-Start with **Work Order 31: Add Sensor Input Extension Point** in [`phase-3-work-orders.md`](./phase-3-work-orders.md).
+Start with **Work Order 32: Add Motor and Driver Component Cards** in [`phase-3-work-orders.md`](./phase-3-work-orders.md).
 
-GitHub issue: [#36 WO-31: Add sensor input extension point](https://github.com/devlikebear/wirecraft/issues/36)
+GitHub issue: [#37 WO-32: Add motor and driver component cards](https://github.com/devlikebear/wirecraft/issues/37)
 
-Phase 2 is complete and approved. Phase 3 has started; the physics transform/entity foundation, actuator domain model, actuator-facing block/protocol types, internal actuator update order, transform snapshot export, actuator entity rendering, and actuator placement UI are complete. The next step is separating sensor input primitives for later proximity-style inputs.
+Phase 2 is complete and approved. Phase 3 has started; the physics transform/entity foundation, actuator domain model, actuator-facing block/protocol types, internal actuator update order, transform snapshot export, actuator entity rendering, actuator placement UI, and sensor input extension point are complete. The next step is adding motor and driver component cards with beginner-facing wiring warnings.
 
 ## GitHub Issue Index
 
@@ -112,6 +113,7 @@ Phase 2 is complete and approved. Phase 3 has started; the physics transform/ent
 - [#34 WO-29: Render actuator meshes](https://github.com/devlikebear/wirecraft/issues/34)
 - [#35 WO-30: Add actuator placement UI](https://github.com/devlikebear/wirecraft/issues/35)
 - [#36 WO-31: Add sensor input extension point](https://github.com/devlikebear/wirecraft/issues/36)
+- [#37 WO-32: Add motor and driver component cards](https://github.com/devlikebear/wirecraft/issues/37)
 
 ## Session Rules
 

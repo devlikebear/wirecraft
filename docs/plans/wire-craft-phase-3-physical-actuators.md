@@ -123,7 +123,7 @@ _예상 소요: 1-2주_
 
 ### 작업 그룹 D: Sensor input stub
 
-- [ ] **T3.D.1** — button 외 sensor input 확장 포인트 작성.
+- [x] **T3.D.1** — button 외 sensor input 확장 포인트 작성.
   - 파일:
     - `internal/sensor/types.go`
     - `internal/sensor/types_test.go`
@@ -154,7 +154,7 @@ _예상 소요: 1-2주_
 - [ ] 회로 output High/Low가 actuator input으로 연결된다.
 - [ ] 서버 tick에서 actuator transform이 계산된다.
 - [ ] 클라이언트가 actuator transform을 보간 렌더링한다.
-- [ ] sensor 확장 지점이 코드상 분리되어 있다.
+- [x] sensor 확장 지점이 코드상 분리되어 있다.
 - [ ] GPIO pin에 motor를 직접 연결하면 warning 또는 invalid wiring이 표시된다.
 
 **자동 검증:**

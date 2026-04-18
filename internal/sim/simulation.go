@@ -7,6 +7,7 @@ import (
 	"github.com/devlikebear/wirecraft/internal/circuit"
 	"github.com/devlikebear/wirecraft/internal/netproto"
 	"github.com/devlikebear/wirecraft/internal/physics"
+	"github.com/devlikebear/wirecraft/internal/sensor"
 	"github.com/devlikebear/wirecraft/internal/world"
 )
 
@@ -16,7 +17,7 @@ type Simulation struct {
 	tick             TickID
 	bounds           world.Dimensions
 	world            *world.World
-	buttonStates     map[world.Position]bool
+	sensorInputs     *sensor.Store
 	actuatorEntities map[physics.EntityID]physics.DynamicEntity
 	lastServerTimeMS int64
 }
@@ -35,7 +36,7 @@ func NewSimulationWithDimensions(bounds world.Dimensions) *Simulation {
 	return &Simulation{
 		bounds:           bounds,
 		world:            world.New(bounds),
-		buttonStates:     make(map[world.Position]bool),
+		sensorInputs:     sensor.NewStore(),
 		actuatorEntities: make(map[physics.EntityID]physics.DynamicEntity),
 	}
 }
@@ -50,13 +51,13 @@ func (s *Simulation) ApplyCommand(command netproto.Command) error {
 		if err := s.world.Set(command.Position, command.BlockType); err != nil {
 			return err
 		}
-		delete(s.buttonStates, command.Position)
+		s.sensorInputs.Clear(command.Position)
 		return nil
 	case netproto.CommandRemoveBlock:
 		if err := s.world.Remove(command.Position); err != nil {
 			return err
 		}
-		delete(s.buttonStates, command.Position)
+		s.sensorInputs.Clear(command.Position)
 		return nil
 	case netproto.CommandSetButton:
 		block, err := s.world.Get(command.Position)
@@ -64,14 +65,10 @@ func (s *Simulation) ApplyCommand(command netproto.Command) error {
 			return err
 		}
 		if block != world.BlockButton {
-			delete(s.buttonStates, command.Position)
+			s.sensorInputs.Clear(command.Position)
 			return nil
 		}
-		if command.ButtonPressed {
-			s.buttonStates[command.Position] = true
-		} else {
-			delete(s.buttonStates, command.Position)
-		}
+		s.sensorInputs.Set(sensor.ButtonInput(command.Position, command.ButtonPressed))
 		return nil
 	default:
 		return netproto.ErrUnknownCommandType
@@ -86,7 +83,7 @@ func (s *Simulation) Step(input StepInput) netproto.Snapshot {
 		Tick:             s.tick,
 		ServerTimeMS:     input.ServerTimeMS,
 		World:            s.world,
-		ButtonStates:     s.buttonStates,
+		ButtonStates:     s.sensorInputs.ButtonStates(),
 		ActuatorEntities: s.ActuatorEntities(),
 		Stats:            input.Stats,
 	})
@@ -127,8 +124,9 @@ func (s *Simulation) updateActuators(deltaSeconds float64) {
 }
 
 func (s *Simulation) buttonStatesByNodeID() map[circuit.NodeID]circuit.SignalState {
-	states := make(map[circuit.NodeID]circuit.SignalState, len(s.buttonStates))
-	for pos, pressed := range s.buttonStates {
+	buttonStates := s.sensorInputs.ButtonStates()
+	states := make(map[circuit.NodeID]circuit.SignalState, len(buttonStates))
+	for pos, pressed := range buttonStates {
 		if pressed {
 			states[circuit.NodeIDForPosition(pos)] = circuit.SignalHigh
 		}

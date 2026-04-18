@@ -338,7 +338,7 @@ Expose actuator block placement in the browser toolbar so users can place piston
 
 ## Work Order 31: Add Sensor Input Extension Point
 
-Status: Next. GitHub issue: [#36](https://github.com/devlikebear/wirecraft/issues/36).
+Status: Completed. GitHub issue: [#36](https://github.com/devlikebear/wirecraft/issues/36).
 
 ## Goal
 
@@ -361,17 +361,17 @@ Add a small server-side sensor input extension point so Phase 3 can separate but
 
 ## Steps
 
-- [ ] Add sensor type/input state primitives for button and proximity stub.
-- [ ] Keep button input semantics compatible with the current `set_button` command.
-- [ ] Add tests proving the proximity stub is inert until wired later.
-- [ ] Keep actuator update behavior unchanged.
-- [ ] Document the extension point in the Phase 3 work orders.
+- [x] Add sensor type/input state primitives for button and proximity stub.
+- [x] Keep button input semantics compatible with the current `set_button` command.
+- [x] Add tests proving the proximity stub is inert until wired later.
+- [x] Keep actuator update behavior unchanged.
+- [x] Document the extension point in the Phase 3 work orders.
 
 ## Acceptance Criteria
 
-- [ ] `go test ./...` passes.
-- [ ] `cd web && npm test` passes.
-- [ ] `cd web && npm run build` passes.
+- [x] `go test ./...` passes.
+- [x] `cd web && npm test` passes.
+- [x] `cd web && npm run build` passes.
 
 ## Verification Commands
 
@@ -381,11 +381,56 @@ Add a small server-side sensor input extension point so Phase 3 can separate but
 
 ---
 
+## Work Order 32: Add Motor and Driver Component Cards
+
+Status: Next. GitHub issue: [#37](https://github.com/devlikebear/wirecraft/issues/37).
+
+## Goal
+
+Add beginner-facing motor, motor driver, and transistor switch component cards so the inspect panel can explain why motors should not be driven directly from GPIO and how WireCraft simplifies the real hardware constraints.
+
+## Non-goals
+
+- Do not change circuit evaluation behavior.
+- Do not change actuator motion behavior.
+- Do not add new placement UI controls.
+- Do not implement electrical current, flyback diode, or PWM simulation.
+
+## Touch points (<=5)
+
+- `internal/component/card.go`
+- `internal/component/card_test.go`
+- `web/src/state/componentCards.ts`
+- `web/src/state/componentCards.test.ts`
+- `docs/reference/component-cards.md`
+
+## Steps
+
+- [ ] Add backend component cards for motor, motor driver, and transistor switch.
+- [ ] Add matching frontend inspect-panel cards and block-type mappings.
+- [ ] Include beginner warnings for direct GPIO-to-motor wiring and simplified simulation limits.
+- [ ] Add focused tests for card completeness and block mappings.
+- [ ] Keep runtime simulation behavior unchanged.
+
+## Acceptance Criteria
+
+- [ ] `go test ./internal/component/...` passes.
+- [ ] `cd web && npm test` passes.
+- [ ] `cd web && npm run build` passes.
+
+## Verification Commands
+
+- `go test ./internal/component/...`
+- `go test ./...`
+- `cd web && npm test`
+- `cd web && npm run build`
+
+---
+
 ## Planned Work Orders
 
-- [ ] **WO-32: Add motor and driver component cards** — explain motor driver/transistor constraints and simulation simplifications.
 - [ ] **Phase 3 Checkpoint** — verify button-driven actuator motion across server tests, client build, and browser smoke.
 
 ## Session Handoff
 
-Start the next session from [current-status.md](./current-status.md), then continue with [#36 WO-31](https://github.com/devlikebear/wirecraft/issues/36).
+Start the next session from [current-status.md](./current-status.md), then continue with [#37 WO-32](https://github.com/devlikebear/wirecraft/issues/37).

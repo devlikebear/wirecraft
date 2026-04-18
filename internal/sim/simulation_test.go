@@ -139,6 +139,28 @@ func TestSimulationSetButtonCommandAffectsCircuitState(t *testing.T) {
 	assertCircuitSignal(t, releasedAgain, "2:0:0", "low")
 }
 
+func TestSimulationClearsButtonSensorInputWhenBlockChanges(t *testing.T) {
+	simulation := NewSimulationWithDimensions(world.Dimensions{X: 8, Y: 8, Z: 8})
+	buttonPos := world.Position{X: 0, Y: 0, Z: 0}
+
+	if err := simulation.ApplyCommand(placeCommand("cmd-1", buttonPos, world.BlockButton)); err != nil {
+		t.Fatalf("ApplyCommand(button) error = %v, want nil", err)
+	}
+	if err := simulation.ApplyCommand(setButtonCommand("cmd-2", buttonPos, true)); err != nil {
+		t.Fatalf("ApplyCommand(press) error = %v, want nil", err)
+	}
+	if !simulation.sensorInputs.ButtonStates()[buttonPos] {
+		t.Fatalf("button sensor state was not recorded")
+	}
+
+	if err := simulation.ApplyCommand(placeCommand("cmd-3", buttonPos, world.BlockSolid)); err != nil {
+		t.Fatalf("ApplyCommand(replace) error = %v, want nil", err)
+	}
+	if len(simulation.sensorInputs.ButtonStates()) != 0 {
+		t.Fatalf("button sensor state after block replacement = %+v, want empty", simulation.sensorInputs.ButtonStates())
+	}
+}
+
 func TestSimulationUpdatesPistonAfterCircuitEvaluation(t *testing.T) {
 	simulation := NewSimulationWithDimensions(world.Dimensions{X: 8, Y: 8, Z: 8})
 	pistonPos := world.Position{X: 2, Y: 0, Z: 0}
