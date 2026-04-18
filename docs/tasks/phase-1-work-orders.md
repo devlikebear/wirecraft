@@ -321,7 +321,7 @@ Expose the in-memory simulation through a server-owned WebSocket stream so clien
 
 ## Work Order 8: Add TypeScript WebSocket Client And Snapshot Store
 
-GitHub issue: [#9 WO-8: Add TypeScript WebSocket client and snapshot store](https://github.com/devlikebear/wirecraft/issues/9)
+Status: Completed. GitHub issue: [#9](https://github.com/devlikebear/wirecraft/issues/9).
 
 ## Goal
 
@@ -343,19 +343,63 @@ Connect the Vite client to the Go WebSocket endpoint and keep an in-memory snaps
 
 ## Steps
 
-- [ ] Define TypeScript protocol types matching Go snapshot and command JSON.
-- [ ] Add a WebSocket client that connects to `/ws` and parses snapshots.
-- [ ] Add a snapshot store with append/latest/buffer length helpers.
-- [ ] Wire the client into `main.ts` for connection lifecycle and basic status logging or overlay-safe state.
-- [ ] Add build-time validation through the existing Vite build.
+- [x] Define TypeScript protocol types matching Go snapshot and command JSON.
+- [x] Add a WebSocket client that connects to `/ws` and parses snapshots.
+- [x] Add a snapshot store with append/latest/buffer length helpers.
+- [x] Wire the client into `main.ts` for connection lifecycle and basic status logging or overlay-safe state.
+- [x] Add build-time validation through the existing Vite build.
 
 ## Acceptance Criteria
 
+- [x] `cd web && npm run build` passes.
+- [x] Client code derives the WebSocket URL from the current page origin.
+- [x] Snapshot parsing does not mutate authoritative world state locally.
+- [x] No Go server files are touched.
+
+## Verification Commands
+
+- `cd web && npm run build`
+
+---
+
+## Work Order 9: Render Authoritative Snapshots As Voxels
+
+GitHub issue: [#10 WO-9: Render authoritative snapshots as voxels](https://github.com/devlikebear/wirecraft/issues/10)
+
+## Goal
+
+Render server-authoritative snapshot blocks in the Three.js scene using an efficient voxel renderer path.
+
+## Non-goals
+
+- Do not implement raycast editing yet.
+- Do not implement interpolation yet.
+- Do not add delta snapshots.
+
+## Touch points (<=5)
+
+- `web/src/render/VoxelRenderer.ts`
+- `web/src/render/VoxelRenderer.test.ts`
+- `web/src/main.ts`
+- `web/src/styles.css`
+- `docs/tasks/phase-1-work-orders.md`
+
+## Steps
+
+- [ ] Add a `VoxelRenderer` that maps full snapshot blocks into Three.js mesh instances or stable meshes.
+- [ ] Define block materials for solid and debug mover block types.
+- [ ] Replace the static demo footprint with server snapshot-driven voxel updates.
+- [ ] Keep the existing scene, camera, lights, and resize behavior intact.
+- [ ] Add focused tests for snapshot-to-render data mapping where practical.
+
+## Acceptance Criteria
+
+- [ ] `cd web && npm test` passes.
 - [ ] `cd web && npm run build` passes.
-- [ ] Client code derives the WebSocket URL from the current page origin.
-- [ ] Snapshot parsing does not mutate authoritative world state locally.
+- [ ] With Go server and Vite dev server running, the browser scene reflects blocks received from `/ws` snapshots.
 - [ ] No Go server files are touched.
 
 ## Verification Commands
 
+- `cd web && npm test`
 - `cd web && npm run build`

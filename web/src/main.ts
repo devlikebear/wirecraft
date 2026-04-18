@@ -1,4 +1,6 @@
 import './styles.css';
+import { SnapshotSocket } from './net/socket';
+import { SnapshotStore } from './state/snapshotStore';
 import {
   AmbientLight,
   BoxGeometry,
@@ -19,6 +21,24 @@ const app = document.querySelector<HTMLElement>('#app');
 if (!app) {
   throw new Error('Missing #app root element');
 }
+
+const snapshots = new SnapshotStore({ maxSnapshots: 64 });
+const snapshotSocket = new SnapshotSocket({
+  onSnapshot: (snapshot) => {
+    snapshots.append(snapshot);
+    app.dataset.serverTick = String(snapshot.tick);
+    app.dataset.snapshotBuffer = String(snapshots.length);
+  },
+  onStatusChange: (status) => {
+    app.dataset.wsStatus = status;
+    console.info(`[wirecraft] websocket ${status}`);
+  },
+  onError: (error) => {
+    console.warn('[wirecraft] websocket error', error);
+  },
+});
+snapshotSocket.connect();
+window.addEventListener('beforeunload', () => snapshotSocket.close());
 
 const scene = new Scene();
 scene.background = new Color(0x101211);
