@@ -63,7 +63,7 @@ Add the Phase 3 physics foundation: value types for transforms and dynamic entit
 
 ## Work Order 25: Add Actuator Component Model
 
-Status: Next. GitHub issue: [#30](https://github.com/devlikebear/wirecraft/issues/30).
+Status: Completed. GitHub issue: [#30](https://github.com/devlikebear/wirecraft/issues/30).
 
 ## Goal
 
@@ -86,17 +86,17 @@ Implement the first actuator domain behavior: piston and motor actuator primitiv
 
 ## Steps
 
-- [ ] Add actuator type and input signal primitives.
-- [ ] Implement piston target extension/retraction from High/Low input.
-- [ ] Clamp movement by tick delta and movement speed.
-- [ ] Add focused tests for target calculation and movement step behavior.
-- [ ] Update local handoff docs when complete.
+- [x] Add actuator type and input signal primitives.
+- [x] Implement piston target extension/retraction from High/Low input.
+- [x] Clamp movement by tick delta and movement speed.
+- [x] Add focused tests for target calculation and movement step behavior.
+- [x] Update local handoff docs when complete.
 
 ## Acceptance Criteria
 
-- [ ] `go test ./internal/actuator/...` passes.
-- [ ] `go test ./...` passes.
-- [ ] No frontend files are touched.
+- [x] `go test ./internal/actuator/...` passes.
+- [x] `go test ./...` passes.
+- [x] No frontend files are touched.
 
 ## Verification Commands
 
@@ -105,9 +105,57 @@ Implement the first actuator domain behavior: piston and motor actuator primitiv
 
 ---
 
+## Work Order 26: Add Actuator Block Types
+
+Status: Next. GitHub issue: [#31](https://github.com/devlikebear/wirecraft/issues/31).
+
+## Goal
+
+Add the world/protocol/circuit-facing block type foundation for Phase 3 actuator placement. Introduce piston, motor, motor driver, and transistor switch types without wiring them into simulation motion yet.
+
+## Non-goals
+
+- Do not implement actuator movement in simulation yet.
+- Do not add transform snapshots yet.
+- Do not add client actuator mesh rendering yet.
+- Do not implement full wiring validation UI yet.
+
+## Touch points (<=5)
+
+- `internal/world/block.go`
+- `internal/world/world_test.go`
+- `internal/circuit/types.go`
+- `internal/circuit/types_test.go`
+- `web/src/net/protocol.ts`
+
+## Steps
+
+- [ ] Add piston, motor, motor driver, and transistor switch block types while preserving existing numeric values.
+- [ ] Add actuator-facing metadata or role definitions needed by later wiring work.
+- [ ] Extend Go tests for valid block types and metadata completeness.
+- [ ] Update TypeScript protocol block type definitions.
+- [ ] Keep simulation behavior unchanged.
+
+## Acceptance Criteria
+
+- [ ] `go test ./internal/world/...` passes.
+- [ ] `go test ./internal/circuit/...` passes.
+- [ ] `go test ./...` passes.
+- [ ] `cd web && npm test` passes.
+- [ ] `cd web && npm run build` passes.
+
+## Verification Commands
+
+- `go test ./internal/world/...`
+- `go test ./internal/circuit/...`
+- `go test ./...`
+- `cd web && npm test`
+- `cd web && npm run build`
+
+---
+
 ## Planned Work Orders
 
-- [ ] **WO-26: Add actuator block types** — add piston, motor, motor driver, and transistor switch block/protocol types.
 - [ ] **WO-27: Integrate actuator update order** — run actuator input mapping and physics update after circuit evaluation.
 - [ ] **WO-28: Add transform snapshot schema** — include actuator transforms in authoritative snapshots.
 - [ ] **WO-29: Render actuator meshes** — render piston or motor entities from interpolated server transforms.
@@ -118,4 +166,4 @@ Implement the first actuator domain behavior: piston and motor actuator primitiv
 
 ## Session Handoff
 
-Start the next session from [current-status.md](./current-status.md), then continue with [#30 WO-25](https://github.com/devlikebear/wirecraft/issues/30).
+Start the next session from [current-status.md](./current-status.md), then continue with [#31 WO-26](https://github.com/devlikebear/wirecraft/issues/31).

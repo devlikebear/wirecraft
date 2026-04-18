@@ -46,7 +46,7 @@ _예상 소요: 1-2주_
     - deterministic update를 위한 entity ordering
   - 검증: `go test ./internal/physics/...`
 
-- [ ] **T3.A.2** — actuator component 구현.
+- [x] **T3.A.2** — actuator component 구현.
   - 파일:
     - `internal/actuator/types.go`
     - `internal/actuator/piston.go`
