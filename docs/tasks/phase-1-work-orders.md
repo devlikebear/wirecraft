@@ -145,7 +145,7 @@ Create the TypeScript frontend scaffold with a minimal Three.js scene and packag
 
 ## Work Order 4: Add Command And Snapshot Protocol Types
 
-GitHub issue: [#5 WO-4: Add command and snapshot protocol types](https://github.com/devlikebear/wirecraft/issues/5)
+Status: Completed. GitHub issue: [#5](https://github.com/devlikebear/wirecraft/issues/5).
 
 ## Goal
 
@@ -167,20 +167,65 @@ Define the server-side protocol data types for client edit commands and world sn
 
 ## Steps
 
-- [ ] Define command types for `place_block` and `remove_block`.
-- [ ] Define command fields: `clientId`, `commandId`, `tickHint`, `position`, `blockType`.
-- [ ] Add command validation tests for valid edits, out-of-bounds positions, invalid block types, and unknown command types.
-- [ ] Define snapshot type with `tick`, `serverTimeMs`, `blocks`, `entities`, and `stats` fields.
-- [ ] Add JSON round-trip tests for command and snapshot payloads.
+- [x] Define command types for `place_block` and `remove_block`.
+- [x] Define command fields: `clientId`, `commandId`, `tickHint`, `position`, `blockType`.
+- [x] Add command validation tests for valid edits, out-of-bounds positions, invalid block types, and unknown command types.
+- [x] Define snapshot type with `tick`, `serverTimeMs`, `blocks`, `entities`, and `stats` fields.
+- [x] Add JSON round-trip tests for command and snapshot payloads.
 
 ## Acceptance Criteria
 
-- [ ] `go test ./internal/netproto/...` passes.
-- [ ] `go test ./...` passes.
-- [ ] Protocol structs reuse `internal/world.Position` and `internal/world.BlockType` where appropriate.
-- [ ] No server transport or frontend files are touched.
+- [x] `go test ./internal/netproto/...` passes.
+- [x] `go test ./...` passes.
+- [x] Protocol structs reuse `internal/world.Position` and `internal/world.BlockType` where appropriate.
+- [x] No server transport or frontend files are touched.
 
 ## Verification Commands
 
 - `go test ./internal/netproto/...`
+- `go test ./...`
+
+---
+
+## Work Order 5: Build Simulation Snapshot From World State
+
+GitHub issue: [#6 WO-5: Build simulation snapshot from world state](https://github.com/devlikebear/wirecraft/issues/6)
+
+## Goal
+
+Create the first simulation assembly layer that can build a full snapshot from the authoritative world state using the protocol types.
+
+## Non-goals
+
+- Do not implement WebSocket transport yet.
+- Do not connect the TypeScript client yet.
+- Do not implement delta snapshots yet.
+
+## Touch points (<=5)
+
+- `internal/world/world.go`
+- `internal/world/world_test.go`
+- `internal/sim/snapshot.go`
+- `internal/sim/snapshot_test.go`
+- `docs/tasks/phase-1-work-orders.md`
+
+## Steps
+
+- [ ] Add a deterministic way to list occupied blocks from `world.World`.
+- [ ] Add tests proving occupied blocks are listed in stable coordinate order.
+- [ ] Add a snapshot builder that emits a full `netproto.Snapshot` from tick, server time, world, and stats input.
+- [ ] Add tests proving snapshot blocks match world state and air blocks are omitted.
+- [ ] Keep dynamic entities empty for this work order.
+
+## Acceptance Criteria
+
+- [ ] `go test ./internal/world/...` passes.
+- [ ] `go test ./internal/sim/...` passes.
+- [ ] `go test ./...` passes.
+- [ ] No WebSocket transport or frontend files are touched.
+
+## Verification Commands
+
+- `go test ./internal/world/...`
+- `go test ./internal/sim/...`
 - `go test ./...`
