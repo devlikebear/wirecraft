@@ -81,6 +81,33 @@ describe('createToolbar', () => {
     globalThis.document = originalDocument;
   });
 
+  it('defines starter circuit and actuator placement tools', () => {
+    expect(BLOCK_TOOLS.map((tool) => tool.blockType)).toEqual([
+      BlockType.Solid,
+      BlockType.Power,
+      BlockType.Wire,
+      BlockType.Button,
+      BlockType.AndGate,
+      BlockType.MCUOutput,
+      BlockType.Piston,
+      BlockType.Motor,
+      BlockType.MotorDriver,
+      BlockType.TransistorSwitch,
+    ]);
+    expect(BLOCK_TOOLS.map((tool) => tool.name)).toEqual([
+      'Solid',
+      'Power',
+      'Wire',
+      'Button',
+      'AND Gate',
+      'MCU Output',
+      'Piston',
+      'Motor',
+      'Motor Driver',
+      'Transistor Switch',
+    ]);
+  });
+
   it('renders block tool buttons and reports selected block type', () => {
     const selected: BlockType[] = [];
     const toolbar = createToolbar({
@@ -99,5 +126,25 @@ describe('createToolbar', () => {
     expect(selected).toEqual([BlockType.Wire]);
     expect(buttons[0].getAttribute('aria-pressed')).toBe('false');
     expect(buttons[2].getAttribute('aria-pressed')).toBe('true');
+  });
+
+  it('reports actuator block selections', () => {
+    const selected: BlockType[] = [];
+    const toolbar = createToolbar({
+      selectedBlockType: BlockType.Power,
+      onSelectBlockType: (blockType) => selected.push(blockType),
+    });
+
+    const buttons = [...toolbar.element.querySelectorAll<HTMLButtonElement>('button[data-block-type]')];
+    const pistonButton = buttons.find((button) => Number(button.dataset.blockType) === BlockType.Piston);
+    const motorDriverButton = buttons.find((button) => Number(button.dataset.blockType) === BlockType.MotorDriver);
+
+    expect(pistonButton?.getAttribute('aria-label')).toBe('Piston');
+    expect(motorDriverButton?.getAttribute('aria-label')).toBe('Motor Driver');
+
+    pistonButton?.click();
+    motorDriverButton?.click();
+
+    expect(selected).toEqual([BlockType.Piston, BlockType.MotorDriver]);
   });
 });

@@ -23,6 +23,10 @@ export const BLOCK_TOOLS: BlockTool[] = [
   { blockType: BlockType.Button, name: 'Button', color: '#4f8df0' },
   { blockType: BlockType.AndGate, name: 'AND Gate', color: '#7d6cf2' },
   { blockType: BlockType.MCUOutput, name: 'MCU Output', color: '#35b58a' },
+  { blockType: BlockType.Piston, name: 'Piston', color: '#b8c4d6' },
+  { blockType: BlockType.Motor, name: 'Motor', color: '#45b7a8' },
+  { blockType: BlockType.MotorDriver, name: 'Motor Driver', color: '#f2c14e' },
+  { blockType: BlockType.TransistorSwitch, name: 'Transistor Switch', color: '#d973a8' },
 ];
 
 export function createToolbar(options: ToolbarOptions): Toolbar {

@@ -112,13 +112,13 @@ _예상 소요: 1-2주_
     - server entity transform을 interpolation 결과로 적용
   - 검증: 브라우저에서 piston/motor 표시 확인
 
-- [ ] **T3.C.2** — actuator block placement UI.
+- [x] **T3.C.2** — actuator block placement UI.
   - 파일:
     - `web/src/ui/Toolbar.ts`
     - `web/src/input/EditController.ts`
   - 내용:
-    - piston/motor 선택
-    - orientation 선택의 최소 UI
+    - piston/motor/motor driver/transistor switch 선택
+    - orientation은 기존 placement semantics 유지
   - 검증: actuator block 배치 후 서버 snapshot에 entity 생성 확인
 
 ### 작업 그룹 D: Sensor input stub
@@ -150,7 +150,7 @@ _예상 소요: 1-2주_
 ## ✅ Phase 3 Checkpoint
 
 **구현 확인:**
-- [ ] 피스톤 또는 모터 block을 배치할 수 있다.
+- [x] 피스톤 또는 모터 block을 배치할 수 있다.
 - [ ] 회로 output High/Low가 actuator input으로 연결된다.
 - [ ] 서버 tick에서 actuator transform이 계산된다.
 - [ ] 클라이언트가 actuator transform을 보간 렌더링한다.

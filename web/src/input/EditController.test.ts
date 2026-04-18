@@ -79,6 +79,35 @@ describe('buildEditCommand', () => {
     });
   });
 
+  it('builds place commands with selected actuator block types', () => {
+    const actuatorBlockTypes = [
+      BlockType.Piston,
+      BlockType.Motor,
+      BlockType.MotorDriver,
+      BlockType.TransistorSwitch,
+    ];
+
+    for (const blockType of actuatorBlockTypes) {
+      expect(
+        buildEditCommand({
+          mode: 'place',
+          clientId: 'client-1',
+          commandId: `cmd-${blockType}`,
+          tickHint: 45,
+          position: { x: blockType, y: 0, z: 2 },
+          blockType,
+        }),
+      ).toEqual({
+        type: 'place_block',
+        clientId: 'client-1',
+        commandId: `cmd-${blockType}`,
+        tickHint: 45,
+        position: { x: blockType, y: 0, z: 2 },
+        blockType,
+      });
+    }
+  });
+
   it('builds remove commands with air block type', () => {
     expect(
       buildEditCommand({

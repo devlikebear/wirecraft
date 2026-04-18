@@ -294,7 +294,7 @@ Render actuator dynamic entities from authoritative snapshots in the browser. Th
 
 ## Work Order 30: Add Actuator Placement UI
 
-Status: Next. GitHub issue: [#35](https://github.com/devlikebear/wirecraft/issues/35).
+Status: Completed. GitHub issue: [#35](https://github.com/devlikebear/wirecraft/issues/35).
 
 ## Goal
 
@@ -317,17 +317,17 @@ Expose actuator block placement in the browser toolbar so users can place piston
 
 ## Steps
 
-- [ ] Add toolbar tools for piston, motor, motor driver, and transistor switch.
-- [ ] Ensure selected actuator block types flow through existing place commands.
-- [ ] Keep remove behavior unchanged.
-- [ ] Add focused toolbar/edit flow tests for actuator selection.
-- [ ] Keep server command validation unchanged.
+- [x] Add toolbar tools for piston, motor, motor driver, and transistor switch.
+- [x] Ensure selected actuator block types flow through existing place commands.
+- [x] Keep remove behavior unchanged.
+- [x] Add focused toolbar/edit flow tests for actuator selection.
+- [x] Keep server command validation unchanged.
 
 ## Acceptance Criteria
 
-- [ ] `cd web && npm test` passes.
-- [ ] `cd web && npm run build` passes.
-- [ ] No Go files are touched.
+- [x] `cd web && npm test` passes.
+- [x] `cd web && npm run build` passes.
+- [x] No Go files are touched.
 
 ## Verification Commands
 
@@ -336,12 +336,56 @@ Expose actuator block placement in the browser toolbar so users can place piston
 
 ---
 
+## Work Order 31: Add Sensor Input Extension Point
+
+Status: Next. GitHub issue: [#36](https://github.com/devlikebear/wirecraft/issues/36).
+
+## Goal
+
+Add a small server-side sensor input extension point so Phase 3 can separate button-style inputs from future proximity-style sensor inputs without changing current button behavior.
+
+## Non-goals
+
+- Do not implement final proximity gameplay or UI controls yet.
+- Do not change existing button command behavior.
+- Do not change actuator motion behavior.
+- Do not add component card content yet.
+
+## Touch points (<=5)
+
+- `internal/sensor/types.go`
+- `internal/sensor/types_test.go`
+- `internal/sim/simulation.go`
+- `internal/sim/simulation_test.go`
+- `docs/tasks/phase-3-work-orders.md`
+
+## Steps
+
+- [ ] Add sensor type/input state primitives for button and proximity stub.
+- [ ] Keep button input semantics compatible with the current `set_button` command.
+- [ ] Add tests proving the proximity stub is inert until wired later.
+- [ ] Keep actuator update behavior unchanged.
+- [ ] Document the extension point in the Phase 3 work orders.
+
+## Acceptance Criteria
+
+- [ ] `go test ./...` passes.
+- [ ] `cd web && npm test` passes.
+- [ ] `cd web && npm run build` passes.
+
+## Verification Commands
+
+- `go test ./...`
+- `cd web && npm test`
+- `cd web && npm run build`
+
+---
+
 ## Planned Work Orders
 
-- [ ] **WO-31: Add sensor input extension point** — separate button/proximity-style sensor primitives for later inputs.
 - [ ] **WO-32: Add motor and driver component cards** — explain motor driver/transistor constraints and simulation simplifications.
 - [ ] **Phase 3 Checkpoint** — verify button-driven actuator motion across server tests, client build, and browser smoke.
 
 ## Session Handoff
 
-Start the next session from [current-status.md](./current-status.md), then continue with [#35 WO-30](https://github.com/devlikebear/wirecraft/issues/35).
+Start the next session from [current-status.md](./current-status.md), then continue with [#36 WO-31](https://github.com/devlikebear/wirecraft/issues/36).
