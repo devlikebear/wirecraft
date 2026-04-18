@@ -33,12 +33,13 @@ GitHub issue: [#1 Phase 1: Authoritative Voxel Loop](https://github.com/devlikeb
 ## Completed Work
 
 - [x] [#2 WO-1: Scaffold Go project and embedded web boundary](https://github.com/devlikebear/wirecraft/issues/2)
+- [x] [#3 WO-2: Add tick clock and voxel world core](https://github.com/devlikebear/wirecraft/issues/3)
 
 ## Next Work Order
 
-Start with **WO-2** in [`phase-1-work-orders.md`](./phase-1-work-orders.md).
+Start with **WO-3** in [`phase-1-work-orders.md`](./phase-1-work-orders.md).
 
-GitHub issue: [#3 WO-2: Add tick clock and voxel world core](https://github.com/devlikebear/wirecraft/issues/3)
+GitHub issue: [#4 WO-3: Initialize Vite Three.js client skeleton](https://github.com/devlikebear/wirecraft/issues/4)
 
 ## GitHub Issue Index
 

@@ -56,7 +56,7 @@ Create the repository's executable skeleton: Go module, server entrypoint, packa
 
 ## Work Order 2: Add Tick Clock And Voxel World Core
 
-GitHub issue: [#3 WO-2: Add tick clock and voxel world core](https://github.com/devlikebear/wirecraft/issues/3)
+Status: Completed. GitHub issue: [#3](https://github.com/devlikebear/wirecraft/issues/3).
 
 ## Goal
 
@@ -78,18 +78,18 @@ Implement test-first server simulation primitives: fixed tick timing and determi
 
 ## Steps
 
-- [ ] Write tests for a 20Hz clock target duration and monotonically increasing tick IDs.
-- [ ] Implement `TickID`, `Clock`, and tick duration helpers.
-- [ ] Write tests for bounded `Position`, `BlockType`, `World.Get`, `World.Set`, and `World.Remove`.
-- [ ] Implement a 32x32x16 default world with deterministic set/remove behavior.
-- [ ] Keep block types minimal: `air`, `solid`, `debug_mover`.
+- [x] Write tests for a 20Hz clock target duration and monotonically increasing tick IDs.
+- [x] Implement `TickID`, `Clock`, and tick duration helpers.
+- [x] Write tests for bounded `Position`, `BlockType`, `World.Get`, `World.Set`, and `World.Remove`.
+- [x] Implement a 32x32x16 default world with deterministic set/remove behavior.
+- [x] Keep block types minimal: `air`, `solid`, `debug_mover`.
 
 ## Acceptance Criteria
 
-- [ ] Tick tests prove target duration and tick ID behavior.
-- [ ] World tests reject out-of-bounds positions.
-- [ ] World tests prove repeated set/remove operations are deterministic.
-- [ ] No frontend files are touched.
+- [x] Tick tests prove target duration and tick ID behavior.
+- [x] World tests reject out-of-bounds positions.
+- [x] World tests prove repeated set/remove operations are deterministic.
+- [x] No frontend files are touched.
 
 ## Verification Commands
 
