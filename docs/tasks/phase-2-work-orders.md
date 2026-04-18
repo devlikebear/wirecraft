@@ -145,7 +145,7 @@ Convert circuit-capable voxel blocks into a circuit graph using adjacency rules.
 
 ## Work Order 18: Evaluate Digital Signal State
 
-GitHub issue: [#21 WO-18: Evaluate digital signal state](https://github.com/devlikebear/wirecraft/issues/21)
+Status: Completed. GitHub issue: [#21](https://github.com/devlikebear/wirecraft/issues/21).
 
 ## Goal
 
@@ -167,15 +167,15 @@ Evaluate High/Low/Unknown digital signal state from a circuit graph deterministi
 
 ## Steps
 
-- [ ] Add propagation from power sources through wires.
-- [ ] Add button default/off state behavior.
-- [ ] Add AND gate truth table behavior.
-- [ ] Handle cycles without panic by resolving to stable state or Unknown.
-- [ ] Add deterministic truth table and cycle tests.
+- [x] Add propagation from power sources through wires.
+- [x] Add button default/off state behavior.
+- [x] Add AND gate truth table behavior.
+- [x] Handle cycles without panic by resolving to stable state or Unknown.
+- [x] Add deterministic truth table and cycle tests.
 
 ## Acceptance Criteria
 
-- [ ] `go test ./internal/circuit/...` passes.
+- [x] `go test ./internal/circuit/...` passes.
 
 ## Verification Commands
 
@@ -185,7 +185,7 @@ Evaluate High/Low/Unknown digital signal state from a circuit graph deterministi
 
 ## Work Order 19: Add Circuit State to Simulation Snapshots
 
-GitHub issue: create when active.
+GitHub issue: [#22 WO-19: Add circuit state to simulation snapshots](https://github.com/devlikebear/wirecraft/issues/22)
 
 ## Goal
 
