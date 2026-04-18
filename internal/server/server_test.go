@@ -8,6 +8,7 @@ import (
 
 func TestNewHandlesHealthz(t *testing.T) {
 	handler := New()
+	defer handler.Close()
 
 	req := httptest.NewRequest(http.MethodGet, "/healthz", nil)
 	rec := httptest.NewRecorder()

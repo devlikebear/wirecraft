@@ -38,12 +38,13 @@ GitHub issue: [#1 Phase 1: Authoritative Voxel Loop](https://github.com/devlikeb
 - [x] [#5 WO-4: Add command and snapshot protocol types](https://github.com/devlikebear/wirecraft/issues/5)
 - [x] [#6 WO-5: Build simulation snapshot from world state](https://github.com/devlikebear/wirecraft/issues/6)
 - [x] [#7 WO-6: Add in-memory simulation runner](https://github.com/devlikebear/wirecraft/issues/7)
+- [x] [#8 WO-7: Add WebSocket simulation stream](https://github.com/devlikebear/wirecraft/issues/8)
 
 ## Next Work Order
 
-Start with **WO-7** in [`phase-1-work-orders.md`](./phase-1-work-orders.md).
+Start with **WO-8** in [`phase-1-work-orders.md`](./phase-1-work-orders.md).
 
-GitHub issue: [#8 WO-7: Add WebSocket simulation stream](https://github.com/devlikebear/wirecraft/issues/8)
+GitHub issue: [#9 WO-8: Add TypeScript WebSocket client and snapshot store](https://github.com/devlikebear/wirecraft/issues/9)
 
 ## GitHub Issue Index
 
@@ -55,6 +56,7 @@ GitHub issue: [#8 WO-7: Add WebSocket simulation stream](https://github.com/devl
 - [#6 WO-5: Build simulation snapshot from world state](https://github.com/devlikebear/wirecraft/issues/6)
 - [#7 WO-6: Add in-memory simulation runner](https://github.com/devlikebear/wirecraft/issues/7)
 - [#8 WO-7: Add WebSocket simulation stream](https://github.com/devlikebear/wirecraft/issues/8)
+- [#9 WO-8: Add TypeScript WebSocket client and snapshot store](https://github.com/devlikebear/wirecraft/issues/9)
 
 ## Session Rules
 
@@ -67,5 +69,5 @@ GitHub issue: [#8 WO-7: Add WebSocket simulation stream](https://github.com/devl
 
 ## Open Decisions
 
-- WebSocket library: choose before WebSocket protocol implementation. Default preference is a small maintained package such as `github.com/coder/websocket`.
+- WebSocket library: chosen for WO-7 as `github.com/coder/websocket v1.8.12` to preserve the Go 1.22 module target.
 - Exact frontend test runner: choose during WO-3. Default preference is Vitest.

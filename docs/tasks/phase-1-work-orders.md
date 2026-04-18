@@ -277,7 +277,7 @@ Add a small in-memory simulation runner that owns a world, applies validated com
 
 ## Work Order 7: Add WebSocket Simulation Stream
 
-GitHub issue: [#8 WO-7: Add WebSocket simulation stream](https://github.com/devlikebear/wirecraft/issues/8)
+Status: Completed. GitHub issue: [#8](https://github.com/devlikebear/wirecraft/issues/8).
 
 ## Goal
 
@@ -299,20 +299,63 @@ Expose the in-memory simulation through a server-owned WebSocket stream so clien
 
 ## Steps
 
-- [ ] Choose and add a small maintained WebSocket package.
-- [ ] Register `GET /ws` on the server handler.
-- [ ] Create a server-owned simulation loop that sends full snapshots at a fixed tick rate.
-- [ ] Accept JSON edit commands from the WebSocket and apply them through `sim.Simulation`.
-- [ ] Add server tests for WebSocket connection, command receive, and snapshot response.
+- [x] Choose and add a small maintained WebSocket package.
+- [x] Register `GET /ws` on the server handler.
+- [x] Create a server-owned simulation loop that sends full snapshots at a fixed tick rate.
+- [x] Accept JSON edit commands from the WebSocket and apply them through `sim.Simulation`.
+- [x] Add server tests for WebSocket connection, command receive, and snapshot response.
 
 ## Acceptance Criteria
 
-- [ ] `go test ./internal/server/...` passes.
-- [ ] `go test ./...` passes.
-- [ ] `/ws` rejects non-WebSocket requests cleanly.
-- [ ] No frontend files are touched.
+- [x] `go test ./internal/server/...` passes.
+- [x] `go test ./...` passes.
+- [x] `/ws` rejects non-WebSocket requests cleanly.
+- [x] No frontend files are touched.
 
 ## Verification Commands
 
 - `go test ./internal/server/...`
 - `go test ./...`
+
+---
+
+## Work Order 8: Add TypeScript WebSocket Client And Snapshot Store
+
+GitHub issue: [#9 WO-8: Add TypeScript WebSocket client and snapshot store](https://github.com/devlikebear/wirecraft/issues/9)
+
+## Goal
+
+Connect the Vite client to the Go WebSocket endpoint and keep an in-memory snapshot buffer that later renderers can consume.
+
+## Non-goals
+
+- Do not implement voxel InstancedMesh rendering yet.
+- Do not implement raycast editing yet.
+- Do not implement interpolation yet.
+
+## Touch points (<=5)
+
+- `web/src/net/protocol.ts`
+- `web/src/net/socket.ts`
+- `web/src/state/snapshotStore.ts`
+- `web/src/main.ts`
+- `docs/tasks/phase-1-work-orders.md`
+
+## Steps
+
+- [ ] Define TypeScript protocol types matching Go snapshot and command JSON.
+- [ ] Add a WebSocket client that connects to `/ws` and parses snapshots.
+- [ ] Add a snapshot store with append/latest/buffer length helpers.
+- [ ] Wire the client into `main.ts` for connection lifecycle and basic status logging or overlay-safe state.
+- [ ] Add build-time validation through the existing Vite build.
+
+## Acceptance Criteria
+
+- [ ] `cd web && npm run build` passes.
+- [ ] Client code derives the WebSocket URL from the current page origin.
+- [ ] Snapshot parsing does not mutate authoritative world state locally.
+- [ ] No Go server files are touched.
+
+## Verification Commands
+
+- `cd web && npm run build`
