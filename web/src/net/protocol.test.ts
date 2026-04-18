@@ -53,6 +53,45 @@ describe('parseSnapshot', () => {
     ]);
   });
 
+  it('accepts actuator block types in authoritative snapshots', () => {
+    const snapshot = parseSnapshot({
+      tick: 10,
+      serverTimeMs: 1700000000157,
+      blocks: [
+        {
+          position: { X: 6, Y: 0, Z: 3 },
+          blockType: BlockType.Piston,
+        },
+        {
+          position: { X: 7, Y: 0, Z: 3 },
+          blockType: BlockType.Motor,
+        },
+        {
+          position: { X: 8, Y: 0, Z: 3 },
+          blockType: BlockType.MotorDriver,
+        },
+        {
+          position: { X: 9, Y: 0, Z: 3 },
+          blockType: BlockType.TransistorSwitch,
+        },
+      ],
+      entities: [],
+      circuit: { nodes: [] },
+      stats: {
+        clientCount: 1,
+        commandQueueLength: 0,
+        snapshotBytes: 224,
+      },
+    });
+
+    expect(snapshot?.blocks.map((block) => block.blockType)).toEqual([
+      BlockType.Piston,
+      BlockType.Motor,
+      BlockType.MotorDriver,
+      BlockType.TransistorSwitch,
+    ]);
+  });
+
   it('parses circuit signal state from authoritative snapshots', () => {
     const snapshot = parseSnapshot({
       tick: 9,

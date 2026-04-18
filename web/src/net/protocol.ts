@@ -7,6 +7,10 @@ export const BlockType = {
   Button: 5,
   AndGate: 6,
   MCUOutput: 7,
+  Piston: 8,
+  Motor: 9,
+  MotorDriver: 10,
+  TransistorSwitch: 11,
 } as const;
 
 export type BlockType = (typeof BlockType)[keyof typeof BlockType];

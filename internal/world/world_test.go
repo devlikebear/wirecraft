@@ -100,6 +100,25 @@ func TestBlockTypesIncludeCircuitBlocksAndKeepPhase1Values(t *testing.T) {
 	if BlockDebugMover != 2 {
 		t.Fatalf("BlockDebugMover = %d, want 2", BlockDebugMover)
 	}
+	if BlockPower != 3 || BlockWire != 4 || BlockButton != 5 || BlockAndGate != 6 || BlockMCUOutput != 7 {
+		t.Fatalf(
+			"Phase 2 block values = power:%d wire:%d button:%d and:%d output:%d, want 3..7",
+			BlockPower,
+			BlockWire,
+			BlockButton,
+			BlockAndGate,
+			BlockMCUOutput,
+		)
+	}
+	if BlockPiston != 8 || BlockMotor != 9 || BlockMotorDriver != 10 || BlockTransistorSwitch != 11 {
+		t.Fatalf(
+			"Phase 3 block values = piston:%d motor:%d driver:%d transistor:%d, want 8..11",
+			BlockPiston,
+			BlockMotor,
+			BlockMotorDriver,
+			BlockTransistorSwitch,
+		)
+	}
 
 	cases := []struct {
 		block BlockType
@@ -110,6 +129,10 @@ func TestBlockTypesIncludeCircuitBlocksAndKeepPhase1Values(t *testing.T) {
 		{BlockButton, "button"},
 		{BlockAndGate, "and_gate"},
 		{BlockMCUOutput, "mcu_output"},
+		{BlockPiston, "piston"},
+		{BlockMotor, "motor"},
+		{BlockMotorDriver, "motor_driver"},
+		{BlockTransistorSwitch, "transistor_switch"},
 	}
 	for _, tc := range cases {
 		if !tc.block.Valid() {
@@ -129,6 +152,10 @@ func TestWorldAcceptsCircuitBlocks(t *testing.T) {
 		BlockButton,
 		BlockAndGate,
 		BlockMCUOutput,
+		BlockPiston,
+		BlockMotor,
+		BlockMotorDriver,
+		BlockTransistorSwitch,
 	}
 
 	for index, blockType := range circuitBlocks {

@@ -11,11 +11,15 @@ const (
 	BlockButton
 	BlockAndGate
 	BlockMCUOutput
+	BlockPiston
+	BlockMotor
+	BlockMotorDriver
+	BlockTransistorSwitch
 )
 
 func (b BlockType) Valid() bool {
 	switch b {
-	case BlockAir, BlockSolid, BlockDebugMover, BlockPower, BlockWire, BlockButton, BlockAndGate, BlockMCUOutput:
+	case BlockAir, BlockSolid, BlockDebugMover, BlockPower, BlockWire, BlockButton, BlockAndGate, BlockMCUOutput, BlockPiston, BlockMotor, BlockMotorDriver, BlockTransistorSwitch:
 		return true
 	default:
 		return false
@@ -40,6 +44,14 @@ func (b BlockType) String() string {
 		return "and_gate"
 	case BlockMCUOutput:
 		return "mcu_output"
+	case BlockPiston:
+		return "piston"
+	case BlockMotor:
+		return "motor"
+	case BlockMotorDriver:
+		return "motor_driver"
+	case BlockTransistorSwitch:
+		return "transistor_switch"
 	default:
 		return "invalid"
 	}

@@ -65,7 +65,7 @@ _예상 소요: 1-2주_
 
 ### 작업 그룹 B: Circuit-to-actuator integration
 
-- [ ] **T3.B.1** — actuator block type 추가.
+- [x] **T3.B.1** — actuator block type 추가.
   - 파일:
     - `internal/world/block.go`
     - `internal/circuit/types.go`

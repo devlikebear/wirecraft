@@ -60,14 +60,15 @@ GitHub issue: [#28 Phase 3: Physical Actuators](https://github.com/devlikebear/w
 - [x] [#27 Phase 2 Checkpoint: Verify circuit runtime](https://github.com/devlikebear/wirecraft/issues/27)
 - [x] [#29 WO-24: Add dynamic entity and transform primitives](https://github.com/devlikebear/wirecraft/issues/29)
 - [x] [#30 WO-25: Add actuator component model](https://github.com/devlikebear/wirecraft/issues/30)
+- [x] [#31 WO-26: Add actuator block types](https://github.com/devlikebear/wirecraft/issues/31)
 
 ## Next Work Order
 
-Start with **Work Order 26: Add Actuator Block Types** in [`phase-3-work-orders.md`](./phase-3-work-orders.md).
+Start with **Work Order 27: Integrate Actuator Update Order** in [`phase-3-work-orders.md`](./phase-3-work-orders.md).
 
-GitHub issue: [#31 WO-26: Add actuator block types](https://github.com/devlikebear/wirecraft/issues/31)
+GitHub issue: [#32 WO-27: Integrate actuator update order](https://github.com/devlikebear/wirecraft/issues/32)
 
-Phase 2 is complete and approved. Phase 3 has started; the physics transform/entity foundation and actuator domain model are complete. The next step is adding actuator-facing block/protocol types.
+Phase 2 is complete and approved. Phase 3 has started; the physics transform/entity foundation, actuator domain model, and actuator-facing block/protocol types are complete. The next step is integrating actuator update order into the simulation loop.
 
 ## GitHub Issue Index
 
@@ -102,6 +103,7 @@ Phase 2 is complete and approved. Phase 3 has started; the physics transform/ent
 - [#29 WO-24: Add dynamic entity and transform primitives](https://github.com/devlikebear/wirecraft/issues/29)
 - [#30 WO-25: Add actuator component model](https://github.com/devlikebear/wirecraft/issues/30)
 - [#31 WO-26: Add actuator block types](https://github.com/devlikebear/wirecraft/issues/31)
+- [#32 WO-27: Integrate actuator update order](https://github.com/devlikebear/wirecraft/issues/32)
 
 ## Session Rules
 

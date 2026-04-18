@@ -13,6 +13,10 @@ func TestCircuitBlockTypes(t *testing.T) {
 		world.BlockButton,
 		world.BlockAndGate,
 		world.BlockMCUOutput,
+		world.BlockPiston,
+		world.BlockMotor,
+		world.BlockMotorDriver,
+		world.BlockTransistorSwitch,
 	}
 
 	got := BlockTypes()
@@ -40,6 +44,10 @@ func TestMetadataForBlock(t *testing.T) {
 		{world.BlockButton, RoleSwitch, 1, 1, false, true},
 		{world.BlockAndGate, RoleLogicGate, 2, 1, false, false},
 		{world.BlockMCUOutput, RoleOutput, 1, 0, false, false},
+		{world.BlockPiston, RolePistonActuator, 1, 0, false, false},
+		{world.BlockMotor, RoleMotorActuator, 1, 0, false, false},
+		{world.BlockMotorDriver, RoleMotorDriver, 1, 1, false, false},
+		{world.BlockTransistorSwitch, RoleTransistorSwitch, 1, 1, false, false},
 	}
 
 	for _, tc := range cases {
