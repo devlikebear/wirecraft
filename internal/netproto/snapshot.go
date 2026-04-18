@@ -12,6 +12,7 @@ type Snapshot struct {
 	ServerTimeMS int64            `json:"serverTimeMs"`
 	Blocks       []BlockSnapshot  `json:"blocks"`
 	Entities     []EntitySnapshot `json:"entities"`
+	Circuit      CircuitSnapshot  `json:"circuit"`
 	Stats        SnapshotStats    `json:"stats"`
 }
 
@@ -24,6 +25,17 @@ type EntitySnapshot struct {
 	ID        string            `json:"id"`
 	Type      string            `json:"type"`
 	Transform TransformSnapshot `json:"transform"`
+}
+
+type CircuitSnapshot struct {
+	Nodes []CircuitNodeSnapshot `json:"nodes"`
+}
+
+type CircuitNodeSnapshot struct {
+	Position    world.Position `json:"position"`
+	NodeID      string         `json:"nodeId"`
+	NodeType    string         `json:"nodeType"`
+	SignalState string         `json:"signalState"`
 }
 
 type TransformSnapshot struct {

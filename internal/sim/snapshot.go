@@ -3,6 +3,7 @@ package sim
 import (
 	"encoding/json"
 
+	"github.com/devlikebear/wirecraft/internal/circuit"
 	"github.com/devlikebear/wirecraft/internal/netproto"
 	"github.com/devlikebear/wirecraft/internal/world"
 )
@@ -37,6 +38,7 @@ func BuildSnapshot(input SnapshotInput) netproto.Snapshot {
 		ServerTimeMS: input.ServerTimeMS,
 		Blocks:       blocks,
 		Entities:     []netproto.EntitySnapshot{buildDebugMoverEntity(input.Tick)},
+		Circuit:      buildCircuitSnapshot(input.World),
 		Stats: netproto.SnapshotStats{
 			ClientCount:        input.Stats.ClientCount,
 			CommandQueueLength: input.Stats.CommandQueueLength,
@@ -49,6 +51,43 @@ func BuildSnapshot(input SnapshotInput) netproto.Snapshot {
 	}
 
 	return snapshot
+}
+
+func buildCircuitSnapshot(w *world.World) netproto.CircuitSnapshot {
+	nodes := make([]netproto.CircuitNodeSnapshot, 0)
+	if w == nil {
+		return netproto.CircuitSnapshot{Nodes: nodes}
+	}
+
+	graph, err := circuit.ExtractGraphFromWorld(w)
+	if err != nil {
+		return netproto.CircuitSnapshot{Nodes: nodes}
+	}
+
+	positionsByNodeID := make(map[circuit.NodeID]world.Position)
+	for _, block := range w.OccupiedBlocks() {
+		if !circuit.IsCircuitBlock(block.BlockType) {
+			continue
+		}
+		positionsByNodeID[circuit.NodeIDForPosition(block.Position)] = block.Position
+	}
+
+	evaluation := circuit.EvaluateGraph(graph)
+	for _, node := range graph.Nodes() {
+		position, ok := positionsByNodeID[node.ID]
+		if !ok {
+			continue
+		}
+
+		nodes = append(nodes, netproto.CircuitNodeSnapshot{
+			Position:    position,
+			NodeID:      string(node.ID),
+			NodeType:    string(node.Type),
+			SignalState: evaluation.State(node.ID).String(),
+		})
+	}
+
+	return netproto.CircuitSnapshot{Nodes: nodes}
 }
 
 func buildDebugMoverEntity(tick TickID) netproto.EntitySnapshot {

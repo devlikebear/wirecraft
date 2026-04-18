@@ -185,7 +185,7 @@ Evaluate High/Low/Unknown digital signal state from a circuit graph deterministi
 
 ## Work Order 19: Add Circuit State to Simulation Snapshots
 
-GitHub issue: [#22 WO-19: Add circuit state to simulation snapshots](https://github.com/devlikebear/wirecraft/issues/22)
+Status: Completed. GitHub issue: [#22](https://github.com/devlikebear/wirecraft/issues/22).
 
 ## Goal
 
@@ -207,16 +207,16 @@ Run circuit extraction/evaluation during simulation steps and include circuit de
 
 ## Steps
 
-- [ ] Add a circuit evaluation step after world command application and before snapshot build.
-- [ ] Add snapshot payload for block position signal state.
-- [ ] Add tests proving snapshots include deterministic circuit state.
-- [ ] Keep Phase 1 blocks/entities unchanged.
+- [x] Add a circuit evaluation step after world command application and before snapshot build.
+- [x] Add snapshot payload for block position signal state.
+- [x] Add tests proving snapshots include deterministic circuit state.
+- [x] Keep Phase 1 blocks/entities unchanged.
 
 ## Acceptance Criteria
 
-- [ ] `go test ./internal/sim/...` passes.
-- [ ] `go test ./internal/netproto/...` passes.
-- [ ] `go test ./...` passes.
+- [x] `go test ./internal/sim/...` passes.
+- [x] `go test ./internal/netproto/...` passes.
+- [x] `go test ./...` passes.
 
 ## Verification Commands
 
@@ -228,7 +228,7 @@ Run circuit extraction/evaluation during simulation steps and include circuit de
 
 ## Work Order 20: Add Button Input Command
 
-GitHub issue: create when active.
+GitHub issue: [#23 WO-20: Add button input command](https://github.com/devlikebear/wirecraft/issues/23)
 
 ## Goal
 

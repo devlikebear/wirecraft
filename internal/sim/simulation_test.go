@@ -58,6 +58,46 @@ func TestSimulationStepAdvancesTickAndIncludesStats(t *testing.T) {
 	}
 }
 
+func TestSimulationStepIncludesCircuitStateAfterCommands(t *testing.T) {
+	simulation := NewSimulationWithDimensions(world.Dimensions{X: 8, Y: 8, Z: 8})
+
+	if err := simulation.ApplyCommand(placeCommand("cmd-1", world.Position{X: 0, Y: 0, Z: 0}, world.BlockPower)); err != nil {
+		t.Fatalf("ApplyCommand(power) error = %v, want nil", err)
+	}
+	if err := simulation.ApplyCommand(placeCommand("cmd-2", world.Position{X: 1, Y: 0, Z: 0}, world.BlockWire)); err != nil {
+		t.Fatalf("ApplyCommand(wire) error = %v, want nil", err)
+	}
+	if err := simulation.ApplyCommand(placeCommand("cmd-3", world.Position{X: 2, Y: 0, Z: 0}, world.BlockMCUOutput)); err != nil {
+		t.Fatalf("ApplyCommand(output) error = %v, want nil", err)
+	}
+	if err := simulation.ApplyCommand(placeCommand("cmd-4", world.Position{X: 3, Y: 0, Z: 0}, world.BlockSolid)); err != nil {
+		t.Fatalf("ApplyCommand(solid) error = %v, want nil", err)
+	}
+
+	snapshot := simulation.Step(StepInput{})
+
+	assertCircuitNodes(t, snapshot.Circuit.Nodes, []netproto.CircuitNodeSnapshot{
+		{
+			Position:    world.Position{X: 0, Y: 0, Z: 0},
+			NodeID:      "0:0:0",
+			NodeType:    "power_source",
+			SignalState: "high",
+		},
+		{
+			Position:    world.Position{X: 1, Y: 0, Z: 0},
+			NodeID:      "1:0:0",
+			NodeType:    "wire",
+			SignalState: "high",
+		},
+		{
+			Position:    world.Position{X: 2, Y: 0, Z: 0},
+			NodeID:      "2:0:0",
+			NodeType:    "mcu_output",
+			SignalState: "high",
+		},
+	})
+}
+
 func TestSimulationRejectsInvalidCommandWithoutChangingWorld(t *testing.T) {
 	simulation := NewSimulation()
 	validPos := world.Position{X: 1, Y: 1, Z: 1}
@@ -125,6 +165,19 @@ func assertSnapshotBlocks(t *testing.T, snapshot netproto.Snapshot, want []netpr
 	for i := range want {
 		if snapshot.Blocks[i] != want[i] {
 			t.Fatalf("snapshot.Blocks[%d] = %+v, want %+v", i, snapshot.Blocks[i], want[i])
+		}
+	}
+}
+
+func assertCircuitNodes(t *testing.T, got []netproto.CircuitNodeSnapshot, want []netproto.CircuitNodeSnapshot) {
+	t.Helper()
+
+	if len(got) != len(want) {
+		t.Fatalf("len(circuit nodes) = %d, want %d: %+v", len(got), len(want), got)
+	}
+	for i := range want {
+		if got[i] != want[i] {
+			t.Fatalf("circuit nodes[%d] = %+v, want %+v", i, got[i], want[i])
 		}
 	}
 }

@@ -51,12 +51,13 @@ GitHub issue: [#17 Phase 2: Circuit Runtime](https://github.com/devlikebear/wire
 - [x] [#19 WO-16: Add circuit graph primitives](https://github.com/devlikebear/wirecraft/issues/19)
 - [x] [#20 WO-17: Extract circuit graph from world blocks](https://github.com/devlikebear/wirecraft/issues/20)
 - [x] [#21 WO-18: Evaluate digital signal state](https://github.com/devlikebear/wirecraft/issues/21)
+- [x] [#22 WO-19: Add circuit state to simulation snapshots](https://github.com/devlikebear/wirecraft/issues/22)
 
 ## Next Work Order
 
-Start with **WO-19** in [`phase-2-work-orders.md`](./phase-2-work-orders.md).
+Start with **WO-20** in [`phase-2-work-orders.md`](./phase-2-work-orders.md).
 
-GitHub issue: [#22 WO-19: Add circuit state to simulation snapshots](https://github.com/devlikebear/wirecraft/issues/22)
+GitHub issue: [#23 WO-20: Add button input command](https://github.com/devlikebear/wirecraft/issues/23)
 
 ## GitHub Issue Index
 
@@ -82,6 +83,7 @@ GitHub issue: [#22 WO-19: Add circuit state to simulation snapshots](https://git
 - [#20 WO-17: Extract circuit graph from world blocks](https://github.com/devlikebear/wirecraft/issues/20)
 - [#21 WO-18: Evaluate digital signal state](https://github.com/devlikebear/wirecraft/issues/21)
 - [#22 WO-19: Add circuit state to simulation snapshots](https://github.com/devlikebear/wirecraft/issues/22)
+- [#23 WO-20: Add button input command](https://github.com/devlikebear/wirecraft/issues/23)
 
 ## Session Rules
 
