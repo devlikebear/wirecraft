@@ -4,16 +4,22 @@ _Last updated: 2026-04-19_
 
 ## Purpose
 
-This file is the handoff point for new Codex sessions. Start here, then read the roadmap and the active work order file.
+This file is the handoff point for new Codex sessions. Start here, then read the reset roadmap and active reset work orders.
 
 ## Canonical Documents
 
-- Product and MVP: [`../plans/wire-craft-prd.md`](../plans/wire-craft-prd.md)
-- Full roadmap: [`../plans/wire-craft-roadmap.md`](../plans/wire-craft-roadmap.md)
+- Product and MVP reset PRD: [`../plans/wire-craft-prd.md`](../plans/wire-craft-prd.md)
+- Reset roadmap: [`../plans/wire-craft-roadmap.md`](../plans/wire-craft-roadmap.md)
+- Reset rationale: [`../plans/wire-craft-mvp-reset.md`](../plans/wire-craft-mvp-reset.md)
+- Active reset work orders: [`mvp-reset-work-orders.md`](./mvp-reset-work-orders.md)
 - Research notes: [`../plans/wire-craft-research-notes.md`](../plans/wire-craft-research-notes.md)
-- Active phase plan: [`../plans/wire-craft-phase-4-multiplayer-physics-sync.md`](../plans/wire-craft-phase-4-multiplayer-physics-sync.md)
-- Active work orders: [`phase-4-work-orders.md`](./phase-4-work-orders.md)
-- Recent checkpoint report: [`phase-3-checkpoint-report.md`](./phase-3-checkpoint-report.md)
+
+Historical phase plans remain useful as implementation context:
+
+- Phase 1: [`../plans/wire-craft-phase-1-authoritative-voxel-loop.md`](../plans/wire-craft-phase-1-authoritative-voxel-loop.md)
+- Phase 2: [`../plans/wire-craft-phase-2-circuit-runtime.md`](../plans/wire-craft-phase-2-circuit-runtime.md)
+- Phase 3: [`../plans/wire-craft-phase-3-physical-actuators.md`](../plans/wire-craft-phase-3-physical-actuators.md)
+- Phase 4 paused context: [`../plans/wire-craft-phase-4-multiplayer-physics-sync.md`](../plans/wire-craft-phase-4-multiplayer-physics-sync.md), [`phase-4-work-orders.md`](./phase-4-work-orders.md)
 
 ## Repository State
 
@@ -23,120 +29,67 @@ This file is the handoff point for new Codex sessions. Start here, then read the
 - Frontend package manager: `npm`
 - Deployment shape: development uses separate Go/Vite servers; release build embeds Vite output into the Go binary with `go:embed`.
 
+## Current Product Direction
+
+**MVP Reset: Workbench Device Builder**
+
+Tracking issue: [#49 MVP Reset: Workbench Device Builder](https://github.com/devlikebear/wirecraft/issues/49)
+
+WireCraft is now scoped around a small workbench where a user can build, inspect, edit, and run one interactive device before broader multiplayer/export work resumes. The first target device is a **button-controlled sliding door**.
+
 ## Current Phase
 
-**Phase 4: Multiplayer Physics Sync**
+**Phase R0: MVP Reset Planning**
 
-Goal: strengthen WireCraft for 2-4 collaborative users in the same room by separating room/session state, defining deterministic command conflict handling, improving snapshot efficiency, adding basic actuator collision constraints, and exposing tick/snapshot/client observability.
+Status: completed locally by the reset documentation update.
 
-GitHub issue: [#39 Phase 4: Multiplayer Physics Sync](https://github.com/devlikebear/wirecraft/issues/39)
-
-Status: active.
-
-## Completed Work
-
-- [x] [#2 WO-1: Scaffold Go project and embedded web boundary](https://github.com/devlikebear/wirecraft/issues/2)
-- [x] [#3 WO-2: Add tick clock and voxel world core](https://github.com/devlikebear/wirecraft/issues/3)
-- [x] [#4 WO-3: Initialize Vite Three.js client skeleton](https://github.com/devlikebear/wirecraft/issues/4)
-- [x] [#5 WO-4: Add command and snapshot protocol types](https://github.com/devlikebear/wirecraft/issues/5)
-- [x] [#6 WO-5: Build simulation snapshot from world state](https://github.com/devlikebear/wirecraft/issues/6)
-- [x] [#7 WO-6: Add in-memory simulation runner](https://github.com/devlikebear/wirecraft/issues/7)
-- [x] [#8 WO-7: Add WebSocket simulation stream](https://github.com/devlikebear/wirecraft/issues/8)
-- [x] [#9 WO-8: Add TypeScript WebSocket client and snapshot store](https://github.com/devlikebear/wirecraft/issues/9)
-- [x] [#10 WO-9: Render authoritative snapshots as voxels](https://github.com/devlikebear/wirecraft/issues/10)
-- [x] [#11 WO-10: Add raycast block edit commands](https://github.com/devlikebear/wirecraft/issues/11)
-- [x] [#12 WO-11: Add snapshot interpolation primitives](https://github.com/devlikebear/wirecraft/issues/12)
-- [x] [#13 WO-12: Add dynamic debug entity snapshots](https://github.com/devlikebear/wirecraft/issues/13)
-- [x] [#14 WO-13: Render dynamic debug entity with interpolation](https://github.com/devlikebear/wirecraft/issues/14)
-- [x] [#15 WO-14: Add client debug overlay](https://github.com/devlikebear/wirecraft/issues/15)
-- [x] [#16 Phase 1 checkpoint: Verify authoritative voxel loop](https://github.com/devlikebear/wirecraft/issues/16)
-- [x] [#18 WO-15: Add circuit block types and metadata](https://github.com/devlikebear/wirecraft/issues/18)
-- [x] [#19 WO-16: Add circuit graph primitives](https://github.com/devlikebear/wirecraft/issues/19)
-- [x] [#20 WO-17: Extract circuit graph from world blocks](https://github.com/devlikebear/wirecraft/issues/20)
-- [x] [#21 WO-18: Evaluate digital signal state](https://github.com/devlikebear/wirecraft/issues/21)
-- [x] [#22 WO-19: Add circuit state to simulation snapshots](https://github.com/devlikebear/wirecraft/issues/22)
-- [x] [#23 WO-20: Add button input command](https://github.com/devlikebear/wirecraft/issues/23)
-- [x] [#24 WO-21: Add circuit block toolbar](https://github.com/devlikebear/wirecraft/issues/24)
-- [x] [#25 WO-22: Visualize circuit signal state](https://github.com/devlikebear/wirecraft/issues/25)
-- [x] [#26 WO-23: Add starter component cards](https://github.com/devlikebear/wirecraft/issues/26)
-- [x] [#27 Phase 2 Checkpoint: Verify circuit runtime](https://github.com/devlikebear/wirecraft/issues/27)
-- [x] [#29 WO-24: Add dynamic entity and transform primitives](https://github.com/devlikebear/wirecraft/issues/29)
-- [x] [#30 WO-25: Add actuator component model](https://github.com/devlikebear/wirecraft/issues/30)
-- [x] [#31 WO-26: Add actuator block types](https://github.com/devlikebear/wirecraft/issues/31)
-- [x] [#32 WO-27: Integrate actuator update order](https://github.com/devlikebear/wirecraft/issues/32)
-- [x] [#33 WO-28: Add transform snapshot schema](https://github.com/devlikebear/wirecraft/issues/33)
-- [x] [#34 WO-29: Render actuator meshes](https://github.com/devlikebear/wirecraft/issues/34)
-- [x] [#35 WO-30: Add actuator placement UI](https://github.com/devlikebear/wirecraft/issues/35)
-- [x] [#36 WO-31: Add sensor input extension point](https://github.com/devlikebear/wirecraft/issues/36)
-- [x] [#37 WO-32: Add motor and driver component cards](https://github.com/devlikebear/wirecraft/issues/37)
-- [x] [#38 Phase 3 Checkpoint: Verify physical actuators](https://github.com/devlikebear/wirecraft/issues/38)
-- [x] [#40 WO-33: Add server room model](https://github.com/devlikebear/wirecraft/issues/40)
-- [x] [#41 WO-34: Add client presence metadata](https://github.com/devlikebear/wirecraft/issues/41)
-- [x] [#42 WO-35: Add deterministic command ordering](https://github.com/devlikebear/wirecraft/issues/42)
-- [x] [#43 WO-36: Add command acknowledgement snapshot fields](https://github.com/devlikebear/wirecraft/issues/43)
-- [x] [#45 WO-36A: Improve circuit block visual readability](https://github.com/devlikebear/wirecraft/issues/45)
-- [x] [#44 WO-37: Add changed-set snapshot primitives](https://github.com/devlikebear/wirecraft/issues/44)
-- [x] [#46 WO-38: Apply client delta snapshots](https://github.com/devlikebear/wirecraft/issues/46)
-- [x] [#48 WO-38A: Improve viewport usability and directional placement](https://github.com/devlikebear/wirecraft/issues/48)
+The next implementation phase is **Phase R1: Workbench Block Instance UX**.
 
 ## Next Work Order
 
-Start with **Work Order 39: Add Basic Actuator Collision Constraints** in [`phase-4-work-orders.md`](./phase-4-work-orders.md).
+Start with **Work Order R1: Add Block Instance Properties To Snapshots** in [`mvp-reset-work-orders.md`](./mvp-reset-work-orders.md).
 
-GitHub issue: [#47 WO-39: Add basic actuator collision constraints](https://github.com/devlikebear/wirecraft/issues/47)
+GitHub issue: [#50 WO-R1: Add block instance properties to snapshots](https://github.com/devlikebear/wirecraft/issues/50)
 
-Phase 3 is complete and approved. Phase 4 has started; the server now has a default room model that owns simulation, subscribers, client counts, lightweight presence metadata, deterministic same-tick command ordering, duplicate command suppression, and command acknowledgement metadata in snapshots. Circuit blocks now have distinct visual profiles. Snapshot efficiency now has server full/changed-set primitives and browser-side changed-set application for blocks, removals, and entities while preserving full snapshot fallback. The default view now hides the old debug mover, supports orbit/zoom/pan camera navigation, and carries block facing through commands, world state, snapshots, and client rendering. The next step is adding basic actuator collision constraints so moving actuator parts cannot pass through occupied solid cells.
+Recommended first implementation behavior:
+
+- Add minimal block instance properties to server world/snapshot models.
+- Preserve existing place/remove behavior.
+- Parse optional properties in TypeScript snapshots.
+- Keep this as a small TDD change before UI property editing.
+
+## Completed Foundation
+
+The following completed work remains part of the foundation:
+
+- Phase 1: authoritative voxel loop, WebSocket command/snapshot protocol, voxel rendering, raycast editing, interpolation.
+- Phase 2: starter circuit block types, circuit graph/evaluation, button input, circuit snapshot, toolbar, signal overlay, component cards.
+- Phase 3: dynamic entity/transform primitives, actuator model, piston/motor snapshots, actuator rendering, sensor input store, motor/driver cards.
+- Phase 4 partial: room model, presence metadata, deterministic command ordering, command acknowledgements, changed-set snapshots, client delta application, viewport navigation, placement facing.
+
+## Paused / Superseded Work
+
+- [#39 Phase 4: Multiplayer Physics Sync](https://github.com/devlikebear/wirecraft/issues/39) is paused by the MVP reset. Completed foundation work remains valid.
+- [#47 WO-39: Add basic actuator collision constraints](https://github.com/devlikebear/wirecraft/issues/47) is no longer the next task. Collision should return inside the sliding door vertical slice when blocked state has a product meaning.
+- Phase 5 blueprint/export work is deferred until block instance metadata, port/slot rules, and the first device slice exist.
+
+## Current Technical Reality
+
+- Server world blocks currently store `Position`, `BlockType`, and `Facing`.
+- Circuit extraction currently connects adjacent circuit blocks through a default `body` pin.
+- Inspect UI currently shows toolbar-selected component cards, not selected placed block instances.
+- Recent work added placement facing and viewport controls, but existing placed block rotation and editable properties are not implemented yet.
+
+These gaps are now the intended next focus.
 
 ## GitHub Issue Index
 
-- [#1 Phase 1: Authoritative Voxel Loop](https://github.com/devlikebear/wirecraft/issues/1)
-- [#2 WO-1: Scaffold Go project and embedded web boundary](https://github.com/devlikebear/wirecraft/issues/2)
-- [#3 WO-2: Add tick clock and voxel world core](https://github.com/devlikebear/wirecraft/issues/3)
-- [#4 WO-3: Initialize Vite Three.js client skeleton](https://github.com/devlikebear/wirecraft/issues/4)
-- [#5 WO-4: Add command and snapshot protocol types](https://github.com/devlikebear/wirecraft/issues/5)
-- [#6 WO-5: Build simulation snapshot from world state](https://github.com/devlikebear/wirecraft/issues/6)
-- [#7 WO-6: Add in-memory simulation runner](https://github.com/devlikebear/wirecraft/issues/7)
-- [#8 WO-7: Add WebSocket simulation stream](https://github.com/devlikebear/wirecraft/issues/8)
-- [#9 WO-8: Add TypeScript WebSocket client and snapshot store](https://github.com/devlikebear/wirecraft/issues/9)
-- [#10 WO-9: Render authoritative snapshots as voxels](https://github.com/devlikebear/wirecraft/issues/10)
-- [#11 WO-10: Add raycast block edit commands](https://github.com/devlikebear/wirecraft/issues/11)
-- [#12 WO-11: Add snapshot interpolation primitives](https://github.com/devlikebear/wirecraft/issues/12)
-- [#13 WO-12: Add dynamic debug entity snapshots](https://github.com/devlikebear/wirecraft/issues/13)
-- [#14 WO-13: Render dynamic debug entity with interpolation](https://github.com/devlikebear/wirecraft/issues/14)
-- [#15 WO-14: Add client debug overlay](https://github.com/devlikebear/wirecraft/issues/15)
-- [#16 Phase 1 checkpoint: Verify authoritative voxel loop](https://github.com/devlikebear/wirecraft/issues/16)
-- [#17 Phase 2: Circuit Runtime](https://github.com/devlikebear/wirecraft/issues/17)
-- [#18 WO-15: Add circuit block types and metadata](https://github.com/devlikebear/wirecraft/issues/18)
-- [#19 WO-16: Add circuit graph primitives](https://github.com/devlikebear/wirecraft/issues/19)
-- [#20 WO-17: Extract circuit graph from world blocks](https://github.com/devlikebear/wirecraft/issues/20)
-- [#21 WO-18: Evaluate digital signal state](https://github.com/devlikebear/wirecraft/issues/21)
-- [#22 WO-19: Add circuit state to simulation snapshots](https://github.com/devlikebear/wirecraft/issues/22)
-- [#23 WO-20: Add button input command](https://github.com/devlikebear/wirecraft/issues/23)
-- [#24 WO-21: Add circuit block toolbar](https://github.com/devlikebear/wirecraft/issues/24)
-- [#25 WO-22: Visualize circuit signal state](https://github.com/devlikebear/wirecraft/issues/25)
-- [#26 WO-23: Add starter component cards](https://github.com/devlikebear/wirecraft/issues/26)
-- [#27 Phase 2 Checkpoint: Verify circuit runtime](https://github.com/devlikebear/wirecraft/issues/27)
-- [#28 Phase 3: Physical Actuators](https://github.com/devlikebear/wirecraft/issues/28)
-- [#29 WO-24: Add dynamic entity and transform primitives](https://github.com/devlikebear/wirecraft/issues/29)
-- [#30 WO-25: Add actuator component model](https://github.com/devlikebear/wirecraft/issues/30)
-- [#31 WO-26: Add actuator block types](https://github.com/devlikebear/wirecraft/issues/31)
-- [#32 WO-27: Integrate actuator update order](https://github.com/devlikebear/wirecraft/issues/32)
-- [#33 WO-28: Add transform snapshot schema](https://github.com/devlikebear/wirecraft/issues/33)
-- [#34 WO-29: Render actuator meshes](https://github.com/devlikebear/wirecraft/issues/34)
-- [#35 WO-30: Add actuator placement UI](https://github.com/devlikebear/wirecraft/issues/35)
-- [#36 WO-31: Add sensor input extension point](https://github.com/devlikebear/wirecraft/issues/36)
-- [#37 WO-32: Add motor and driver component cards](https://github.com/devlikebear/wirecraft/issues/37)
-- [#38 Phase 3 Checkpoint: Verify physical actuators](https://github.com/devlikebear/wirecraft/issues/38)
-- [#39 Phase 4: Multiplayer Physics Sync](https://github.com/devlikebear/wirecraft/issues/39)
-- [#40 WO-33: Add server room model](https://github.com/devlikebear/wirecraft/issues/40)
-- [#41 WO-34: Add client presence metadata](https://github.com/devlikebear/wirecraft/issues/41)
-- [#42 WO-35: Add deterministic command ordering](https://github.com/devlikebear/wirecraft/issues/42)
-- [#43 WO-36: Add command acknowledgement snapshot fields](https://github.com/devlikebear/wirecraft/issues/43)
-- [#44 WO-37: Add changed-set snapshot primitives](https://github.com/devlikebear/wirecraft/issues/44)
-- [#45 WO-36A: Improve circuit block visual readability](https://github.com/devlikebear/wirecraft/issues/45)
-- [#46 WO-38: Apply client delta snapshots](https://github.com/devlikebear/wirecraft/issues/46)
-- [#47 WO-39: Add basic actuator collision constraints](https://github.com/devlikebear/wirecraft/issues/47)
-- [#48 WO-38A: Improve viewport usability and directional placement](https://github.com/devlikebear/wirecraft/issues/48)
+- [#39 Phase 4: Multiplayer Physics Sync](https://github.com/devlikebear/wirecraft/issues/39) — paused context.
+- [#47 WO-39: Add basic actuator collision constraints](https://github.com/devlikebear/wirecraft/issues/47) — superseded as immediate next work.
+- [#49 MVP Reset: Workbench Device Builder](https://github.com/devlikebear/wirecraft/issues/49) — active reset parent.
+- [#50 WO-R1: Add block instance properties to snapshots](https://github.com/devlikebear/wirecraft/issues/50) — next implementation task.
+
+Historical completed issues are listed in GitHub and older phase work-order documents.
 
 ## Session Rules
 
@@ -145,9 +98,10 @@ Phase 3 is complete and approved. Phase 4 has started; the server now has a defa
 - Keep work test-first where possible.
 - Update this file when a work order is completed or the next task changes.
 - Update the matching GitHub issue when a work order is completed.
-- Do not advance to the next phase until the phase checkpoint is complete and the user approves.
+- Do not resume paused Phase 4/5 work until it is reconnected to the reset MVP.
 
 ## Open Decisions
 
-- WebSocket library: chosen for WO-7 as `github.com/coder/websocket v1.8.12` to preserve the Go 1.22 module target.
-- Exact frontend test runner: choose during WO-3. Default preference is Vitest.
+- First device remains sliding door unless the user explicitly chooses a different vertical slice.
+- Block instance properties should start minimal and backwards-compatible.
+- Port/slot/attachment generalization should be added only as needed for the sliding door MVP.

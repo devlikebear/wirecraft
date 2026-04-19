@@ -4,6 +4,8 @@ _작성일: 2026-04-18_
 _속한 로드맵: [`wire-craft-roadmap.md`](./wire-craft-roadmap.md)_
 _예상 소요: 1-2주_
 
+> **MVP Reset notice (2026-04-19):** 이 페이즈는 [#49 MVP Reset: Workbench Device Builder](https://github.com/devlikebear/wirecraft/issues/49)에 의해 일시 중단되었다. 완료된 room/session, presence, command ordering, acknowledgement, changed-set snapshot, viewport/facing 작업은 foundation으로 유지한다. 남은 generic collision/metrics/checkpoint 작업은 첫 sliding door device slice에 연결될 때 재개한다.
+
 ## 페이즈 목표
 
 2-4명의 사용자가 같은 room에서 동시에 조립하고 테스트해도 서버 상태가 깨지지 않도록 동시성, 충돌 처리, snapshot 효율을 강화한다. 이 단계는 “멀티플레이어에서 견딜 수 있는 구조인가”를 검증하는 안정화 단계다.

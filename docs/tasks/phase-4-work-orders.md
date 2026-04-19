@@ -4,6 +4,14 @@ _Last updated: 2026-04-19_
 
 Parent issue: [#39 Phase 4: Multiplayer Physics Sync](https://github.com/devlikebear/wirecraft/issues/39)
 
+## MVP Reset Notice
+
+Status: Paused by [#49 MVP Reset: Workbench Device Builder](https://github.com/devlikebear/wirecraft/issues/49).
+
+The completed Phase 4 work remains part of the foundation: room/session model, presence, deterministic command ordering, command acknowledgements, changed-set snapshots, client delta application, viewport navigation, and placement facing.
+
+Do not continue the remaining generic collision/metrics/checkpoint work as the immediate next step. Resume it only when it is tied to the reset MVP device slice, especially the button-controlled sliding door.
+
 ## Phase Goal
 
 Strengthen WireCraft for 2-4 collaborative users in the same room by separating room/session state, defining deterministic command conflict handling, improving snapshot efficiency, adding basic actuator collision constraints, and exposing tick/snapshot/client observability.
@@ -369,7 +377,7 @@ Remove confusing debug-only motion from the default view, add usable camera navi
 
 ## Work Order 39: Add Basic Actuator Collision Constraints
 
-Status: Next. GitHub issue: [#47](https://github.com/devlikebear/wirecraft/issues/47).
+Status: Paused / superseded as immediate next work by [#49](https://github.com/devlikebear/wirecraft/issues/49). GitHub issue: [#47](https://github.com/devlikebear/wirecraft/issues/47).
 
 ## Goal
 
@@ -413,9 +421,9 @@ Add a small physics collision policy that prevents actuator motion from entering
 
 ## Planned Work Orders
 
-- [ ] **WO-40: Add server metrics logging** — expose tick duration, queue length, bytes, and client count.
-- [ ] **Phase 4 checkpoint** — verify 2-4 client collaboration, conflict handling, collision, and observability.
+- [ ] **WO-40: Add server metrics logging** — paused until the reset MVP has a useful device loop to measure.
+- [ ] **Phase 4 checkpoint** — paused until multiplayer is reintroduced after the single-user workbench/device loop.
 
 ## Session Handoff
 
-Start the next session from [current-status.md](./current-status.md), then continue with [#47 WO-39](https://github.com/devlikebear/wirecraft/issues/47).
+Start the next session from [current-status.md](./current-status.md), then continue with [mvp-reset-work-orders.md](./mvp-reset-work-orders.md).
