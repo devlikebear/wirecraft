@@ -31,6 +31,7 @@ describe('parseSnapshot', () => {
         {
           position: { X: 1, Y: 2, Z: 3 },
           blockType: BlockType.DebugMover,
+          facing: 'east',
         },
       ],
       entities: [],
@@ -43,6 +44,7 @@ describe('parseSnapshot', () => {
     });
 
     expect(snapshot?.blocks[0]?.position).toEqual({ x: 1, y: 2, z: 3 });
+    expect(snapshot?.blocks[0]?.facing).toBe('east');
   });
 
   it('accepts circuit block types in authoritative snapshots', () => {
@@ -328,6 +330,29 @@ describe('parseSnapshot', () => {
       tick: 14,
       serverTimeMs: 1700000000357,
       blocks: [],
+      entities: [],
+      circuit: { nodes: [] },
+      stats: {
+        clientCount: 1,
+        commandQueueLength: 0,
+        snapshotBytes: 196,
+      },
+    });
+
+    expect(snapshot).toBeNull();
+  });
+
+  it('rejects invalid block facing values', () => {
+    const snapshot = parseSnapshot({
+      tick: 14,
+      serverTimeMs: 1700000000357,
+      blocks: [
+        {
+          position: { X: 1, Y: 0, Z: 0 },
+          blockType: BlockType.Wire,
+          facing: 'diagonal',
+        },
+      ],
       entities: [],
       circuit: { nodes: [] },
       stats: {

@@ -25,6 +25,7 @@ export type EntityType = (typeof EntityType)[keyof typeof EntityType];
 
 export type CommandType = 'place_block' | 'remove_block' | 'set_button';
 export type SnapshotMode = 'full' | 'changed_set';
+export type BlockFacing = 'north' | 'east' | 'south' | 'west';
 
 export interface Position {
   x: number;
@@ -39,6 +40,7 @@ export interface Command {
   tickHint: number;
   position: Position;
   blockType: BlockType;
+  facing?: BlockFacing;
   buttonPressed?: boolean;
 }
 
@@ -61,6 +63,7 @@ export interface Snapshot {
 export interface BlockSnapshot {
   position: Position;
   blockType: BlockType;
+  facing?: BlockFacing;
 }
 
 export interface EntitySnapshot {
@@ -208,14 +211,26 @@ function parseBlockSnapshot(value: unknown): BlockSnapshot | null {
   }
 
   const position = parsePosition(value.position);
-  if (position === null || !isBlockType(value.blockType)) {
+  const facing = parseBlockFacing(value.facing);
+  if (position === null || !isBlockType(value.blockType) || facing === null) {
     return null;
   }
 
   return {
     position,
     blockType: value.blockType,
+    ...(typeof facing !== 'undefined' ? { facing } : {}),
   };
+}
+
+function parseBlockFacing(value: unknown): BlockFacing | undefined | null {
+  if (typeof value === 'undefined') {
+    return undefined;
+  }
+  if (value === 'north' || value === 'east' || value === 'south' || value === 'west') {
+    return value;
+  }
+  return null;
 }
 
 function parseEntitySnapshot(value: unknown): EntitySnapshot | null {

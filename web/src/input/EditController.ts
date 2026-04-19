@@ -7,14 +7,21 @@ import {
   type Object3D,
   type WebGLRenderer,
 } from 'three';
-import { BlockType, type Command, type Position, type Vec3 } from '../net/protocol';
+import { BlockType, type BlockFacing, type Command, type Position, type Vec3 } from '../net/protocol';
 import type { VoxelRaycastHit, VoxelRenderer } from '../render/VoxelRenderer';
 
 export type EditMode = 'place' | 'remove';
+export const BLOCK_FACINGS: BlockFacing[] = ['north', 'east', 'south', 'west'];
+const EDIT_CLICK_DRAG_THRESHOLD_PX = 5;
 
 export interface EditPointerLike {
   button: number;
   shiftKey: boolean;
+}
+
+export interface PointerPointLike {
+  x: number;
+  y: number;
 }
 
 export interface BuildEditCommandInput {
@@ -24,6 +31,7 @@ export interface BuildEditCommandInput {
   tickHint: number;
   position: Position;
   blockType: BlockType;
+  facing?: BlockFacing;
 }
 
 export interface BuildSetButtonCommandInput {
@@ -42,6 +50,7 @@ export interface EditControllerOptions {
   clientId: string;
   blockType?: BlockType;
   getBlockType?: () => BlockType;
+  getFacing?: () => BlockFacing;
   getTickHint: () => number;
   sendCommand: (command: Command) => void;
 }
@@ -72,6 +81,19 @@ export function positionFromGroundPoint(point: Vec3): Position {
   };
 }
 
+export function nextBlockFacing(facing: BlockFacing): BlockFacing {
+  const index = BLOCK_FACINGS.indexOf(facing);
+  return BLOCK_FACINGS[(index + 1) % BLOCK_FACINGS.length];
+}
+
+export function isEditClickWithinDragThreshold(
+  start: PointerPointLike,
+  end: PointerPointLike,
+  thresholdPx = EDIT_CLICK_DRAG_THRESHOLD_PX,
+): boolean {
+  return Math.hypot(end.x - start.x, end.y - start.y) <= thresholdPx;
+}
+
 export function buildEditCommand(input: BuildEditCommandInput): Command {
   return {
     type: input.mode === 'place' ? 'place_block' : 'remove_block',
@@ -80,6 +102,7 @@ export function buildEditCommand(input: BuildEditCommandInput): Command {
     tickHint: input.tickHint,
     position: input.position,
     blockType: input.mode === 'place' ? input.blockType : BlockType.Air,
+    ...(input.mode === 'place' && input.facing ? { facing: input.facing } : {}),
   };
 }
 
@@ -102,6 +125,7 @@ export class EditController {
   private readonly voxelRenderer: VoxelRenderer;
   private readonly clientId: string;
   private readonly getBlockType: () => BlockType;
+  private readonly getFacing: () => BlockFacing;
   private readonly getTickHint: () => number;
   private readonly sendCommand: (command: Command) => void;
   private readonly raycaster = new Raycaster();
@@ -109,6 +133,7 @@ export class EditController {
   private readonly groundPlane = new Plane(new Vector3(0, 1, 0), 0);
   private readonly groundPoint = new Vector3();
   private commandSequence = 0;
+  private pendingEditPointer: (EditPointerLike & PointerPointLike) | null = null;
 
   constructor(options: EditControllerOptions) {
     this.camera = options.camera;
@@ -117,17 +142,20 @@ export class EditController {
     this.voxelRenderer = options.voxelRenderer;
     this.clientId = options.clientId;
     this.getBlockType = options.getBlockType ?? (() => options.blockType ?? BlockType.DebugMover);
+    this.getFacing = options.getFacing ?? (() => 'north');
     this.getTickHint = options.getTickHint;
     this.sendCommand = options.sendCommand;
   }
 
   connect(): void {
     this.renderer.domElement.addEventListener('pointerdown', this.handlePointerDown);
+    this.renderer.domElement.addEventListener('pointerup', this.handlePointerUp);
     this.renderer.domElement.addEventListener('contextmenu', this.preventContextMenu);
   }
 
   disconnect(): void {
     this.renderer.domElement.removeEventListener('pointerdown', this.handlePointerDown);
+    this.renderer.domElement.removeEventListener('pointerup', this.handlePointerUp);
     this.renderer.domElement.removeEventListener('contextmenu', this.preventContextMenu);
   }
 
@@ -138,9 +166,32 @@ export class EditController {
   private readonly handlePointerDown = (event: PointerEvent) => {
     const mode = editModeFromPointer(event);
     if (mode === null) {
+      this.pendingEditPointer = null;
       return;
     }
 
+    this.pendingEditPointer = {
+      button: event.button,
+      shiftKey: event.shiftKey,
+      x: event.clientX,
+      y: event.clientY,
+    };
+  };
+
+  private readonly handlePointerUp = (event: PointerEvent) => {
+    const pending = this.pendingEditPointer;
+    this.pendingEditPointer = null;
+    if (!pending || pending.button !== event.button) {
+      return;
+    }
+    if (!isEditClickWithinDragThreshold(pending, { x: event.clientX, y: event.clientY })) {
+      return;
+    }
+
+    const mode = editModeFromPointer(pending);
+    if (mode === null) {
+      return;
+    }
     const position = this.pickPosition(event, mode);
     if (position === null) {
       return;
@@ -154,6 +205,7 @@ export class EditController {
         tickHint: this.getTickHint(),
         position,
         blockType: this.getBlockType(),
+        facing: this.getFacing(),
       }),
     );
   };

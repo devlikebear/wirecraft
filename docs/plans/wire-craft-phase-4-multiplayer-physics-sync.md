@@ -105,6 +105,21 @@ _예상 소요: 1-2주_
     - missing base snapshot 감지 시 resync 요청 또는 full snapshot 대기
   - 검증: `cd web && npm test`
 
+### 작업 그룹 C-UX: Viewport usability and directional placement
+
+- [x] **T4.C-UX.1** — 조립 가능한 기본 viewport 사용성 개선.
+  - 파일:
+    - `web/src/input/CameraController.ts`
+    - `web/src/input/EditController.ts`
+    - `web/src/render/EntityRenderer.ts`
+    - `web/src/render/VoxelRenderer.ts`
+  - 내용:
+    - 기본 화면에서 debug mover 숨김
+    - orbit/zoom/pan camera navigation
+    - `R` 키 기반 placement facing 회전
+    - block facing을 command/snapshot/client render 경로로 전달
+  - 검증: `go test ./... && cd web && npm test && cd web && npm run build`
+
 ### 작업 그룹 D: Basic physics constraints
 
 - [ ] **T4.D.1** — 단순 충돌/점유 규칙 구현.

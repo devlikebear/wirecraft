@@ -319,6 +319,54 @@ Teach the browser state layer to accept full snapshots and apply changed-set sna
 
 ---
 
+## Work Order 38A: Improve Viewport Usability and Directional Placement
+
+Status: Completed. GitHub issue: [#48](https://github.com/devlikebear/wirecraft/issues/48).
+
+## Goal
+
+Remove confusing debug-only motion from the default view, add usable camera navigation, and add the first server-authoritative block facing path for direction-sensitive placement.
+
+## Non-goals
+
+- Do not implement full pin-aware circuit graph rules in this work order.
+- Do not redesign the full toolbar or mode system.
+- Do not replace the server-authoritative command/snapshot model.
+- Do not implement actuator collision here; keep Work Order 39 as the next physics work order.
+
+## Touch points (<=5 groups)
+
+- `internal/world/*`
+- `internal/netproto/*`
+- `internal/sim/*`
+- `web/src/input/*`
+- `web/src/render/*`
+
+## Steps
+
+- [x] Hide the Phase 1 debug mover from the default client render path.
+- [x] Add orbit, zoom, pan, and keyboard planar camera navigation.
+- [x] Add placement facing metadata to commands, world blocks, snapshots, and the TypeScript protocol.
+- [x] Add `R` key facing rotation for block placement.
+- [x] Rotate rendered voxel instances from snapshot facing data.
+- [x] Update local task docs after verification.
+
+## Acceptance Criteria
+
+- [x] `go test ./...` passes.
+- [x] `cd web && npm test` passes.
+- [x] `cd web && npm run build` passes.
+- [x] Default runtime view no longer renders the moving debug mover.
+- [x] Block facing survives command -> world -> snapshot -> client parse/render flow.
+
+## Verification Commands
+
+- `go test ./...`
+- `cd web && npm test`
+- `cd web && npm run build`
+
+---
+
 ## Work Order 39: Add Basic Actuator Collision Constraints
 
 Status: Next. GitHub issue: [#47](https://github.com/devlikebear/wirecraft/issues/47).

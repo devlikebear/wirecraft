@@ -1,7 +1,8 @@
 import './styles.css';
 import { DebugOverlay, calculateFps } from './debug/DebugOverlay';
-import { EditController, buildSetButtonCommand } from './input/EditController';
-import { BlockType, type Position } from './net/protocol';
+import { CameraController, shouldIgnoreKeyboardNavigation } from './input/CameraController';
+import { EditController, buildSetButtonCommand, nextBlockFacing } from './input/EditController';
+import { BlockType, type BlockFacing, type Position } from './net/protocol';
 import { SnapshotSocket } from './net/socket';
 import { CircuitOverlay } from './render/CircuitOverlay';
 import { EntityRenderer } from './render/EntityRenderer';
@@ -19,7 +20,7 @@ import {
   PerspectiveCamera,
   Scene,
   SRGBColorSpace,
-  Vector2,
+  Vector3,
   WebGLRenderer,
 } from 'three';
 
@@ -44,6 +45,13 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 renderer.setSize(window.innerWidth, window.innerHeight);
 app.appendChild(renderer.domElement);
 
+const cameraController = new CameraController({
+  camera,
+  renderer,
+  target: new Vector3(0, 0, 0),
+});
+cameraController.connect();
+
 const ambient = new AmbientLight(0xf1ead9, 0.45);
 scene.add(ambient);
 
@@ -65,6 +73,7 @@ const debugOverlay = new DebugOverlay(app);
 const snapshots = new SnapshotStore({ maxSnapshots: 64 });
 const clientId = crypto.randomUUID();
 let selectedBlockType = BlockType.Power;
+let placementFacing: BlockFacing = 'north';
 let wsStatus = 'idle';
 let serverTick: number | null = null;
 let clientCount = 0;
@@ -108,6 +117,7 @@ const toolbar = createToolbar({
 app.appendChild(inspectPanel.element);
 app.appendChild(toolbar.element);
 app.dataset.selectedBlockType = String(selectedBlockType);
+app.dataset.placementFacing = placementFacing;
 
 const editController = new EditController({
   camera,
@@ -116,13 +126,30 @@ const editController = new EditController({
   voxelRenderer,
   clientId,
   getBlockType: () => selectedBlockType,
+  getFacing: () => placementFacing,
   getTickHint: () => snapshots.latest()?.tick ?? 0,
   sendCommand: (command) => snapshotSocket.sendCommand(command),
 });
 editController.connect();
 
+const handlePlacementFacingKey = (event: KeyboardEvent) => {
+  if (shouldIgnoreKeyboardNavigation(event.target as { tagName?: string } | null)) {
+    return;
+  }
+  if (event.key.toLowerCase() !== 'r') {
+    return;
+  }
+
+  event.preventDefault();
+  placementFacing = nextBlockFacing(placementFacing);
+  app.dataset.placementFacing = placementFacing;
+};
+window.addEventListener('keydown', handlePlacementFacingKey);
+
 window.addEventListener('beforeunload', () => {
+  window.removeEventListener('keydown', handlePlacementFacingKey);
   editController.disconnect();
+  cameraController.dispose();
   debugOverlay.dispose();
   circuitOverlay.dispose();
   entityRenderer.dispose();
@@ -165,15 +192,6 @@ window.wirecraft = {
   snapshots,
 };
 
-const pointer = new Vector2();
-let targetYaw = 0;
-
-window.addEventListener('pointermove', (event) => {
-  pointer.x = event.clientX / window.innerWidth - 0.5;
-  pointer.y = event.clientY / window.innerHeight - 0.5;
-  targetYaw = pointer.x * 0.25;
-});
-
 window.addEventListener('resize', () => {
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
@@ -183,7 +201,7 @@ window.addEventListener('resize', () => {
 function animate(timestampMs: number) {
   latestFps = calculateFps(previousFrameTimestampMs, timestampMs) ?? latestFps;
   previousFrameTimestampMs = timestampMs;
-  scene.rotation.y += (targetYaw - scene.rotation.y) * 0.035;
+  cameraController.update();
 
   const renderServerTimeMs = snapshots.renderServerTimeMs(Date.now(), DEFAULT_INTERPOLATION_DELAY_MS);
   if (renderServerTimeMs !== null) {

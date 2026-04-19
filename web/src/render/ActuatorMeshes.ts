@@ -6,7 +6,7 @@ import {
 import { EntityType } from '../net/protocol';
 
 export function isRenderableEntityType(type: string): boolean {
-  return type === EntityType.DebugMover || type === EntityType.Piston || type === EntityType.Motor;
+  return type === EntityType.Piston || type === EntityType.Motor;
 }
 
 export function createEntityMesh(type: string): Mesh {

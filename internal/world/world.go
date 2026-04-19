@@ -8,6 +8,7 @@ import (
 var (
 	ErrOutOfBounds      = errors.New("position out of bounds")
 	ErrInvalidBlockType = errors.New("invalid block type")
+	ErrInvalidFacing    = errors.New("invalid block facing")
 )
 
 type Position struct {
@@ -25,11 +26,12 @@ type Dimensions struct {
 type Block struct {
 	Position  Position
 	BlockType BlockType
+	Facing    Facing
 }
 
 type World struct {
 	dimensions Dimensions
-	blocks     map[Position]BlockType
+	blocks     map[Position]Block
 }
 
 func NewDefault() *World {
@@ -43,7 +45,7 @@ func DefaultDimensions() Dimensions {
 func New(dimensions Dimensions) *World {
 	return &World{
 		dimensions: dimensions,
-		blocks:     make(map[Position]BlockType),
+		blocks:     make(map[Position]Block),
 	}
 }
 
@@ -62,18 +64,38 @@ func (w *World) Get(pos Position) (BlockType, error) {
 	if !ok {
 		return BlockAir, nil
 	}
+	return block.BlockType, nil
+}
+
+func (w *World) GetBlock(pos Position) (Block, error) {
+	if !w.InBounds(pos) {
+		return Block{}, ErrOutOfBounds
+	}
+
+	block, ok := w.blocks[pos]
+	if !ok {
+		return Block{Position: pos, BlockType: BlockAir}, nil
+	}
 	return block, nil
 }
 
 func (w *World) Set(pos Position, block BlockType) error {
+	return w.SetBlock(Block{Position: pos, BlockType: block})
+}
+
+func (w *World) SetBlock(block Block) error {
+	pos := block.Position
 	if !w.InBounds(pos) {
 		return ErrOutOfBounds
 	}
-	if !block.Valid() {
+	if !block.BlockType.Valid() {
 		return ErrInvalidBlockType
 	}
+	if !block.Facing.Valid() {
+		return ErrInvalidFacing
+	}
 
-	if block == BlockAir {
+	if block.BlockType == BlockAir {
 		delete(w.blocks, pos)
 		return nil
 	}
@@ -93,14 +115,11 @@ func (w *World) Remove(pos Position) error {
 
 func (w *World) OccupiedBlocks() []Block {
 	blocks := make([]Block, 0, len(w.blocks))
-	for pos, blockType := range w.blocks {
-		if blockType == BlockAir {
+	for _, block := range w.blocks {
+		if block.BlockType == BlockAir {
 			continue
 		}
-		blocks = append(blocks, Block{
-			Position:  pos,
-			BlockType: blockType,
-		})
+		blocks = append(blocks, block)
 	}
 
 	sort.Slice(blocks, func(i, j int) bool {

@@ -83,7 +83,11 @@ func (s *Simulation) ApplyCommands(commands []QueuedCommand) []error {
 func (s *Simulation) applyValidatedCommand(command netproto.Command) error {
 	switch command.Type {
 	case netproto.CommandPlaceBlock:
-		if err := s.world.Set(command.Position, command.BlockType); err != nil {
+		if err := s.world.SetBlock(world.Block{
+			Position:  command.Position,
+			BlockType: command.BlockType,
+			Facing:    command.Facing,
+		}); err != nil {
 			return err
 		}
 		s.sensorInputs.Clear(command.Position)

@@ -1,6 +1,7 @@
 package world
 
 type BlockType uint8
+type Facing string
 
 const (
 	BlockAir BlockType = iota
@@ -16,6 +17,22 @@ const (
 	BlockMotorDriver
 	BlockTransistorSwitch
 )
+
+const (
+	FacingNorth Facing = "north"
+	FacingEast  Facing = "east"
+	FacingSouth Facing = "south"
+	FacingWest  Facing = "west"
+)
+
+func (f Facing) Valid() bool {
+	switch f {
+	case "", FacingNorth, FacingEast, FacingSouth, FacingWest:
+		return true
+	default:
+		return false
+	}
+}
 
 func (b BlockType) Valid() bool {
 	switch b {

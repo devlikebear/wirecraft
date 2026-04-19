@@ -77,6 +77,7 @@ Status: active.
 - [x] [#45 WO-36A: Improve circuit block visual readability](https://github.com/devlikebear/wirecraft/issues/45)
 - [x] [#44 WO-37: Add changed-set snapshot primitives](https://github.com/devlikebear/wirecraft/issues/44)
 - [x] [#46 WO-38: Apply client delta snapshots](https://github.com/devlikebear/wirecraft/issues/46)
+- [x] [#48 WO-38A: Improve viewport usability and directional placement](https://github.com/devlikebear/wirecraft/issues/48)
 
 ## Next Work Order
 
@@ -84,7 +85,7 @@ Start with **Work Order 39: Add Basic Actuator Collision Constraints** in [`phas
 
 GitHub issue: [#47 WO-39: Add basic actuator collision constraints](https://github.com/devlikebear/wirecraft/issues/47)
 
-Phase 3 is complete and approved. Phase 4 has started; the server now has a default room model that owns simulation, subscribers, client counts, lightweight presence metadata, deterministic same-tick command ordering, duplicate command suppression, and command acknowledgement metadata in snapshots. Circuit blocks now have distinct visual profiles. Snapshot efficiency now has server full/changed-set primitives and browser-side changed-set application for blocks, removals, and entities while preserving full snapshot fallback. The next step is adding basic actuator collision constraints so moving actuator parts cannot pass through occupied solid cells.
+Phase 3 is complete and approved. Phase 4 has started; the server now has a default room model that owns simulation, subscribers, client counts, lightweight presence metadata, deterministic same-tick command ordering, duplicate command suppression, and command acknowledgement metadata in snapshots. Circuit blocks now have distinct visual profiles. Snapshot efficiency now has server full/changed-set primitives and browser-side changed-set application for blocks, removals, and entities while preserving full snapshot fallback. The default view now hides the old debug mover, supports orbit/zoom/pan camera navigation, and carries block facing through commands, world state, snapshots, and client rendering. The next step is adding basic actuator collision constraints so moving actuator parts cannot pass through occupied solid cells.
 
 ## GitHub Issue Index
 
@@ -135,6 +136,7 @@ Phase 3 is complete and approved. Phase 4 has started; the server now has a defa
 - [#45 WO-36A: Improve circuit block visual readability](https://github.com/devlikebear/wirecraft/issues/45)
 - [#46 WO-38: Apply client delta snapshots](https://github.com/devlikebear/wirecraft/issues/46)
 - [#47 WO-39: Add basic actuator collision constraints](https://github.com/devlikebear/wirecraft/issues/47)
+- [#48 WO-38A: Improve viewport usability and directional placement](https://github.com/devlikebear/wirecraft/issues/48)
 
 ## Session Rules
 

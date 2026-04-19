@@ -10,11 +10,12 @@ import {
   type Intersection,
   type Object3D,
 } from 'three';
-import { BlockType, type BlockSnapshot, type Position, type Snapshot } from '../net/protocol';
+import { BlockType, type BlockFacing, type BlockSnapshot, type Position, type Snapshot } from '../net/protocol';
 
 export interface VoxelRenderItem {
   key: string;
   blockType: Exclude<BlockType, typeof BlockType.Air>;
+  facing?: BlockFacing;
   blockPosition: Position;
   position: {
     x: number;
@@ -122,6 +123,20 @@ export function voxelVisualProfileForBlockType(blockType: BlockType): VoxelGeome
   return visualProfiles.get(blockType) ?? defaultVoxelProfile;
 }
 
+export function blockFacingYaw(facing: BlockFacing | undefined): number {
+  switch (facing) {
+    case 'north':
+      return -Math.PI / 2;
+    case 'south':
+      return Math.PI / 2;
+    case 'west':
+      return Math.PI;
+    case 'east':
+    default:
+      return 0;
+  }
+}
+
 export function createVoxelRenderItems(blocks: BlockSnapshot[]): VoxelRenderItem[] {
   const items: VoxelRenderItem[] = [];
 
@@ -132,9 +147,11 @@ export function createVoxelRenderItems(blocks: BlockSnapshot[]): VoxelRenderItem
 
     const blockType = block.blockType as VoxelRenderItem['blockType'];
     const profile = voxelVisualProfileForBlockType(blockType);
+    const facingKey = block.facing ? `:${block.facing}` : '';
     items.push({
-      key: `${block.position.x}:${block.position.y}:${block.position.z}:${block.blockType}`,
+      key: `${block.position.x}:${block.position.y}:${block.position.z}:${block.blockType}${facingKey}`,
       blockType,
+      ...(block.facing ? { facing: block.facing } : {}),
       blockPosition: block.position,
       position: {
         x: block.position.x,
@@ -224,8 +241,9 @@ export class VoxelRenderer {
 
       mesh.count = items.length;
       for (let index = 0; index < items.length; index += 1) {
-        const { position } = items[index];
-        this.transform.makeTranslation(position.x, position.y, position.z);
+        const { facing, position } = items[index];
+        this.transform.makeRotationY(blockFacingYaw(facing));
+        this.transform.setPosition(position.x, position.y, position.z);
         mesh.setMatrixAt(index, this.transform);
       }
       mesh.instanceMatrix.needsUpdate = true;

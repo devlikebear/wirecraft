@@ -34,6 +34,7 @@ func BuildSnapshot(input SnapshotInput) netproto.Snapshot {
 			blocks = append(blocks, netproto.BlockSnapshot{
 				Position:  block.Position,
 				BlockType: block.BlockType,
+				Facing:    block.Facing,
 			})
 		}
 	}

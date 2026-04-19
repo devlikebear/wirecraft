@@ -8,20 +8,20 @@ import {
 } from './EntityRenderer';
 
 describe('selectInterpolatedEntityRenderItems', () => {
-  it('interpolates matching debug mover entities between buffered snapshots', () => {
+  it('hides debug mover entities from the default runtime view', () => {
     const items = selectInterpolatedEntityRenderItems(
       [snapshot(1, 1000, entity('debug-mover-1', 0)), snapshot(2, 1100, entity('debug-mover-1', 10))],
       1050,
     );
 
-    expect(items).toHaveLength(1);
-    expect(items[0].id).toBe('debug-mover-1');
-    expect(items[0].transform.position).toEqual({ x: 5, y: 1.25, z: 1 });
-    expect(items[0].transform.scale).toEqual({ x: 0.5, y: 0.5, z: 0.5 });
+    expect(items).toEqual([]);
   });
 
   it('falls back to the nearest available snapshot when outside the buffered range', () => {
-    const items = selectInterpolatedEntityRenderItems([snapshot(1, 1000, entity('debug-mover-1', 3))], 1200);
+    const items = selectInterpolatedEntityRenderItems(
+      [snapshot(1, 1000, entity('piston:2:0:0', 3, EntityType.Piston))],
+      1200,
+    );
 
     expect(items).toHaveLength(1);
     expect(items[0].transform.position).toEqual({ x: 3, y: 1.25, z: 1 });
@@ -53,7 +53,7 @@ describe('selectInterpolatedEntityRenderItems', () => {
 });
 
 describe('EntityRenderer', () => {
-  it('creates and updates debug mover meshes by entity ID', () => {
+  it('does not create debug mover meshes by default', () => {
     const parent = new Group();
     const renderer = new EntityRenderer(parent);
 
@@ -63,12 +63,8 @@ describe('EntityRenderer', () => {
     );
 
     expect(parent.children).toContain(renderer.object);
-    expect(renderer.count).toBe(1);
-
-    const mesh = renderer.object.getObjectByName('wirecraft-entity-debug-mover-1');
-    expect(mesh?.position.x).toBe(5);
-    expect(mesh?.position.y).toBe(1.25);
-    expect(mesh?.scale.x).toBe(0.5);
+    expect(renderer.count).toBe(0);
+    expect(renderer.object.getObjectByName('wirecraft-entity-debug-mover-1')).toBeUndefined();
 
     renderer.dispose();
     expect(parent.children).not.toContain(renderer.object);
@@ -92,8 +88,8 @@ describe('EntityRenderer', () => {
       1000,
     );
 
-    expect(renderer.count).toBe(3);
-    expect(renderer.object.getObjectByName('wirecraft-entity-debug-mover-1')).toBeTruthy();
+    expect(renderer.count).toBe(2);
+    expect(renderer.object.getObjectByName('wirecraft-entity-debug-mover-1')).toBeUndefined();
     expect(renderer.object.getObjectByName('wirecraft-entity-piston:2:0:0')).toBeTruthy();
     expect(renderer.object.getObjectByName('wirecraft-entity-motor:4:0:0')).toBeTruthy();
     expect(renderer.object.getObjectByName('wirecraft-entity-servo-1')).toBeUndefined();

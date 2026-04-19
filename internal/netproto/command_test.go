@@ -134,6 +134,7 @@ func TestCommandJSONRoundTrip(t *testing.T) {
 		TickHint:      11,
 		Position:      world.Position{X: 4, Y: 5, Z: 6},
 		BlockType:     world.BlockDebugMover,
+		Facing:        world.FacingWest,
 		ButtonPressed: true,
 	}
 

@@ -66,6 +66,41 @@ func TestWorldGetSetRemove(t *testing.T) {
 	}
 }
 
+func TestWorldSetBlockPreservesFacing(t *testing.T) {
+	w := NewDefault()
+	pos := Position{X: 2, Y: 0, Z: 4}
+
+	if err := w.SetBlock(Block{Position: pos, BlockType: BlockAndGate, Facing: FacingEast}); err != nil {
+		t.Fatalf("SetBlock(and gate east) error = %v, want nil", err)
+	}
+
+	block, err := w.GetBlock(pos)
+	if err != nil {
+		t.Fatalf("GetBlock(and gate east) error = %v, want nil", err)
+	}
+	if block != (Block{Position: pos, BlockType: BlockAndGate, Facing: FacingEast}) {
+		t.Fatalf("GetBlock(and gate east) = %+v, want facing east", block)
+	}
+
+	occupied := w.OccupiedBlocks()
+	if len(occupied) != 1 || occupied[0] != block {
+		t.Fatalf("OccupiedBlocks() = %+v, want block with facing", occupied)
+	}
+}
+
+func TestWorldRejectsInvalidFacing(t *testing.T) {
+	w := NewDefault()
+
+	err := w.SetBlock(Block{
+		Position:  Position{X: 0, Y: 0, Z: 0},
+		BlockType: BlockWire,
+		Facing:    Facing("diagonal"),
+	})
+	if !errors.Is(err, ErrInvalidFacing) {
+		t.Fatalf("SetBlock(invalid facing) error = %v, want %v", err, ErrInvalidFacing)
+	}
+}
+
 func TestWorldRejectsOutOfBoundsOperations(t *testing.T) {
 	w := NewDefault()
 	pos := Position{X: 32, Y: 0, Z: 0}

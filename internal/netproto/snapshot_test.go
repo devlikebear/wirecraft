@@ -17,6 +17,7 @@ func TestSnapshotJSONRoundTrip(t *testing.T) {
 			{
 				Position:  world.Position{X: 1, Y: 2, Z: 3},
 				BlockType: world.BlockSolid,
+				Facing:    world.FacingSouth,
 			},
 		},
 		Entities: []EntitySnapshot{
@@ -53,6 +54,7 @@ func TestSnapshotJSONRoundTrip(t *testing.T) {
 			{
 				Position:  world.Position{X: 4, Y: 0, Z: 0},
 				BlockType: world.BlockWire,
+				Facing:    world.FacingEast,
 			},
 		},
 		RemovedBlocks: []world.Position{

@@ -42,6 +42,7 @@ type Snapshot struct {
 type BlockSnapshot struct {
 	Position  world.Position  `json:"position"`
 	BlockType world.BlockType `json:"blockType"`
+	Facing    world.Facing    `json:"facing,omitempty"`
 }
 
 type EntitySnapshot struct {

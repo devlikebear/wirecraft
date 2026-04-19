@@ -30,6 +30,22 @@ func TestSimulationApplyCommandPlacesAndRemovesBlocks(t *testing.T) {
 	assertSnapshotBlocks(t, removed, nil)
 }
 
+func TestSimulationApplyCommandPreservesBlockFacingInSnapshot(t *testing.T) {
+	simulation := NewSimulationWithDimensions(world.Dimensions{X: 8, Y: 8, Z: 8})
+	pos := world.Position{X: 2, Y: 0, Z: 3}
+	command := placeCommand("cmd-facing", pos, world.BlockAndGate)
+	command.Facing = world.FacingSouth
+
+	if err := simulation.ApplyCommand(command); err != nil {
+		t.Fatalf("ApplyCommand(facing place) error = %v, want nil", err)
+	}
+
+	snapshot := simulation.Step(StepInput{})
+	assertSnapshotBlocks(t, snapshot, []netproto.BlockSnapshot{
+		{Position: pos, BlockType: world.BlockAndGate, Facing: world.FacingSouth},
+	})
+}
+
 func TestSimulationStepAdvancesTickAndIncludesStats(t *testing.T) {
 	simulation := NewSimulation()
 

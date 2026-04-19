@@ -2,9 +2,12 @@ import { describe, expect, it } from 'vitest';
 import { BlockType } from '../net/protocol';
 import {
   adjacentPosition,
+  BLOCK_FACINGS,
   buildSetButtonCommand,
   buildEditCommand,
   editModeFromPointer,
+  isEditClickWithinDragThreshold,
+  nextBlockFacing,
   positionFromGroundPoint,
 } from './EditController';
 
@@ -38,6 +41,19 @@ describe('position helpers', () => {
   });
 });
 
+describe('placement facing helpers', () => {
+  it('cycles placement facing in cardinal order', () => {
+    expect(BLOCK_FACINGS).toEqual(['north', 'east', 'south', 'west']);
+    expect(nextBlockFacing('north')).toBe('east');
+    expect(nextBlockFacing('west')).toBe('north');
+  });
+
+  it('treats pointer movement beyond the drag threshold as camera navigation', () => {
+    expect(isEditClickWithinDragThreshold({ x: 10, y: 10 }, { x: 12, y: 13 })).toBe(true);
+    expect(isEditClickWithinDragThreshold({ x: 10, y: 10 }, { x: 18, y: 10 })).toBe(false);
+  });
+});
+
 describe('buildEditCommand', () => {
   it('builds place commands without mutating local world state', () => {
     expect(
@@ -68,6 +84,7 @@ describe('buildEditCommand', () => {
         tickHint: 44,
         position: { x: 5, y: 0, z: 2 },
         blockType: BlockType.AndGate,
+        facing: 'south',
       }),
     ).toEqual({
       type: 'place_block',
@@ -76,6 +93,7 @@ describe('buildEditCommand', () => {
       tickHint: 44,
       position: { x: 5, y: 0, z: 2 },
       blockType: BlockType.AndGate,
+      facing: 'south',
     });
   });
 

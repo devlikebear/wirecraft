@@ -26,6 +26,7 @@ type Command struct {
 	TickHint      uint64          `json:"tickHint"`
 	Position      world.Position  `json:"position"`
 	BlockType     world.BlockType `json:"blockType"`
+	Facing        world.Facing    `json:"facing,omitempty"`
 	ButtonPressed bool            `json:"buttonPressed"`
 }
 
@@ -41,6 +42,9 @@ func (c Command) Validate(bounds world.Dimensions) error {
 	case CommandPlaceBlock:
 		if !c.BlockType.Valid() {
 			return world.ErrInvalidBlockType
+		}
+		if !c.Facing.Valid() {
+			return world.ErrInvalidFacing
 		}
 		if c.BlockType == world.BlockAir {
 			return world.ErrInvalidBlockType
