@@ -24,10 +24,13 @@ type Dimensions struct {
 }
 
 type Block struct {
-	Position  Position
-	BlockType BlockType
-	Facing    Facing
+	Position   Position
+	BlockType  BlockType
+	Facing     Facing
+	Properties BlockProperties
 }
+
+type BlockProperties map[string]string
 
 type World struct {
 	dimensions Dimensions
@@ -74,9 +77,9 @@ func (w *World) GetBlock(pos Position) (Block, error) {
 
 	block, ok := w.blocks[pos]
 	if !ok {
-		return Block{Position: pos, BlockType: BlockAir}, nil
+		return Block{Position: pos, BlockType: BlockAir, Properties: BlockProperties{}}, nil
 	}
-	return block, nil
+	return block.Clone(), nil
 }
 
 func (w *World) Set(pos Position, block BlockType) error {
@@ -100,7 +103,7 @@ func (w *World) SetBlock(block Block) error {
 		return nil
 	}
 
-	w.blocks[pos] = block
+	w.blocks[pos] = block.Clone()
 	return nil
 }
 
@@ -119,7 +122,7 @@ func (w *World) OccupiedBlocks() []Block {
 		if block.BlockType == BlockAir {
 			continue
 		}
-		blocks = append(blocks, block)
+		blocks = append(blocks, block.Clone())
 	}
 
 	sort.Slice(blocks, func(i, j int) bool {
@@ -135,4 +138,21 @@ func (w *World) OccupiedBlocks() []Block {
 	})
 
 	return blocks
+}
+
+func (b Block) Clone() Block {
+	b.Properties = b.Properties.Clone()
+	return b
+}
+
+func (p BlockProperties) Clone() BlockProperties {
+	if len(p) == 0 {
+		return BlockProperties{}
+	}
+
+	clone := make(BlockProperties, len(p))
+	for key, value := range p {
+		clone[key] = value
+	}
+	return clone
 }

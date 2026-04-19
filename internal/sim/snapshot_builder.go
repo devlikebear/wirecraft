@@ -1,6 +1,7 @@
 package sim
 
 import (
+	"reflect"
 	"sort"
 
 	"github.com/devlikebear/wirecraft/internal/netproto"
@@ -34,14 +35,14 @@ func BuildChangedSetSnapshot(base netproto.Snapshot, next netproto.Snapshot) net
 }
 
 func changedBlocks(base []netproto.BlockSnapshot, next []netproto.BlockSnapshot) []netproto.BlockSnapshot {
-	baseByPosition := make(map[world.Position]world.BlockType, len(base))
+	baseByPosition := make(map[world.Position]netproto.BlockSnapshot, len(base))
 	for _, block := range base {
-		baseByPosition[block.Position] = block.BlockType
+		baseByPosition[block.Position] = block
 	}
 
 	changed := make([]netproto.BlockSnapshot, 0)
 	for _, block := range next {
-		if baseType, ok := baseByPosition[block.Position]; !ok || baseType != block.BlockType {
+		if baseBlock, ok := baseByPosition[block.Position]; !ok || !blockSnapshotsEqual(baseBlock, block) {
 			changed = append(changed, block)
 		}
 	}
@@ -49,6 +50,20 @@ func changedBlocks(base []netproto.BlockSnapshot, next []netproto.BlockSnapshot)
 		return positionLess(changed[i].Position, changed[j].Position)
 	})
 	return changed
+}
+
+func blockSnapshotsEqual(left netproto.BlockSnapshot, right netproto.BlockSnapshot) bool {
+	return left.Position == right.Position &&
+		left.BlockType == right.BlockType &&
+		left.Facing == right.Facing &&
+		reflect.DeepEqual(normalizedProperties(left.Properties), normalizedProperties(right.Properties))
+}
+
+func normalizedProperties(properties world.BlockProperties) world.BlockProperties {
+	if len(properties) == 0 {
+		return nil
+	}
+	return properties
 }
 
 func removedBlockPositions(base []netproto.BlockSnapshot, next []netproto.BlockSnapshot) []world.Position {

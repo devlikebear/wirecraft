@@ -2,6 +2,7 @@ package world
 
 import (
 	"errors"
+	"reflect"
 	"testing"
 )
 
@@ -78,13 +79,71 @@ func TestWorldSetBlockPreservesFacing(t *testing.T) {
 	if err != nil {
 		t.Fatalf("GetBlock(and gate east) error = %v, want nil", err)
 	}
-	if block != (Block{Position: pos, BlockType: BlockAndGate, Facing: FacingEast}) {
+	if !reflect.DeepEqual(block, Block{
+		Position:   pos,
+		BlockType:  BlockAndGate,
+		Facing:     FacingEast,
+		Properties: BlockProperties{},
+	}) {
 		t.Fatalf("GetBlock(and gate east) = %+v, want facing east", block)
 	}
 
 	occupied := w.OccupiedBlocks()
-	if len(occupied) != 1 || occupied[0] != block {
+	if len(occupied) != 1 || !reflect.DeepEqual(occupied[0], block) {
 		t.Fatalf("OccupiedBlocks() = %+v, want block with facing", occupied)
+	}
+}
+
+func TestWorldSetBlockPreservesPropertiesAndCopies(t *testing.T) {
+	w := NewDefault()
+	pos := Position{X: 3, Y: 0, Z: 5}
+	properties := BlockProperties{
+		"label":   "entry-door",
+		"blocked": "false",
+	}
+
+	if err := w.SetBlock(Block{
+		Position:   pos,
+		BlockType:  BlockPiston,
+		Facing:     FacingSouth,
+		Properties: properties,
+	}); err != nil {
+		t.Fatalf("SetBlock(piston properties) error = %v, want nil", err)
+	}
+	properties["blocked"] = "mutated-after-set"
+
+	block, err := w.GetBlock(pos)
+	if err != nil {
+		t.Fatalf("GetBlock(piston properties) error = %v, want nil", err)
+	}
+	wantProperties := BlockProperties{
+		"label":   "entry-door",
+		"blocked": "false",
+	}
+	if !reflect.DeepEqual(block.Properties, wantProperties) {
+		t.Fatalf("GetBlock().Properties = %+v, want %+v", block.Properties, wantProperties)
+	}
+
+	block.Properties["label"] = "mutated-after-get"
+	again, err := w.GetBlock(pos)
+	if err != nil {
+		t.Fatalf("GetBlock(after mutation) error = %v, want nil", err)
+	}
+	if !reflect.DeepEqual(again.Properties, wantProperties) {
+		t.Fatalf("GetBlock after caller mutation = %+v, want %+v", again.Properties, wantProperties)
+	}
+
+	occupied := w.OccupiedBlocks()
+	if len(occupied) != 1 {
+		t.Fatalf("len(OccupiedBlocks()) = %d, want 1", len(occupied))
+	}
+	occupied[0].Properties["label"] = "mutated-after-occupied"
+	finalBlock, err := w.GetBlock(pos)
+	if err != nil {
+		t.Fatalf("GetBlock(after occupied mutation) error = %v, want nil", err)
+	}
+	if !reflect.DeepEqual(finalBlock.Properties, wantProperties) {
+		t.Fatalf("GetBlock after occupied mutation = %+v, want %+v", finalBlock.Properties, wantProperties)
 	}
 }
 
@@ -258,17 +317,17 @@ func TestWorldOccupiedBlocksReturnsStableCoordinateOrder(t *testing.T) {
 
 	got := w.OccupiedBlocks()
 	want := []Block{
-		{Position: Position{X: 1, Y: 1, Z: 1}, BlockType: BlockDebugMover},
-		{Position: Position{X: 1, Y: 1, Z: 3}, BlockType: BlockSolid},
-		{Position: Position{X: 1, Y: 2, Z: 0}, BlockType: BlockDebugMover},
-		{Position: Position{X: 3, Y: 0, Z: 0}, BlockType: BlockSolid},
+		{Position: Position{X: 1, Y: 1, Z: 1}, BlockType: BlockDebugMover, Properties: BlockProperties{}},
+		{Position: Position{X: 1, Y: 1, Z: 3}, BlockType: BlockSolid, Properties: BlockProperties{}},
+		{Position: Position{X: 1, Y: 2, Z: 0}, BlockType: BlockDebugMover, Properties: BlockProperties{}},
+		{Position: Position{X: 3, Y: 0, Z: 0}, BlockType: BlockSolid, Properties: BlockProperties{}},
 	}
 
 	if len(got) != len(want) {
 		t.Fatalf("len(OccupiedBlocks()) = %d, want %d", len(got), len(want))
 	}
 	for i := range want {
-		if got[i] != want[i] {
+		if !reflect.DeepEqual(got[i], want[i]) {
 			t.Fatalf("OccupiedBlocks()[%d] = %+v, want %+v", i, got[i], want[i])
 		}
 	}

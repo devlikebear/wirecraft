@@ -1,6 +1,7 @@
 package sim
 
 import (
+	"reflect"
 	"testing"
 
 	"github.com/devlikebear/wirecraft/internal/netproto"
@@ -46,14 +47,14 @@ func TestBuildSnapshotFromWorld(t *testing.T) {
 	}
 
 	wantBlocks := []netproto.BlockSnapshot{
-		{Position: world.Position{X: 1, Y: 0, Z: 0}, BlockType: world.BlockDebugMover},
-		{Position: world.Position{X: 2, Y: 0, Z: 0}, BlockType: world.BlockSolid},
+		{Position: world.Position{X: 1, Y: 0, Z: 0}, BlockType: world.BlockDebugMover, Properties: world.BlockProperties{}},
+		{Position: world.Position{X: 2, Y: 0, Z: 0}, BlockType: world.BlockSolid, Properties: world.BlockProperties{}},
 	}
 	if len(snapshot.Blocks) != len(wantBlocks) {
 		t.Fatalf("len(snapshot.Blocks) = %d, want %d", len(snapshot.Blocks), len(wantBlocks))
 	}
 	for i := range wantBlocks {
-		if snapshot.Blocks[i] != wantBlocks[i] {
+		if !reflect.DeepEqual(snapshot.Blocks[i], wantBlocks[i]) {
 			t.Fatalf("snapshot.Blocks[%d] = %+v, want %+v", i, snapshot.Blocks[i], wantBlocks[i])
 		}
 	}
@@ -72,6 +73,37 @@ func TestBuildSnapshotFromWorld(t *testing.T) {
 	}
 	if snapshot.Stats.SnapshotBytes <= 0 {
 		t.Fatalf("snapshot.Stats.SnapshotBytes = %d, want positive", snapshot.Stats.SnapshotBytes)
+	}
+}
+
+func TestBuildSnapshotIncludesBlockProperties(t *testing.T) {
+	w := world.NewDefault()
+	pos := world.Position{X: 5, Y: 0, Z: 2}
+	if err := w.SetBlock(world.Block{
+		Position:  pos,
+		BlockType: world.BlockPiston,
+		Facing:    world.FacingWest,
+		Properties: world.BlockProperties{
+			"axis":    "west",
+			"blocked": "false",
+		},
+	}); err != nil {
+		t.Fatalf("SetBlock(piston properties) error = %v, want nil", err)
+	}
+
+	snapshot := BuildSnapshot(SnapshotInput{Tick: TickID(2), World: w})
+
+	want := netproto.BlockSnapshot{
+		Position:  pos,
+		BlockType: world.BlockPiston,
+		Facing:    world.FacingWest,
+		Properties: world.BlockProperties{
+			"axis":    "west",
+			"blocked": "false",
+		},
+	}
+	if len(snapshot.Blocks) != 1 || !reflect.DeepEqual(snapshot.Blocks[0], want) {
+		t.Fatalf("snapshot.Blocks = %+v, want %+v", snapshot.Blocks, []netproto.BlockSnapshot{want})
 	}
 }
 

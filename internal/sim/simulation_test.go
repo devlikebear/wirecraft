@@ -345,7 +345,7 @@ func assertSnapshotBlocks(t *testing.T, snapshot netproto.Snapshot, want []netpr
 		t.Fatalf("len(snapshot.Blocks) = %d, want %d: %+v", len(snapshot.Blocks), len(want), snapshot.Blocks)
 	}
 	for i := range want {
-		if snapshot.Blocks[i] != want[i] {
+		if !blockSnapshotsEqual(snapshot.Blocks[i], want[i]) {
 			t.Fatalf("snapshot.Blocks[%d] = %+v, want %+v", i, snapshot.Blocks[i], want[i])
 		}
 	}

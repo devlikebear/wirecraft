@@ -67,7 +67,8 @@ Status: Completed locally. Tracking issue: [#49](https://github.com/devlikebear/
 
 - **목표**: "블록 타입을 놓는 앱"에서 "배치된 블록 인스턴스를 선택하고 편집하는 앱"으로 전환한다.
 - **포함 기능**: block properties, selected block state, rotate existing block, inspect instance panel, workbench bounds.
-- **첫 작업**: [`WO-R1: Add block instance properties to snapshots`](https://github.com/devlikebear/wirecraft/issues/50).
+- **완료된 첫 작업**: [`WO-R1: Add block instance properties to snapshots`](https://github.com/devlikebear/wirecraft/issues/50).
+- **다음 작업**: [`WO-R2: Select placed block and show instance state`](https://github.com/devlikebear/wirecraft/issues/51).
 - **Checkpoint**: 배치된 wire/button/piston을 선택하면 position, facing, editable properties, component metadata가 inspect panel에 표시된다.
 
 ### Phase R2: Port and Attachment Model

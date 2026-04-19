@@ -55,8 +55,8 @@ describe('SnapshotStore', () => {
     store.append(
       snapshot(1, 1000, {
         blocks: [
-          { position: { x: 0, y: 0, z: 0 }, blockType: BlockType.Power },
-          { position: { x: 1, y: 0, z: 0 }, blockType: BlockType.Button },
+          { position: { x: 0, y: 0, z: 0 }, blockType: BlockType.Power, properties: {} },
+          { position: { x: 1, y: 0, z: 0 }, blockType: BlockType.Button, properties: {} },
         ],
       }),
     );
@@ -65,14 +65,24 @@ describe('SnapshotStore', () => {
         mode: 'changed_set',
         baseTick: 1,
         blocks: [],
-        changedBlocks: [{ position: { x: 2, y: 0, z: 0 }, blockType: BlockType.Wire }],
+        changedBlocks: [
+          {
+            position: { x: 2, y: 0, z: 0 },
+            blockType: BlockType.Wire,
+            properties: { net: 'button-out' },
+          },
+        ],
         removedBlocks: [{ x: 1, y: 0, z: 0 }],
       }),
     );
 
     expect(store.latest()?.blocks).toEqual([
-      { position: { x: 0, y: 0, z: 0 }, blockType: BlockType.Power },
-      { position: { x: 2, y: 0, z: 0 }, blockType: BlockType.Wire },
+      { position: { x: 0, y: 0, z: 0 }, blockType: BlockType.Power, properties: {} },
+      {
+        position: { x: 2, y: 0, z: 0 },
+        blockType: BlockType.Wire,
+        properties: { net: 'button-out' },
+      },
     ]);
     expect(store.latest()?.mode).toBe('changed_set');
   });
@@ -111,7 +121,7 @@ describe('SnapshotStore', () => {
       snapshot(2, 1050, {
         mode: 'changed_set',
         baseTick: 99,
-        changedBlocks: [{ position: { x: 2, y: 0, z: 0 }, blockType: BlockType.Wire }],
+        changedBlocks: [{ position: { x: 2, y: 0, z: 0 }, blockType: BlockType.Wire, properties: {} }],
       }),
     );
 

@@ -78,6 +78,47 @@ func TestBuildChangedSetSnapshotIncludesChangedAndRemovedBlocks(t *testing.T) {
 	}
 }
 
+func TestBuildChangedSetSnapshotIncludesPropertyChanges(t *testing.T) {
+	base := netproto.Snapshot{
+		Mode: netproto.SnapshotModeFull,
+		Tick: 10,
+		Blocks: []netproto.BlockSnapshot{
+			{
+				Position:   world.Position{X: 1, Y: 0, Z: 0},
+				BlockType:  world.BlockPiston,
+				Facing:     world.FacingEast,
+				Properties: world.BlockProperties{"blocked": "false"},
+			},
+		},
+	}
+	next := netproto.Snapshot{
+		Mode: netproto.SnapshotModeFull,
+		Tick: 11,
+		Blocks: []netproto.BlockSnapshot{
+			{
+				Position:   world.Position{X: 1, Y: 0, Z: 0},
+				BlockType:  world.BlockPiston,
+				Facing:     world.FacingEast,
+				Properties: world.BlockProperties{"blocked": "true"},
+			},
+		},
+	}
+
+	changedSet := BuildChangedSetSnapshot(base, next)
+
+	wantChangedBlocks := []netproto.BlockSnapshot{
+		{
+			Position:   world.Position{X: 1, Y: 0, Z: 0},
+			BlockType:  world.BlockPiston,
+			Facing:     world.FacingEast,
+			Properties: world.BlockProperties{"blocked": "true"},
+		},
+	}
+	if !reflect.DeepEqual(changedSet.ChangedBlocks, wantChangedBlocks) {
+		t.Fatalf("changedSet.ChangedBlocks = %+v, want %+v", changedSet.ChangedBlocks, wantChangedBlocks)
+	}
+}
+
 func entitySnapshot(id string, entityType string, position netproto.Vec3) netproto.EntitySnapshot {
 	return netproto.EntitySnapshot{
 		ID:   id,

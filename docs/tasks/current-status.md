@@ -43,20 +43,28 @@ WireCraft is now scoped around a small workbench where a user can build, inspect
 
 Status: completed locally by the reset documentation update.
 
-The next implementation phase is **Phase R1: Workbench Block Instance UX**.
+The current implementation phase is **Phase R1: Workbench Block Instance UX**.
 
 ## Next Work Order
 
-Start with **Work Order R1: Add Block Instance Properties To Snapshots** in [`mvp-reset-work-orders.md`](./mvp-reset-work-orders.md).
+Start with **Work Order R2: Select Placed Block And Show Instance State** in [`mvp-reset-work-orders.md`](./mvp-reset-work-orders.md).
 
-GitHub issue: [#50 WO-R1: Add block instance properties to snapshots](https://github.com/devlikebear/wirecraft/issues/50)
+GitHub issue: [#51 WO-R2: Select placed block and show instance state](https://github.com/devlikebear/wirecraft/issues/51)
 
-Recommended first implementation behavior:
+Recommended next implementation behavior:
 
-- Add minimal block instance properties to server world/snapshot models.
-- Preserve existing place/remove behavior.
-- Parse optional properties in TypeScript snapshots.
-- Keep this as a small TDD change before UI property editing.
+- Let the user select an already placed block.
+- Resolve the selected block from the latest snapshot.
+- Show instance position, type, facing, properties, and component details in inspect panel.
+- Do not add property editing yet.
+
+## Recently Completed
+
+- [x] [#50 WO-R1: Add block instance properties to snapshots](https://github.com/devlikebear/wirecraft/issues/50)
+  - Added server-side `BlockProperties`.
+  - Added block properties to snapshot payloads.
+  - Added TypeScript parsing with missing properties normalized to `{}`.
+  - Verified browser place/remove with parsed `properties: {}`.
 
 ## Completed Foundation
 
@@ -87,7 +95,8 @@ These gaps are now the intended next focus.
 - [#39 Phase 4: Multiplayer Physics Sync](https://github.com/devlikebear/wirecraft/issues/39) — paused context.
 - [#47 WO-39: Add basic actuator collision constraints](https://github.com/devlikebear/wirecraft/issues/47) — superseded as immediate next work.
 - [#49 MVP Reset: Workbench Device Builder](https://github.com/devlikebear/wirecraft/issues/49) — active reset parent.
-- [#50 WO-R1: Add block instance properties to snapshots](https://github.com/devlikebear/wirecraft/issues/50) — next implementation task.
+- [#50 WO-R1: Add block instance properties to snapshots](https://github.com/devlikebear/wirecraft/issues/50) — completed.
+- [#51 WO-R2: Select placed block and show instance state](https://github.com/devlikebear/wirecraft/issues/51) — next implementation task.
 
 Historical completed issues are listed in GitHub and older phase work-order documents.
 

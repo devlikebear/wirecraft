@@ -32,9 +32,10 @@ func BuildSnapshot(input SnapshotInput) netproto.Snapshot {
 		blocks = make([]netproto.BlockSnapshot, 0, len(occupied))
 		for _, block := range occupied {
 			blocks = append(blocks, netproto.BlockSnapshot{
-				Position:  block.Position,
-				BlockType: block.BlockType,
-				Facing:    block.Facing,
+				Position:   block.Position,
+				BlockType:  block.BlockType,
+				Facing:     block.Facing,
+				Properties: block.Properties.Clone(),
 			})
 		}
 	}

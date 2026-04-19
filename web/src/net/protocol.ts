@@ -64,7 +64,10 @@ export interface BlockSnapshot {
   position: Position;
   blockType: BlockType;
   facing?: BlockFacing;
+  properties: BlockProperties;
 }
+
+export type BlockProperties = Record<string, string>;
 
 export interface EntitySnapshot {
   id: string;
@@ -212,7 +215,8 @@ function parseBlockSnapshot(value: unknown): BlockSnapshot | null {
 
   const position = parsePosition(value.position);
   const facing = parseBlockFacing(value.facing);
-  if (position === null || !isBlockType(value.blockType) || facing === null) {
+  const properties = parseBlockProperties(value.properties);
+  if (position === null || !isBlockType(value.blockType) || facing === null || properties === null) {
     return null;
   }
 
@@ -220,7 +224,26 @@ function parseBlockSnapshot(value: unknown): BlockSnapshot | null {
     position,
     blockType: value.blockType,
     ...(typeof facing !== 'undefined' ? { facing } : {}),
+    properties,
   };
+}
+
+function parseBlockProperties(value: unknown): BlockProperties | null {
+  if (typeof value === 'undefined') {
+    return {};
+  }
+  if (!isRecord(value)) {
+    return null;
+  }
+
+  const properties: BlockProperties = {};
+  for (const [key, propertyValue] of Object.entries(value)) {
+    if (typeof propertyValue !== 'string') {
+      return null;
+    }
+    properties[key] = propertyValue;
+  }
+  return properties;
 }
 
 function parseBlockFacing(value: unknown): BlockFacing | undefined | null {

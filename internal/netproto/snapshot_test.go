@@ -2,6 +2,7 @@ package netproto
 
 import (
 	"encoding/json"
+	"reflect"
 	"testing"
 
 	"github.com/devlikebear/wirecraft/internal/world"
@@ -15,9 +16,10 @@ func TestSnapshotJSONRoundTrip(t *testing.T) {
 		ServerTimeMS: 1700000000123,
 		Blocks: []BlockSnapshot{
 			{
-				Position:  world.Position{X: 1, Y: 2, Z: 3},
-				BlockType: world.BlockSolid,
-				Facing:    world.FacingSouth,
+				Position:   world.Position{X: 1, Y: 2, Z: 3},
+				BlockType:  world.BlockSolid,
+				Facing:     world.FacingSouth,
+				Properties: world.BlockProperties{"label": "door-frame"},
 			},
 		},
 		Entities: []EntitySnapshot{
@@ -52,9 +54,10 @@ func TestSnapshotJSONRoundTrip(t *testing.T) {
 		},
 		ChangedBlocks: []BlockSnapshot{
 			{
-				Position:  world.Position{X: 4, Y: 0, Z: 0},
-				BlockType: world.BlockWire,
-				Facing:    world.FacingEast,
+				Position:   world.Position{X: 4, Y: 0, Z: 0},
+				BlockType:  world.BlockWire,
+				Facing:     world.FacingEast,
+				Properties: world.BlockProperties{"net": "button-out"},
 			},
 		},
 		RemovedBlocks: []world.Position{
@@ -100,7 +103,7 @@ func TestSnapshotJSONRoundTrip(t *testing.T) {
 	if decoded.ServerTimeMS != snapshot.ServerTimeMS {
 		t.Fatalf("decoded ServerTimeMS = %d, want %d", decoded.ServerTimeMS, snapshot.ServerTimeMS)
 	}
-	if len(decoded.Blocks) != 1 || decoded.Blocks[0] != snapshot.Blocks[0] {
+	if len(decoded.Blocks) != 1 || !reflect.DeepEqual(decoded.Blocks[0], snapshot.Blocks[0]) {
 		t.Fatalf("decoded Blocks = %+v, want %+v", decoded.Blocks, snapshot.Blocks)
 	}
 	if len(decoded.Entities) != len(snapshot.Entities) {
@@ -131,7 +134,7 @@ func TestSnapshotJSONRoundTrip(t *testing.T) {
 		t.Fatalf("len(decoded.ChangedBlocks) = %d, want %d", len(decoded.ChangedBlocks), len(snapshot.ChangedBlocks))
 	}
 	for i := range snapshot.ChangedBlocks {
-		if decoded.ChangedBlocks[i] != snapshot.ChangedBlocks[i] {
+		if !reflect.DeepEqual(decoded.ChangedBlocks[i], snapshot.ChangedBlocks[i]) {
 			t.Fatalf("decoded ChangedBlocks[%d] = %+v, want %+v", i, decoded.ChangedBlocks[i], snapshot.ChangedBlocks[i])
 		}
 	}

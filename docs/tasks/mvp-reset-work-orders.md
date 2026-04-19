@@ -34,7 +34,7 @@ Rewrite the active planning documents so the next development work is centered o
 
 ## Work Order R1: Add Block Instance Properties To Snapshots
 
-Status: Next. GitHub issue: [#50](https://github.com/devlikebear/wirecraft/issues/50).
+Status: Completed. GitHub issue: [#50](https://github.com/devlikebear/wirecraft/issues/50).
 
 ## Goal
 
@@ -57,19 +57,27 @@ Add a minimal server-authoritative property container for placed blocks so later
 
 ## Steps
 
-- [ ] Add a `Properties` field to placed world blocks with default empty state.
-- [ ] Include block properties in snapshot block payloads.
-- [ ] Parse optional block properties in the TypeScript protocol.
-- [ ] Preserve compatibility with snapshots that omit properties.
-- [ ] Add focused Go and TypeScript tests.
+- [x] Add a `Properties` field to placed world blocks with default empty state.
+- [x] Include block properties in snapshot block payloads.
+- [x] Parse optional block properties in the TypeScript protocol.
+- [x] Preserve compatibility with snapshots that omit properties.
+- [x] Add focused Go and TypeScript tests.
 
 ## Acceptance Criteria
 
-- [ ] `go test ./internal/world/...` passes.
-- [ ] `go test ./internal/netproto/...` passes.
-- [ ] `go test ./internal/sim/...` passes.
-- [ ] `cd web && npm test` passes.
-- [ ] Existing place/remove flows keep working.
+- [x] `go test ./internal/world/...` passes.
+- [x] `go test ./internal/netproto/...` passes.
+- [x] `go test ./internal/sim/...` passes.
+- [x] `cd web && npm test` passes.
+- [x] Existing place/remove flows keep working.
+
+## Verification Results
+
+- `go test ./internal/world/... ./internal/netproto/... ./internal/sim/...` passed.
+- `go test ./...` passed.
+- `cd web && npm test` passed.
+- `cd web && npm run build` passed.
+- Browser smoke passed at `http://127.0.0.1:5173/?wo50=2`: WebSocket opened, placing a Wire block produced `properties: {}` in the latest parsed snapshot, and removing the block returned the world to zero placed blocks.
 
 ## Verification Commands
 
@@ -82,7 +90,7 @@ Add a minimal server-authoritative property container for placed blocks so later
 
 ## Work Order R2: Select Placed Block And Show Instance State
 
-Status: Planned.
+Status: Next. GitHub issue: [#51](https://github.com/devlikebear/wirecraft/issues/51).
 
 ## Goal
 
@@ -279,4 +287,4 @@ Build the first coherent device slice: a button-controlled sliding door that use
 
 ## Session Handoff
 
-Start the next implementation from **Work Order R1: Add Block Instance Properties To Snapshots** ([#50](https://github.com/devlikebear/wirecraft/issues/50)).
+Start the next implementation from **Work Order R2: Select Placed Block And Show Instance State** ([#51](https://github.com/devlikebear/wirecraft/issues/51)).
