@@ -24,6 +24,7 @@ export const EntityType = {
 export type EntityType = (typeof EntityType)[keyof typeof EntityType];
 
 export type CommandType = 'place_block' | 'remove_block' | 'set_button';
+export type SnapshotMode = 'full' | 'changed_set';
 
 export interface Position {
   x: number;
@@ -42,10 +43,15 @@ export interface Command {
 }
 
 export interface Snapshot {
+  mode: SnapshotMode;
   tick: number;
+  baseTick?: number;
   serverTimeMs: number;
   blocks: BlockSnapshot[];
+  changedBlocks: BlockSnapshot[];
+  removedBlocks: Position[];
   entities: EntitySnapshot[];
+  changedEntities: EntitySnapshot[];
   circuit: CircuitSnapshot;
   presence: PresenceSnapshot;
   commandAcks: CommandAckSnapshot[];
@@ -128,8 +134,26 @@ export function parseSnapshot(value: unknown): Snapshot | null {
     return null;
   }
 
+  const mode = parseSnapshotMode(value.mode);
+  if (mode === null) {
+    return null;
+  }
+  let baseTick: number | undefined;
+  if (typeof value.baseTick !== 'undefined') {
+    if (typeof value.baseTick !== 'number') {
+      return null;
+    }
+    baseTick = value.baseTick;
+  }
+  if (mode === 'changed_set' && typeof baseTick !== 'number') {
+    return null;
+  }
+
   const blocks = parseArray(value.blocks, parseBlockSnapshot);
+  const changedBlocks = parseOptionalArray(value.changedBlocks, parseBlockSnapshot);
+  const removedBlocks = parseOptionalArray(value.removedBlocks, parsePosition);
   const entities = parseArray(value.entities, parseEntitySnapshot);
+  const changedEntities = parseOptionalArray(value.changedEntities, parseEntitySnapshot);
   const circuit = parseCircuitSnapshot(value.circuit);
   const presence = parsePresenceSnapshot(value.presence);
   const commandAcks = parseCommandAcks(value.commandAcks);
@@ -139,7 +163,10 @@ export function parseSnapshot(value: unknown): Snapshot | null {
     typeof value.tick !== 'number' ||
     typeof value.serverTimeMs !== 'number' ||
     blocks === null ||
+    changedBlocks === null ||
+    removedBlocks === null ||
     entities === null ||
+    changedEntities === null ||
     circuit === null ||
     presence === null ||
     commandAcks === null ||
@@ -149,15 +176,30 @@ export function parseSnapshot(value: unknown): Snapshot | null {
   }
 
   return {
+    mode,
     tick: value.tick,
+    ...(typeof baseTick === 'number' ? { baseTick } : {}),
     serverTimeMs: value.serverTimeMs,
     blocks,
+    changedBlocks,
+    removedBlocks,
     entities,
+    changedEntities,
     circuit,
     presence,
     commandAcks,
     stats,
   };
+}
+
+function parseSnapshotMode(value: unknown): SnapshotMode | null {
+  if (typeof value === 'undefined') {
+    return 'full';
+  }
+  if (value === 'full' || value === 'changed_set') {
+    return value;
+  }
+  return null;
 }
 
 function parseBlockSnapshot(value: unknown): BlockSnapshot | null {
@@ -403,4 +445,11 @@ function parseArray<T>(value: unknown, parser: (entry: unknown) => T | null): T[
   }
 
   return parsed;
+}
+
+function parseOptionalArray<T>(value: unknown, parser: (entry: unknown) => T | null): T[] | null {
+  if (typeof value === 'undefined') {
+    return [];
+  }
+  return parseArray(value, parser);
 }

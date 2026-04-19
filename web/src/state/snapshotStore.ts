@@ -1,4 +1,4 @@
-import type { Snapshot } from '../net/protocol';
+import type { BlockSnapshot, EntitySnapshot, Position, Snapshot } from '../net/protocol';
 
 export interface SnapshotStoreOptions {
   maxSnapshots?: number;
@@ -22,7 +22,12 @@ export class SnapshotStore {
   }
 
   append(snapshot: Snapshot, receivedAtMs = Date.now()): void {
-    this.entries = [...this.entries, { snapshot, receivedAtMs }].slice(-this.maxSnapshots);
+    const materialized = this.materialize(snapshot);
+    if (materialized === null) {
+      return;
+    }
+
+    this.entries = [...this.entries, { snapshot: materialized, receivedAtMs }].slice(-this.maxSnapshots);
   }
 
   latest(): Snapshot | null {
@@ -46,4 +51,69 @@ export class SnapshotStore {
   clear(): void {
     this.entries = [];
   }
+
+  private materialize(snapshot: Snapshot): Snapshot | null {
+    if (snapshot.mode !== 'changed_set') {
+      return snapshot;
+    }
+
+    const base = this.entries.at(-1)?.snapshot;
+    if (!base || base.tick !== snapshot.baseTick) {
+      return null;
+    }
+
+    return {
+      ...snapshot,
+      blocks: applyBlockChanges(base.blocks, snapshot.changedBlocks ?? [], snapshot.removedBlocks ?? []),
+      entities: applyEntityChanges(base.entities, snapshot.changedEntities ?? []),
+    };
+  }
+}
+
+function applyBlockChanges(
+  baseBlocks: BlockSnapshot[],
+  changedBlocks: BlockSnapshot[],
+  removedBlocks: Position[],
+): BlockSnapshot[] {
+  const byPosition = new Map<string, BlockSnapshot>();
+  for (const block of baseBlocks) {
+    byPosition.set(positionKey(block.position), block);
+  }
+  for (const position of removedBlocks) {
+    byPosition.delete(positionKey(position));
+  }
+  for (const block of changedBlocks) {
+    byPosition.set(positionKey(block.position), block);
+  }
+
+  return [...byPosition.values()].sort((left, right) => comparePosition(left.position, right.position));
+}
+
+function applyEntityChanges(
+  baseEntities: EntitySnapshot[],
+  changedEntities: EntitySnapshot[],
+): EntitySnapshot[] {
+  const byID = new Map<string, EntitySnapshot>();
+  for (const entity of baseEntities) {
+    byID.set(entity.id, entity);
+  }
+  for (const entity of changedEntities) {
+    byID.set(entity.id, entity);
+  }
+
+  return [...byID.values()].sort((left, right) => left.id.localeCompare(right.id));
+}
+
+function positionKey(position: Position): string {
+  return `${position.x}:${position.y}:${position.z}`;
+}
+
+function comparePosition(left: Position, right: Position): number {
+  if (left.x !== right.x) {
+    return left.x - right.x;
+  }
+  if (left.y !== right.y) {
+    return left.y - right.y;
+  }
+  return left.z - right.z;
 }

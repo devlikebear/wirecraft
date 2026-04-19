@@ -95,7 +95,7 @@ _예상 소요: 1-2주_
     - periodic full snapshot fallback
   - 검증: `go test ./internal/sim/...`
 
-- [ ] **T4.C.2** — client delta apply 구현.
+- [x] **T4.C.2** — client delta apply 구현.
   - 파일:
     - `web/src/state/worldStore.ts`
     - `web/src/state/snapshotStore.ts`
@@ -155,7 +155,7 @@ _예상 소요: 1-2주_
 **구현 확인:**
 - [ ] room/session 구조가 분리되어 있다.
 - [x] command conflict가 결정적으로 처리된다.
-- [ ] delta snapshot 또는 changed-set snapshot이 동작한다.
+- [x] delta snapshot 또는 changed-set snapshot이 동작한다.
 - [ ] basic collision/constraint로 actuator가 solid block을 뚫지 않는다.
 - [ ] tick/snapshot/client metrics를 확인할 수 있다.
 

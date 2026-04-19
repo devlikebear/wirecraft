@@ -1,6 +1,6 @@
 # Phase 4 Work Orders — Multiplayer Physics Sync
 
-_Last updated: 2026-04-18_
+_Last updated: 2026-04-19_
 
 Parent issue: [#39 Phase 4: Multiplayer Physics Sync](https://github.com/devlikebear/wirecraft/issues/39)
 
@@ -277,7 +277,7 @@ Introduce snapshot primitives that can represent full snapshots and changed-set 
 
 ## Work Order 38: Apply Client Delta Snapshots
 
-Status: Next. GitHub issue: [#46](https://github.com/devlikebear/wirecraft/issues/46).
+Status: Completed. GitHub issue: [#46](https://github.com/devlikebear/wirecraft/issues/46).
 
 ## Goal
 
@@ -293,24 +293,24 @@ Teach the browser state layer to accept full snapshots and apply changed-set sna
 ## Touch points (<=5)
 
 - `web/src/net/protocol.ts`
+- `web/src/net/protocol.test.ts`
 - `web/src/state/snapshotStore.ts`
 - `web/src/state/snapshotStore.test.ts`
-- `web/src/render/VoxelRenderer.ts`
 - `docs/tasks/phase-4-work-orders.md`
 
 ## Steps
 
-- [ ] Parse full vs changed-set snapshot fields in TypeScript.
-- [ ] Add state-store logic for changed blocks and removed blocks.
-- [ ] Add entity changed-set application.
-- [ ] Preserve full snapshot reset behavior.
-- [ ] Update local task docs after verification.
+- [x] Parse full vs changed-set snapshot fields in TypeScript.
+- [x] Add state-store logic for changed blocks and removed blocks.
+- [x] Add entity changed-set application.
+- [x] Preserve full snapshot reset behavior.
+- [x] Update local task docs after verification.
 
 ## Acceptance Criteria
 
-- [ ] `cd web && npm test` passes.
-- [ ] `cd web && npm run build` passes.
-- [ ] Existing full snapshot rendering remains compatible.
+- [x] `cd web && npm test` passes.
+- [x] `cd web && npm run build` passes.
+- [x] Existing full snapshot rendering remains compatible.
 
 ## Verification Commands
 
@@ -319,12 +319,55 @@ Teach the browser state layer to accept full snapshots and apply changed-set sna
 
 ---
 
+## Work Order 39: Add Basic Actuator Collision Constraints
+
+Status: Next. GitHub issue: [#47](https://github.com/devlikebear/wirecraft/issues/47).
+
+## Goal
+
+Add a small physics collision policy that prevents actuator motion from entering occupied solid block cells, using a simple stop/clamp response.
+
+## Non-goals
+
+- Do not implement a full rigid body solver.
+- Do not add joints, friction, or continuous collision detection.
+- Do not redesign actuator rendering or placement UI.
+- Do not add multiplayer-specific metrics in this work order.
+
+## Touch points (<=5)
+
+- `internal/physics/collision.go`
+- `internal/physics/collision_test.go`
+- `internal/actuator/piston.go`
+- `internal/sim/simulation.go`
+- `docs/tasks/phase-4-work-orders.md`
+
+## Steps
+
+- [ ] Add a collision/occupancy helper for actuator target cells.
+- [ ] Clamp or stop actuator motion when the target cell is occupied by a solid block.
+- [ ] Integrate the collision policy into piston update flow.
+- [ ] Preserve existing actuator behavior when the path is clear.
+- [ ] Update local task docs after verification.
+
+## Acceptance Criteria
+
+- [ ] `go test ./internal/physics/...` passes.
+- [ ] `go test ./...` passes.
+- [ ] Existing actuator snapshots remain compatible.
+
+## Verification Commands
+
+- `go test ./internal/physics/...`
+- `go test ./...`
+
+---
+
 ## Planned Work Orders
 
-- [ ] **WO-39: Add basic actuator collision constraints** — clamp actuator motion against occupied solids.
 - [ ] **WO-40: Add server metrics logging** — expose tick duration, queue length, bytes, and client count.
 - [ ] **Phase 4 checkpoint** — verify 2-4 client collaboration, conflict handling, collision, and observability.
 
 ## Session Handoff
 
-Start the next session from [current-status.md](./current-status.md), then continue with [#46 WO-38](https://github.com/devlikebear/wirecraft/issues/46).
+Start the next session from [current-status.md](./current-status.md), then continue with [#47 WO-39](https://github.com/devlikebear/wirecraft/issues/47).

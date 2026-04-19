@@ -2,6 +2,27 @@ import { describe, expect, it } from 'vitest';
 import { BlockType, EntityType, parseSnapshot } from './protocol';
 
 describe('parseSnapshot', () => {
+  it('defaults missing snapshot mode to full and empty changed sets', () => {
+    const snapshot = parseSnapshot({
+      tick: 6,
+      serverTimeMs: 1700000000006,
+      blocks: [],
+      entities: [],
+      circuit: { nodes: [] },
+      stats: {
+        clientCount: 1,
+        commandQueueLength: 0,
+        snapshotBytes: 128,
+      },
+    });
+
+    expect(snapshot?.mode).toBe('full');
+    expect(snapshot?.baseTick).toBeUndefined();
+    expect(snapshot?.changedBlocks).toEqual([]);
+    expect(snapshot?.removedBlocks).toEqual([]);
+    expect(snapshot?.changedEntities).toEqual([]);
+  });
+
   it('normalizes Go block positions into client positions', () => {
     const snapshot = parseSnapshot({
       tick: 7,
@@ -177,6 +198,52 @@ describe('parseSnapshot', () => {
     expect(snapshot?.entities[0]?.transform.position).toEqual({ x: 3, y: 0.5, z: 0 });
   });
 
+  it('parses changed-set snapshot payloads from the server', () => {
+    const snapshot = parseSnapshot({
+      mode: 'changed_set',
+      tick: 14,
+      baseTick: 13,
+      serverTimeMs: 1700000000357,
+      blocks: [],
+      changedBlocks: [
+        {
+          position: { X: 4, Y: 0, Z: 2 },
+          blockType: BlockType.Wire,
+        },
+      ],
+      removedBlocks: [{ X: 3, Y: 0, Z: 2 }],
+      entities: [],
+      changedEntities: [
+        {
+          id: 'piston:4:0:2',
+          type: EntityType.Piston,
+          transform: {
+            position: { x: 4, y: 0.5, z: 2 },
+            rotation: { x: 0, y: 0, z: 0, w: 1 },
+            scale: { x: 1, y: 1, z: 1 },
+          },
+        },
+      ],
+      circuit: { nodes: [] },
+      stats: {
+        clientCount: 1,
+        commandQueueLength: 0,
+        snapshotBytes: 196,
+      },
+    });
+
+    expect(snapshot?.mode).toBe('changed_set');
+    expect(snapshot?.baseTick).toBe(13);
+    expect(snapshot?.changedBlocks).toEqual([
+      {
+        position: { x: 4, y: 0, z: 2 },
+        blockType: BlockType.Wire,
+      },
+    ]);
+    expect(snapshot?.removedBlocks).toEqual([{ x: 3, y: 0, z: 2 }]);
+    expect(snapshot?.changedEntities[0]?.id).toBe('piston:4:0:2');
+  });
+
   it('parses optional presence metadata from authoritative snapshots', () => {
     const snapshot = parseSnapshot({
       tick: 12,
@@ -249,6 +316,45 @@ describe('parseSnapshot', () => {
         clientCount: 1,
         commandQueueLength: 1,
         snapshotBytes: 188,
+      },
+    });
+
+    expect(snapshot).toBeNull();
+  });
+
+  it('rejects invalid snapshot modes', () => {
+    const snapshot = parseSnapshot({
+      mode: 'delta',
+      tick: 14,
+      serverTimeMs: 1700000000357,
+      blocks: [],
+      entities: [],
+      circuit: { nodes: [] },
+      stats: {
+        clientCount: 1,
+        commandQueueLength: 0,
+        snapshotBytes: 196,
+      },
+    });
+
+    expect(snapshot).toBeNull();
+  });
+
+  it('rejects changed-set snapshots without a numeric base tick', () => {
+    const snapshot = parseSnapshot({
+      mode: 'changed_set',
+      tick: 14,
+      serverTimeMs: 1700000000357,
+      blocks: [],
+      changedBlocks: [],
+      removedBlocks: [],
+      entities: [],
+      changedEntities: [],
+      circuit: { nodes: [] },
+      stats: {
+        clientCount: 1,
+        commandQueueLength: 0,
+        snapshotBytes: 196,
       },
     });
 
